@@ -69,7 +69,7 @@ const Footer = () => {
 
           <div className={styles.social}>
             <a
-              href="https://github.com"
+              href="https://github.com/Robin-R-G/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
@@ -80,7 +80,7 @@ const Footer = () => {
               </svg>
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://in.linkedin.com/in/robinrg"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
@@ -91,7 +91,7 @@ const Footer = () => {
               </svg>
             </a>
             <a
-              href="mailto:workshop@example.com"
+              href="mailto:metherobin@gmail.com"
               aria-label="Email"
               className={styles.socialLink}
             >

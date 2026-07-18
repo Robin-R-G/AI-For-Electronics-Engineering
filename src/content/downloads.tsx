@@ -210,7 +210,7 @@ function generateProjectListImage(): HTMLCanvasElement {
   return c;
 }
 
-function generateCertificateImage(): HTMLCanvasElement {
+function generateCertificateImage(name: string = 'Participant Name'): HTMLCanvasElement {
   const W = 1200, H = 850;
   const c = document.createElement('canvas'); c.width = W; c.height = H;
   const ctx = c.getContext('2d')!;
@@ -238,13 +238,13 @@ function generateCertificateImage(): HTMLCanvasElement {
   ctx.fillStyle = '#8b949e'; ctx.font = '22px sans-serif';
   ctx.fillText('This is to certify that the participant has successfully completed', W / 2, 290);
   ctx.fillText('all modules of the AI for Electronics Engineers Workshop.', W / 2, 325);
-  // name placeholder
+  // name
   ctx.fillStyle = 'rgba(245,158,11,0.08)';
-  ctx.beginPath(); ctx.roundRect(W / 2 - 200, 360, 400, 60, 8); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(W / 2 - 250, 355, 500, 70, 8); ctx.fill();
   ctx.strokeStyle = '#f59e0b44'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.roundRect(W / 2 - 200, 360, 400, 60, 8); ctx.stroke();
-  ctx.fillStyle = '#f59e0b55'; ctx.font = '20px sans-serif';
-  ctx.fillText('Participant Name', W / 2, 397);
+  ctx.beginPath(); ctx.roundRect(W / 2 - 250, 355, 500, 70, 8); ctx.stroke();
+  ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 30px sans-serif';
+  ctx.fillText(name, W / 2, 398);
   // details
   ctx.fillStyle = '#8b949e'; ctx.font = '18px sans-serif';
   ctx.fillText('19 Modules  •  11 Sections  •  Hands-on Labs  •  Quiz  •  Certificate', W / 2, 470);
@@ -388,35 +388,52 @@ function downloadCanvas(canvas: HTMLCanvasElement, filename: string) {
   }, 'image/png');
 }
 
-const imageGenerators: Record<string, () => HTMLCanvasElement> = {
-  'workshop-notes': generateWorkshopNotesImage,
-  'prompt-book': generatePromptBookImage,
-  'cheat-sheet': generateCheatSheetImage,
-  'project-list': generateProjectListImage,
-  'certificate-template': generateCertificateImage,
-  'source-code': generateSourceCodeImage,
-  'presentation-pdf': generatePresentationImage,
-  'resources-pdf': generateResourcesImage,
+const imageGenerators: Record<string, (name?: string) => HTMLCanvasElement> = {
+  'workshop-notes': () => generateWorkshopNotesImage(),
+  'prompt-book': () => generatePromptBookImage(),
+  'cheat-sheet': () => generateCheatSheetImage(),
+  'project-list': () => generateProjectListImage(),
+  'certificate-template': (name) => generateCertificateImage(name),
+  'source-code': () => generateSourceCodeImage(),
+  'presentation-pdf': () => generatePresentationImage(),
+  'resources-pdf': () => generateResourcesImage(),
 };
 
 const DownloadsContent = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [certName, setCertName] = useState('');
+  const [showCertModal, setShowCertModal] = useState(false);
 
   const filtered = useMemo(() => {
     if (activeCategory === 'All') return downloadsData;
     return downloadsData.filter(d => d.category === activeCategory);
   }, [activeCategory]);
 
-  const handleDownload = (item: DownloadItem) => {
+  const doDownload = (item: DownloadItem, name?: string) => {
     setDownloadingId(item.id);
     setTimeout(() => {
       const generator = imageGenerators[item.id];
       if (generator) {
-        downloadCanvas(generator(), `${item.id.replace(/-/g, '_')}.png`);
+        downloadCanvas(generator(name), `${item.id.replace(/-/g, '_')}.png`);
       }
       setDownloadingId(null);
     }, 500);
+  };
+
+  const handleDownload = (item: DownloadItem) => {
+    if (item.id === 'certificate-template') {
+      setCertName('');
+      setShowCertModal(true);
+      return;
+    }
+    doDownload(item);
+  };
+
+  const handleCertSubmit = () => {
+    const item = downloadsData.find(d => d.id === 'certificate-template')!;
+    setShowCertModal(false);
+    doDownload(item, certName.trim() || 'Participant Name');
   };
 
   return (
@@ -487,6 +504,28 @@ const DownloadsContent = () => {
           </div>
         ))}
       </div>
+
+      {showCertModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowCertModal(false)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <h3 className={styles.modalTitle}>Enter Your Name</h3>
+            <p className={styles.modalDesc}>Your name will appear on the certificate.</p>
+            <input
+              className={styles.modalInput}
+              type="text"
+              placeholder="e.g. Robin R G"
+              value={certName}
+              onChange={(e) => setCertName(e.target.value)}
+              autoFocus
+              onKeyDown={(e) => e.key === 'Enter' && handleCertSubmit()}
+            />
+            <div className={styles.modalActions}>
+              <button className={styles.modalCancel} onClick={() => setShowCertModal(false)}>Cancel</button>
+              <button className={styles.modalSubmit} onClick={handleCertSubmit}>Download Certificate</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
