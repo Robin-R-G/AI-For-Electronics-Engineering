@@ -81,6 +81,9 @@ export default function AdminDashboardPage() {
           <button className={`${styles.navItem} ${tab === 'resources' ? styles.activeNav : ''}`} onClick={() => setTab('resources')}>
             🗂 Manage ({resources.length})
           </button>
+          <button className={`${styles.navItem} ${tab === 'files' ? styles.activeNav : ''}`} onClick={() => setTab('files')}>
+            📁 Files
+          </button>
           <button className={`${styles.navItem} ${tab === 'certificate' ? styles.activeNav : ''}`} onClick={() => setTab('certificate')}>
             🎖 Certificate
           </button>
@@ -105,11 +108,13 @@ export default function AdminDashboardPage() {
             {tab === 'overview' && 'Admin Dashboard'}
             {tab === 'upload' && 'Upload Resource'}
             {tab === 'resources' && 'Manage Resources'}
+            {tab === 'files' && 'File Manager'}
             {tab === 'certificate' && 'Certificate & Branding'}
           </h1>
           <p className={styles.pageSubtitle}>
             {tab === 'upload' && 'Add a document that appears instantly on the public site.'}
             {tab === 'resources' && 'Resources are stored in this browser and shown live to visitors.'}
+            {tab === 'files' && 'Upload, manage, and audit files on the server. Validated, sanitized, and logged.'}
             {tab === 'overview' && 'AI for Electronics Engineers — Workshop'}
             {tab === 'certificate' && 'Set workshop name, instructor, logos, signature, and generate certificates.'}
           </p>
@@ -187,6 +192,10 @@ export default function AdminDashboardPage() {
 
           {tab === 'certificate' && (
             <CertificateManager />
+          )}
+
+          {tab === 'files' && (
+            <FileManager admin={admin} />
           )}
         </div>
       </main>
