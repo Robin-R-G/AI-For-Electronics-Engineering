@@ -1,0 +1,252 @@
+.card {
+  background: var(--glass-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.header {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.categoryBadge {
+  background: rgba(0, 229, 255, 0.1);
+  color: var(--color-cyan);
+  padding: 0.25rem 0.75rem;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--color-white);
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.difficulty {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.diffGreen { background: rgba(0, 255, 100, 0.1); color: #00ff64; }
+.diffYellow { background: rgba(255, 215, 0, 0.1); color: #ffd700; }
+.diffRed { background: rgba(255, 0, 80, 0.1); color: #ff0050; }
+
+.favoriteBtn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.favoriteBtn:hover { color: rgba(255, 255, 255, 0.5); transform: scale(1.1); }
+.isFav { color: #ffd700 !important; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+
+.chevron { color: var(--color-text-secondary); transition: transform 0.3s; font-size: 0.8rem; }
+.chevronUp { transform: rotate(180deg); }
+
+.expandedContent {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Structured prompt display */
+.promptWrapper {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.promptHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.promptLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.copyBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--color-white);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copyBtn:hover { background: rgba(0, 229, 255, 0.2); color: var(--color-cyan); }
+
+.promptText {
+  padding: 1.25rem;
+  color: #c9d1d9;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.promptSection {
+  margin-bottom: 1rem;
+}
+
+.promptSection:last-child {
+  margin-bottom: 0;
+}
+
+.promptFieldLabel {
+  display: inline-block;
+  color: var(--color-cyan);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.promptSection p {
+  margin: 0;
+}
+
+.reqList {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.reqList li {
+  margin-bottom: 0.25rem;
+}
+
+.reqList li:last-child {
+  margin-bottom: 0;
+}
+
+/* Metadata grid */
+.metadataGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.metaBox {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.metaBox h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--color-white);
+  font-size: 0.95rem;
+}
+
+.metaBox p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.qualityRating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qualityText {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Tips / Best practices / Common mistakes */
+.tipBox {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.tipBox:last-child {
+  margin-bottom: 0;
+}
+
+.tipBox h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--color-white);
+  font-size: 0.95rem;
+}
+
+.tipList {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.tipList li {
+  margin-bottom: 0.35rem;
+}
+
+.tipList li:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .actions { width: 100%; justify-content: space-between; }
+  .metadataGrid { grid-template-columns: 1fr; }
+}

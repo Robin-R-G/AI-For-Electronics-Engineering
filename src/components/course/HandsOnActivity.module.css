@@ -1,0 +1,171 @@
+.container {
+  background: var(--glass-bg);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-green);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin: var(--space-8) 0;
+}
+
+.header {
+  margin-bottom: var(--space-5);
+}
+
+.badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  background: rgba(0, 255, 163, 0.15);
+  color: var(--color-green);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  font-size: 0.8rem;
+}
+
+.metaItem {
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+}
+
+.metaDot {
+  color: var(--color-text-muted);
+}
+
+.objectivesBox,
+.materialsBox {
+  padding: var(--space-4);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
+}
+
+.objectivesBox h4,
+.materialsBox h4,
+.stepsContainer h4,
+.verificationBox h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-3);
+}
+
+.objectivesBox ul,
+.materialsBox ul {
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.objectivesBox li,
+.materialsBox li {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.materialsBox {
+  border-left: 3px solid var(--color-purple);
+}
+
+.stepsContainer {
+  margin-bottom: var(--space-5);
+}
+
+.step {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.step:last-child {
+  border-bottom: none;
+}
+
+.stepNumber {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 229, 255, 0.15);
+  color: var(--color-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.stepContent {
+  flex: 1;
+}
+
+.instruction {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+}
+
+.detail {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-2);
+  line-height: 1.6;
+}
+
+.codeSnippet {
+  background: rgba(0, 0, 0, 0.3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-2);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.expected {
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: rgba(0, 255, 163, 0.05);
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  color: var(--color-green);
+}
+
+.expected strong {
+  font-weight: 600;
+}
+
+.verificationBox {
+  padding: var(--space-4);
+  background: rgba(0, 229, 255, 0.05);
+  border-radius: var(--radius-md);
+  border: 1px dashed rgba(0, 229, 255, 0.3);
+}
+
+.verificationBox p {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}

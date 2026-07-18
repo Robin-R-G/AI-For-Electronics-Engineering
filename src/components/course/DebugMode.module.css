@@ -1,0 +1,156 @@
+.container {
+  margin: 3rem 0;
+  padding: 2rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.04), rgba(255, 87, 34, 0.04));
+  border: 1px solid rgba(255, 152, 0, 0.15);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.title {
+  font-size: 1.25rem;
+  color: #ffb74d;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.icon {
+  font-size: 1.4rem;
+}
+
+.scenario {
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 152, 0, 0.04);
+  border-left: 3px solid rgba(255, 152, 0, 0.4);
+  border-radius: 0 10px 10px 0;
+}
+
+.phase {
+  margin-bottom: 1.25rem;
+}
+
+.phaseHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.phaseTag {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.broken {
+  background: rgba(255, 78, 80, 0.12);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 78, 80, 0.2);
+}
+
+.explanation {
+  background: rgba(255, 152, 0, 0.12);
+  color: #ffb74d;
+  border: 1px solid rgba(255, 152, 0, 0.2);
+}
+
+.fixed {
+  background: rgba(0, 255, 163, 0.1);
+  color: var(--color-green);
+  border: 1px solid rgba(0, 255, 163, 0.2);
+}
+
+.phaseInstruction {
+  font-size: 0.88rem;
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+.hintBox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 152, 0, 0.2);
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.hintIcon {
+  font-size: 1rem;
+}
+
+.hintText {
+  font-style: italic;
+}
+
+.revealBtn {
+  display: block;
+  width: 100%;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.15), rgba(255, 87, 34, 0.15));
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  border-radius: 10px;
+  color: #ffb74d;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-snappy);
+}
+
+.revealBtn:hover {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.25), rgba(255, 87, 34, 0.25));
+  border-color: rgba(255, 152, 0, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.2);
+}
+
+.revealed {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.explanationText {
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 152, 0, 0.04);
+  border-radius: 10px;
+}
+
+.lessonBox {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 229, 255, 0.04);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  border-radius: 10px;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.lessonLabel {
+  color: var(--color-cyan);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.lessonText {
+  color: var(--color-text-secondary);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

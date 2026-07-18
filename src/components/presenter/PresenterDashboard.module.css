@@ -1,0 +1,600 @@
+/* ── Root ──────────────────────────────────────────────── */
+.root {
+  min-height: 100vh;
+  background: #060810;
+  color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', system-ui, sans-serif;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.laserCursor {
+  cursor: none !important;
+}
+
+/* ── Laser Pointer ─────────────────────────────────────── */
+.laserDot {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ff1a1a 0%, rgba(255, 26, 26, 0.4) 60%, transparent 100%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 0 12px 4px rgba(255, 26, 26, 0.6);
+  animation: laserPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes laserPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%       { transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* ── Shortcuts Overlay ─────────────────────────────────── */
+.shortcutsOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.shortcutsPanel {
+  background: #0e1320;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2.5rem;
+  min-width: 400px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+}
+
+.shortcutsPanel h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.3rem;
+  color: white;
+  text-align: center;
+}
+
+.shortcutTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+}
+
+.shortcutTable td {
+  padding: 0.4rem 0.75rem;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.shortcutTable td:first-child {
+  width: 80px;
+}
+
+.kbd {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom-width: 3px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #00e5ff;
+}
+
+.closeShortcuts {
+  width: 100%;
+  margin-top: 1.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.closeShortcuts:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+/* ── Header ────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.presenterBadge {
+  background: linear-gradient(135deg, rgba(255, 26, 26, 0.2), rgba(255, 100, 0, 0.2));
+  border: 1px solid rgba(255, 100, 0, 0.4);
+  color: #ff9944;
+  padding: 0.3rem 0.75rem;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  animation: presenterGlow 2s ease-in-out infinite;
+}
+
+@keyframes presenterGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 100, 0, 0.3); }
+  50%       { box-shadow: 0 0 16px rgba(255, 100, 0, 0.6); }
+}
+
+.sectionCounter {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-family: monospace;
+}
+
+.headerCenter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.timer {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: monospace;
+  color: #00e5ff;
+  transition: color 0.3s;
+}
+
+.timerOverrun {
+  color: #ff4444 !important;
+  animation: timerBlink 1s step-end infinite;
+}
+
+@keyframes timerBlink {
+  50% { opacity: 0.5; }
+}
+
+.estimatedTime {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.headerRight {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.headerBtn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.headerBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.headerBtnActive {
+  background: rgba(255, 26, 26, 0.15) !important;
+  border-color: rgba(255, 26, 26, 0.4) !important;
+  color: #ff6666 !important;
+}
+
+/* ── Main Grid ─────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  flex: 1;
+  overflow: hidden;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow: hidden;
+}
+
+/* ── Panel Base ────────────────────────────────────────── */
+.panel {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.panelDim {
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.panelTall {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.panelFlex {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panelLabel {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #475569;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+/* ── Current Section ───────────────────────────────────── */
+.sectionTitle {
+  font-size: 1.75rem;
+  color: white;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.sectionDesc {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.sectionMeta {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.diffBadge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 99px;
+  font-weight: 600;
+}
+
+.diffGreen  { background: rgba(0,255,100,0.1); color: #00ff64; }
+.diffYellow { background: rgba(255,215,0,0.1); color: #ffd700; }
+.diffRed    { background: rgba(255,0,80,0.1);  color: #ff0050; }
+
+.metaChip {
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+/* ── Next Section ──────────────────────────────────────── */
+.nextTitle {
+  font-size: 1.1rem;
+  color: #cbd5e1;
+  margin: 0 0 0.35rem 0;
+}
+
+.nextDesc {
+  color: #64748b;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+/* ── Navigation ────────────────────────────────────────── */
+.navControls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.navBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.navBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.progressDots {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s;
+}
+
+.dotActive {
+  background: #00e5ff;
+  box-shadow: 0 0 6px rgba(0,229,255,0.8);
+  transform: scale(1.3);
+}
+
+.dotDone {
+  background: rgba(0, 229, 255, 0.3);
+}
+
+/* ── Speaker Notes ─────────────────────────────────────── */
+.notesText {
+  color: #e2e8f0;
+  font-size: 1rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 1.25rem 0;
+}
+
+.talkingPointsLabel {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #475569;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.talkingPoints {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.talkingPoints li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  font-size: 0.92rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.tpNum {
+  min-width: 22px;
+  height: 22px;
+  background: rgba(0, 229, 255, 0.12);
+  color: #00e5ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.noNotes {
+  color: #475569;
+  font-style: italic;
+}
+
+/* ── Timer Panel ───────────────────────────────────────── */
+.bigTimer {
+  font-size: 4rem;
+  font-weight: 800;
+  font-family: monospace;
+  color: #00e5ff;
+  text-align: center;
+  margin: 0.5rem 0 1rem;
+  transition: color 0.3s;
+}
+
+.timerBtns {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.timerBtn {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.timerBtnStart {
+  background: rgba(0, 229, 255, 0.15);
+  color: #00e5ff;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+}
+
+.timerBtnStart:hover { background: rgba(0, 229, 255, 0.25); }
+
+.timerBtnStop {
+  background: rgba(255, 68, 68, 0.15);
+  color: #ff6666;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+}
+
+.timerBtnStop:hover { background: rgba(255, 68, 68, 0.25); }
+
+.timerBtnReset {
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #64748b;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.timerBtnReset:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+
+.overrunAlert {
+  margin-top: 0.75rem;
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  color: #ff6666;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* ── Audience Questions ────────────────────────────────── */
+.questionInputRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.questionInput {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: white;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+
+.questionInput:focus {
+  outline: none;
+  border-color: rgba(0, 229, 255, 0.4);
+}
+
+.addQBtn {
+  background: rgba(0, 229, 255, 0.15);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  color: #00e5ff;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.addQBtn:hover { background: rgba(0, 229, 255, 0.25); }
+
+.questionList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.noQuestions {
+  color: #475569;
+  font-size: 0.88rem;
+  font-style: italic;
+  margin: 0;
+}
+
+.questionItem {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.9rem;
+  color: #cbd5e1;
+}
+
+.qBullet {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.08);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.deleteQBtn {
+  background: none;
+  border: none;
+  color: #475569;
+  cursor: pointer;
+  margin-left: auto;
+  font-size: 0.85rem;
+  padding: 0;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.deleteQBtn:hover { color: #ff6666; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (max-width: 1200px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+  .col:last-child { grid-column: span 2; flex-direction: row; }
+}
+
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; padding: 1rem; }
+  .col:last-child { flex-direction: column; grid-column: span 1; }
+  .header { flex-direction: column; gap: 0.75rem; padding: 1rem; }
+}

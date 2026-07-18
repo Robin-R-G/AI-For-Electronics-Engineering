@@ -1,0 +1,245 @@
+.container {
+  background: var(--glass-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin: var(--space-8) 0;
+}
+
+.header {
+  margin-bottom: var(--space-5);
+}
+
+.badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  background: rgba(139, 92, 246, 0.15);
+  color: #8b5cf6;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.package {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tab {
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--color-text-tertiary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--color-text-secondary);
+}
+
+.activeTab {
+  color: var(--color-cyan);
+  border-bottom-color: var(--color-cyan);
+}
+
+.tabContent {
+  min-height: 200px;
+}
+
+.pinoutGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.pinRow {
+  display: grid;
+  grid-template-columns: 14px 60px 100px 90px 1fr;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.pinRow:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pinDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.pinNumber {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+.pinName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+}
+
+.pinType {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pinDesc {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.specsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-3);
+}
+
+.specRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.specLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary);
+}
+
+.specValue {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+}
+
+.timingBox,
+.circuitBox,
+.designList,
+.mistakesBox {
+  padding: var(--space-4);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-4);
+}
+
+.timingBox h4,
+.circuitBox h4,
+.designList h4,
+.mistakesBox h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+  color: var(--color-text-primary);
+}
+
+.timingBox p,
+.designList li,
+.mistakesBox li {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.designList ul,
+.mistakesBox ul {
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mistakesBox li {
+  color: #f59e0b;
+}
+
+.code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.interviewList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.interviewItem {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-cyan);
+}
+
+.questionNumber {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-cyan);
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.interviewItem p {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.placeholder {
+  color: var(--color-text-muted);
+  font-style: italic;
+  text-align: center;
+  padding: var(--space-8);
+}
+
+@media (max-width: 768px) {
+  .pinRow {
+    grid-template-columns: 14px 50px 1fr;
+  }
+  .pinType,
+  .pinDesc {
+    display: none;
+  }
+}

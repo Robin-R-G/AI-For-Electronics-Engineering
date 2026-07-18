@@ -1,0 +1,147 @@
+.container {
+  background: var(--glass-bg);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-purple);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin: var(--space-8) 0;
+}
+
+.header {
+  margin-bottom: var(--space-5);
+}
+
+.badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  background: rgba(124, 58, 237, 0.15);
+  color: var(--color-purple);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.promptBox {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--space-4);
+}
+
+.promptHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.promptLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.copyBtn {
+  padding: var(--space-1) var(--space-3);
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: var(--radius-full);
+  color: var(--color-cyan);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copyBtn:hover {
+  background: rgba(0, 229, 255, 0.2);
+}
+
+.copied {
+  background: rgba(0, 255, 163, 0.15);
+  border-color: rgba(0, 255, 163, 0.3);
+  color: var(--color-green);
+}
+
+.promptContent {
+  padding: var(--space-4);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.promptRole {
+  font-weight: 700;
+  color: var(--color-purple);
+  margin-bottom: var(--space-3);
+}
+
+.promptSection {
+  margin-bottom: var(--space-3);
+}
+
+.promptSection:last-child {
+  margin-bottom: 0;
+}
+
+.promptSection ol {
+  padding-left: var(--space-5);
+  margin-top: var(--space-1);
+}
+
+.promptSection li {
+  margin-bottom: var(--space-1);
+}
+
+.section {
+  margin-top: var(--space-4);
+}
+
+.section h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-2);
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.section li {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  padding-left: var(--space-4);
+  position: relative;
+}
+
+.section li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-purple);
+}

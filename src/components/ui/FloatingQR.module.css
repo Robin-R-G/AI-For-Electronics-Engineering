@@ -1,0 +1,245 @@
+/* ── Floating Trigger Button ────────────────────────────── */
+.floatingBtn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 500;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-electric-blue), var(--color-cyan));
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(0, 82, 255, 0.5);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: fixed;
+}
+
+.floatingBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 32px rgba(0, 229, 255, 0.6);
+}
+
+.floatingBtnActive {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  color: white;
+}
+
+.qrIcon {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* Pulsing ring */
+.btnPulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(0, 229, 255, 0.3);
+  animation: pulse 2.5s ease-out infinite;
+  z-index: 0;
+}
+
+@keyframes pulse {
+  0%   { transform: scale(1); opacity: 0.7; }
+  70%  { transform: scale(1.7); opacity: 0; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+/* ── Backdrop ───────────────────────────────────────────── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 490;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* ── Panel ──────────────────────────────────────────────── */
+.panel {
+  position: fixed;
+  bottom: calc(2rem + 56px + 16px);
+  right: 2rem;
+  z-index: 501;
+  width: 320px;
+  background: rgba(8, 12, 20, 0.92);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 24px;
+  padding: 1.75rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 24px 56px rgba(0, 0, 0, 0.7),
+    0 0 60px rgba(0, 229, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.panelHeader {
+  text-align: center;
+}
+
+.panelHeader h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.2rem;
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.panelHeader p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* ── QR Code ─────────────────────────────────────────────── */
+.qrWrapper {
+  position: relative;
+  padding: 1.25rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qrWrapper svg {
+  border-radius: 8px;
+}
+
+.qrGlow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(0, 229, 255, 0.4) 25%,
+    transparent 50%,
+    rgba(0, 82, 255, 0.4) 75%,
+    transparent 100%
+  );
+  animation: rotateBorder 4s linear infinite;
+  z-index: -1;
+  filter: blur(6px);
+}
+
+@keyframes rotateBorder {
+  to { transform: rotate(360deg); }
+}
+
+/* ── URL Chip ─────────────────────────────────────────────── */
+.urlChip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 0.5rem 0.875rem;
+  width: 100%;
+}
+
+.urlText {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  font-family: monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Action Buttons ──────────────────────────────────────── */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.actionBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text-secondary);
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-snappy);
+  position: relative;
+  overflow: hidden;
+}
+
+.actionBtn span:first-child {
+  font-size: 1.1rem;
+}
+
+.actionBtn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,229,255,0.06), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.actionBtn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(0, 229, 255, 0.3);
+  color: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.actionBtn:hover::before { opacity: 1; }
+
+.actionDone {
+  background: rgba(0, 255, 100, 0.08) !important;
+  border-color: rgba(0, 255, 100, 0.3) !important;
+  color: #00ff64 !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Mobile adjustments ──────────────────────────────────── */
+@media (max-width: 400px) {
+  .panel {
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+    bottom: calc(1rem + 56px + 16px);
+  }
+  .floatingBtn {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}

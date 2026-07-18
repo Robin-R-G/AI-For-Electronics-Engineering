@@ -1,0 +1,100 @@
+.card {
+  --spotlight-x: -200px;
+  --spotlight-y: -200px;
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  transition:
+    transform 0.3s var(--ease-snappy),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Top highlight line */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.6), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Radial gradient inner glow */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(0,229,255,0.05) 0%, transparent 65%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.interactive {
+  cursor: pointer;
+  will-change: transform;
+}
+
+.interactive:hover {
+  border-color: rgba(0, 229, 255, 0.22);
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(0, 229, 255, 0.1),
+    0 0 36px rgba(0, 229, 255, 0.07);
+}
+
+.interactive:hover::before { opacity: 1; }
+.interactive:hover::after  { opacity: 1; }
+
+.interactive:active {
+  transition-duration: 0.1s;
+}
+
+/* ── Spotlight hover (mouse-tracking radial glow) ── */
+.spotlight::before {
+  content: '';
+  position: absolute;
+  top: var(--spotlight-y);
+  left: var(--spotlight-x);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+  border-radius: inherit;
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* ── Gradient border wrapper ── */
+.gradientBorder {
+  background: var(--glass-bg);
+}
+.gradientBorder::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(0,82,255,0.5), rgba(0,229,255,0.3), rgba(124,58,237,0.4));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.gradientBorder:hover::after {
+  opacity: 1;
+}

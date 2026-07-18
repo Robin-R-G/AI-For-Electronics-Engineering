@@ -1,0 +1,46 @@
+.timelineContainer {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.centralLine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(-50%);
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.glowingPulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-cyan),
+    transparent
+  );
+  animation: pulseDown 4s linear infinite;
+  box-shadow: 0 0 20px var(--color-cyan);
+}
+
+@keyframes pulseDown {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(2000px); }
+}
+
+@media (max-width: 900px) {
+  .centralLine {
+    left: 24px; /* Align to left on mobile */
+  }
+}

@@ -1,0 +1,136 @@
+.container {
+  margin-top: 2rem;
+}
+
+.selector {
+  margin-bottom: 3rem;
+}
+
+.selector h3 {
+  color: var(--color-white);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 99px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.badge.selected {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--color-cyan);
+  color: var(--color-white);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+}
+
+.comparisonGrid {
+  display: grid;
+  gap: 1.5rem;
+  overflow-x: auto;
+}
+
+.column {
+  background: var(--glass-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.colHeader {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.colHeader h4 {
+  font-size: 1.25rem;
+  color: var(--color-white);
+  margin: 0 0 0.5rem 0;
+}
+
+.pricing {
+  color: var(--color-cyan);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.section h5 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
+  color: var(--color-white);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.green {
+  color: #00ff64 !important;
+}
+
+.red {
+  color: #ff0050 !important;
+}
+
+.section p {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.section li {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.section li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+  .comparisonGrid {
+    grid-template-columns: 1fr !important; /* Stack on mobile */
+  }
+}
