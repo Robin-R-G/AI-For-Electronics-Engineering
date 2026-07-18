@@ -37,6 +37,7 @@ export const BUCKET_LABELS: Record<Bucket, string> = {
 export interface StoredFile {
   id: string;
   bucket: Bucket;
+  title: string;
   fileName: string; // unique within bucket
   originalName: string;
   mimeType: string;
@@ -93,6 +94,7 @@ export function resolveBucket(input: {
   mimeType: string;
   lessonSlug?: string;
   forceBucket?: Bucket;
+  originalNameSafe?: string;
 }): Bucket {
   if (input.forceBucket) return input.forceBucket;
   if (input.lessonSlug) return 'lesson-files';
@@ -126,11 +128,13 @@ export interface SaveFileInput {
   file: File;
   bucket?: Bucket; // explicit override
   category: string;
+  title?: string;
   description?: string;
   tags?: string[];
   version?: string;
   visibility?: 'public' | 'private';
   lessonSlug?: string;
+  thumbnail?: string;
   metadata?: Record<string, string>;
 }
 
@@ -141,6 +145,7 @@ export function saveFile(input: SaveFileInput): StoredFile {
         category: input.category,
         mimeType: input.file.type,
         lessonSlug: input.lessonSlug,
+        originalNameSafe: input.file.name,
       });
 
   const fileName = uniqueFileName(bucket, input.file.name);
@@ -148,6 +153,7 @@ export function saveFile(input: SaveFileInput): StoredFile {
   const record: StoredFile = {
     id: `file-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     bucket,
+    title: input.title ?? input.file.name,
     fileName,
     originalName: input.file.name,
     mimeType: input.file.type || 'application/octet-stream',
@@ -244,4 +250,14 @@ export function formatBytes(bytes: number): string {
     i++;
   }
   return `${size.toFixed(size < 10 ? 1 : 0)} ${units[i]}`;
+}
+
+export function fileTypeLabel(file: { mimeType: string; fileName?: string }): string {
+  if (file.mimeType.startsWith('image/')) return 'Image';
+  if (file.mimeType.startsWith('video/')) return 'Video';
+  if (file.mimeType.includes('pdf')) return 'PDF';
+  if (file.mimeType.includes('zip')) return 'Archive';
+  if (file.mimeType.includes('csv')) return 'CSV';
+  if (file.mimeType.includes('markdown') || file.mimeType.includes('md')) return 'Markdown';
+  return file.fileName?.split('.').pop()?.toUpperCase() ?? 'File';
 }

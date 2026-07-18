@@ -834,3 +834,244 @@
   border-color: var(--color-border-bright);
   color: var(--color-text-primary);
 }
+
+/* ── Storage usage bar ─────────────────────── */
+.usageBar {
+  margin-bottom: 1.5rem;
+}
+
+.usageLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.usageLabel strong {
+  color: var(--color-text-primary);
+}
+
+.usageTrack {
+  display: flex;
+  height: 18px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+}
+
+.usageSeg {
+  height: 100%;
+  min-width: 2px;
+}
+
+.usageLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.usageChip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+}
+
+.usageChip span {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* ── Analytics ─────────────────────────────── */
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.statSub {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  margin-top: 0.1rem;
+}
+
+.analyticBlock {
+  padding: 1.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+.analyticBlock h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.85rem;
+}
+
+.rankList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rankName {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rankCount {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-cyan);
+  margin-left: auto;
+}
+
+.uploadList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.upName {
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.upMeta {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Lesson editor ─────────────────────────── */
+.editorGrid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.editorMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.editorArea {
+  width: 100%;
+  min-height: 420px;
+  padding: 1rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+}
+
+.editorArea:focus {
+  border-color: var(--color-cyan);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.6rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.overrideTag,
+.defaultTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+.overrideTag {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+
+.defaultTag {
+  background: rgba(0, 255, 163, 0.1);
+  color: #00ffa3;
+}
+
+.mediaPicker {
+  padding: 0.75rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.mediaPicker h4 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.6rem;
+}
+
+.editorActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.editorSide {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.historyBox {
+  padding: 1.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+.historyBox h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.histNote {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.85rem;
+  line-height: 1.5;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .editorGrid {
+    grid-template-columns: 1fr;
+  }
+}
