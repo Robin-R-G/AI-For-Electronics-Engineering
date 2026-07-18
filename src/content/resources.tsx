@@ -1,7 +1,11 @@
+'use client';
+
 import React from 'react';
+import { useSyncExternalStore } from 'react';
 import Callout from '@/components/course/Callout';
 import MiniQuiz from '@/components/course/MiniQuiz';
 import KeyTakeaways from '@/components/course/KeyTakeaways';
+import { getResources, subscribeResources } from '@/lib/resources';
 
 const ResourcesContent = () => {
   return (
@@ -66,6 +70,10 @@ const ResourcesContent = () => {
         <li><strong>Local IEEE / hackathon groups</strong> — hands-on, in person.</li>
       </ul>
 
+      <h2>Downloadable Resources</h2>
+      <p>Materials published by the instructor appear here and can be downloaded directly.</p>
+      <ResourceGallery />
+
       <MiniQuiz
         question="What is the recommended fastest path to real edge-AI skill?"
         options={[
@@ -89,5 +97,76 @@ const ResourcesContent = () => {
     </>
   );
 };
+
+function ResourceGallery() {
+  const resources = useSyncExternalStore(subscribeResources, getResources, () => []);
+  const publicResources = resources.filter(r => r.visibility === 'public');
+
+  if (publicResources.length === 0) {
+    return (
+      <p style={{ opacity: 0.7, fontStyle: 'italic' }}>
+        No downloadable resources published yet.
+      </p>
+    );
+  }
+
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gap: '1rem',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+        margin: '1rem 0',
+      }}
+    >
+      {publicResources.map(r => (
+        <div
+          key={r.id}
+          style={{
+            border: '1px solid var(--border, #2a2f45)',
+            borderRadius: 12,
+            padding: '1rem',
+            background: 'var(--card, #11142a)',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 8,
+            }}
+          >
+            <span style={{ fontSize: 12, opacity: 0.7, textTransform: 'uppercase' }}>
+              {r.category}
+            </span>
+            <span style={{ fontSize: 12, opacity: 0.7 }}>
+              {r.fileType} · {r.fileSize}
+            </span>
+          </div>
+          <h3 style={{ margin: '0 0 .4rem' }}>{r.title}</h3>
+          <p style={{ fontSize: 14, opacity: 0.85, margin: '0 0 .8rem' }}>
+            {r.description}
+          </p>
+          <a
+            href={r.fileData}
+            download={r.fileName}
+            style={{
+              display: 'inline-block',
+              padding: '.5rem .9rem',
+              borderRadius: 8,
+              background: 'var(--color-electric-blue, #2f6bff)',
+              color: '#fff',
+              textDecoration: 'none',
+              fontSize: 14,
+            }}
+          >
+            ⬇ Download
+          </a>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default ResourcesContent;

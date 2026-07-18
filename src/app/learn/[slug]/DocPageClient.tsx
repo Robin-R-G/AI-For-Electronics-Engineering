@@ -8,6 +8,7 @@ import { useProgress } from '@/context/ProgressContext';
 import styles from '../docs.module.css';
 import DocNavigation from '@/components/ui/DocNavigation';
 import ChapterHeader from '@/components/course/ChapterHeader';
+import LessonResources from '@/components/course/LessonResources';
 
 const ContentComponents: Record<string, React.FC> = {
   'introduction': React.lazy(() => import('@/content/introduction')),
@@ -71,7 +72,11 @@ export default function DocPageClient({ slugPromise }: { slugPromise: Promise<st
         )}
       </div>
 
+      <LessonResources slug={slug} />
+
       <DocNavigation currentSlug={slug} />
+
+      <LessonResources slug={slug} />
     </div>
   );
 }

@@ -1,6 +1,10 @@
 'use client';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useSyncExternalStore } from 'react';
 import { downloadsData, downloadCategories, DownloadItem } from '@/data/downloadsData';
+import { Resource, getResources, subscribeResources } from '@/lib/resources';
+import { docsSections } from '@/lib/docsConfig';
+import { getSettings } from '@/lib/settings';
+import { renderCertificate } from '@/lib/certificate';
 import styles from './downloads.module.css';
 
 const getCategoryColor = (category: DownloadItem['category']) => {
@@ -210,60 +214,6 @@ function generateProjectListImage(): HTMLCanvasElement {
   return c;
 }
 
-function generateCertificateImage(name: string = 'Participant Name'): HTMLCanvasElement {
-  const W = 1200, H = 850;
-  const c = document.createElement('canvas'); c.width = W; c.height = H;
-  const ctx = c.getContext('2d')!;
-  // dark bg with border
-  ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
-  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 4;
-  ctx.strokeRect(20, 20, W - 40, H - 40);
-  ctx.strokeStyle = '#f59e0b33'; ctx.lineWidth = 1;
-  ctx.strokeRect(30, 30, W - 60, H - 60);
-  // top accent
-  const grad = ctx.createLinearGradient(0, 0, W, 0);
-  grad.addColorStop(0, '#f59e0b'); grad.addColorStop(1, '#ef4444');
-  ctx.fillStyle = grad; ctx.font = 'bold 22px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('★  CERTIFICATE OF COMPLETION  ★', W / 2, 90);
-  // title
-  ctx.fillStyle = '#e6edf3'; ctx.font = 'bold 52px sans-serif';
-  ctx.fillText('AI for Electronics Engineers', W / 2, 170);
-  ctx.fillStyle = '#8b949e'; ctx.font = '26px sans-serif';
-  ctx.fillText('Workshop Program', W / 2, 210);
-  // divider
-  ctx.strokeStyle = '#f59e0b55'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(300, 240); ctx.lineTo(W - 300, 240); ctx.stroke();
-  // body
-  ctx.fillStyle = '#8b949e'; ctx.font = '22px sans-serif';
-  ctx.fillText('This is to certify that the participant has successfully completed', W / 2, 290);
-  ctx.fillText('all modules of the AI for Electronics Engineers Workshop.', W / 2, 325);
-  // name
-  ctx.fillStyle = 'rgba(245,158,11,0.08)';
-  ctx.beginPath(); ctx.roundRect(W / 2 - 250, 355, 500, 70, 8); ctx.fill();
-  ctx.strokeStyle = '#f59e0b44'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.roundRect(W / 2 - 250, 355, 500, 70, 8); ctx.stroke();
-  ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 30px sans-serif';
-  ctx.fillText(name, W / 2, 398);
-  // details
-  ctx.fillStyle = '#8b949e'; ctx.font = '18px sans-serif';
-  ctx.fillText('19 Modules  •  11 Sections  •  Hands-on Labs  •  Quiz  •  Certificate', W / 2, 470);
-  // instructor
-  ctx.fillStyle = '#e6edf3'; ctx.font = 'bold 24px sans-serif';
-  ctx.fillText('Robin R G', W / 2, 560);
-  ctx.fillStyle = '#8b949e'; ctx.font = '18px sans-serif';
-  ctx.fillText('Instructor  |  AI for Electronics Engineers Workshop', W / 2, 590);
-  // date
-  ctx.fillStyle = '#8b949e'; ctx.font = '16px sans-serif';
-  ctx.fillText('July 2026', W / 2, 650);
-  ctx.textAlign = 'left';
-  // footer
-  ctx.fillStyle = '#21262d'; ctx.fillRect(0, H - 70, W, 70);
-  ctx.fillStyle = '#8b949e'; ctx.font = '16px sans-serif';
-  ctx.fillText('Designed by Robin R G  |  AI for Electronics Engineers Workshop', 60, H - 30);
-  return c;
-}
-
 function generateSourceCodeImage(): HTMLCanvasElement {
   const W = 1200, H = 700;
   const c = document.createElement('canvas'); c.width = W; c.height = H;
@@ -393,22 +343,34 @@ const imageGenerators: Record<string, (name?: string) => HTMLCanvasElement> = {
   'prompt-book': () => generatePromptBookImage(),
   'cheat-sheet': () => generateCheatSheetImage(),
   'project-list': () => generateProjectListImage(),
-  'certificate-template': (name) => generateCertificateImage(name),
   'source-code': () => generateSourceCodeImage(),
   'presentation-pdf': () => generatePresentationImage(),
   'resources-pdf': () => generateResourcesImage(),
 };
+
+type DisplayItem =
+  | { kind: 'seed'; item: DownloadItem }
+  | { kind: 'resource'; item: Resource };
 
 const DownloadsContent = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [certName, setCertName] = useState('');
   const [showCertModal, setShowCertModal] = useState(false);
+  const liveResources = useSyncExternalStore(subscribeResources, () => getResources(), () => []);
 
-  const filtered = useMemo(() => {
-    if (activeCategory === 'All') return downloadsData;
-    return downloadsData.filter(d => d.category === activeCategory);
-  }, [activeCategory]);
+  const filtered = useMemo<DisplayItem[]>(() => {
+    const publicResources = liveResources.filter(r => r.visibility === 'public');
+    const ordered = [...publicResources].sort((a, b) =>
+      a.displayOrder - b.displayOrder || a.uploadedAt.localeCompare(b.uploadedAt)
+    );
+    const resourceItems: DisplayItem[] = ordered.map(item => ({ kind: 'resource', item }));
+    const seedItems: DisplayItem[] = (activeCategory === 'All'
+      ? downloadsData
+      : downloadsData.filter(d => d.category === activeCategory)
+    ).map(item => ({ kind: 'seed', item }));
+    return [...resourceItems, ...seedItems];
+  }, [activeCategory, liveResources]);
 
   const doDownload = (item: DownloadItem, name?: string) => {
     setDownloadingId(item.id);
@@ -421,6 +383,18 @@ const DownloadsContent = () => {
     }, 500);
   };
 
+  const downloadResource = (item: Resource) => {
+    const a = document.createElement('a');
+    a.href = item.fileData;
+    a.download = item.fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const lessonTitle = (slug: string) =>
+    docsSections.find(s => s.slug === slug)?.title ?? slug;
+
   const handleDownload = (item: DownloadItem) => {
     if (item.id === 'certificate-template') {
       setCertName('');
@@ -430,10 +404,16 @@ const DownloadsContent = () => {
     doDownload(item);
   };
 
-  const handleCertSubmit = () => {
-    const item = downloadsData.find(d => d.id === 'certificate-template')!;
+  const handleCertSubmit = async () => {
     setShowCertModal(false);
-    doDownload(item, certName.trim() || 'Participant Name');
+    setDownloadingId('certificate-template');
+    try {
+      const canvas = document.createElement('canvas');
+      await renderCertificate(canvas, getSettings(), certName.trim() || 'Participant Name');
+      downloadCanvas(canvas, 'certificate.png');
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   return (
@@ -456,53 +436,118 @@ const DownloadsContent = () => {
       </div>
 
       <div className={styles.grid}>
-        {filtered.map((item, i) => (
-          <div
-            key={item.id}
-            className={styles.card}
-            style={{ animationDelay: `${i * 0.07}s` }}
-          >
-            <div className={styles.cardHeader}>
-              <span className={styles.itemIcon}>{item.icon}</span>
-              <span className={`${styles.categoryBadge} ${getCategoryColor(item.category)}`}>
-                {item.category}
-              </span>
-            </div>
+        {filtered.map((entry, i) => {
+          if (entry.kind === 'seed') {
+            const item = entry.item;
+            return (
+              <div
+                key={item.id}
+                className={styles.card}
+                style={{ animationDelay: `${i * 0.07}s` }}
+              >
+                <div className={styles.cardHeader}>
+                  <span className={styles.itemIcon}>{item.icon}</span>
+                  <span className={`${styles.categoryBadge} ${getCategoryColor(item.category)}`}>
+                    {item.category}
+                  </span>
+                </div>
 
-            <div className={styles.cardBody}>
-              <h3 className={styles.itemTitle}>{item.title}</h3>
-              <p className={styles.itemDesc}>{item.description}</p>
-            </div>
+                <div className={styles.cardBody}>
+                  <h3 className={styles.itemTitle}>{item.title}</h3>
+                  <p className={styles.itemDesc}>{item.description}</p>
+                </div>
 
-            <div className={styles.cardMeta}>
-              <div className={styles.metaRow}>
-                <span className={`${styles.fileTypeBadge} ${getTypeColor(item.fileType)}`}>
-                  {item.fileType}
-                </span>
-                <span className={styles.metaItem}>📦 {item.fileSize}</span>
+                <div className={styles.cardMeta}>
+                  <div className={styles.metaRow}>
+                    <span className={`${styles.fileTypeBadge} ${getTypeColor(item.fileType)}`}>
+                      {item.fileType}
+                    </span>
+                    <span className={styles.metaItem}>📦 {item.fileSize}</span>
+                  </div>
+                  <div className={styles.metaRow}>
+                    <span className={styles.metaItem}>🔖 {item.version}</span>
+                    <span className={styles.metaItem}>🗓 {item.updatedAt}</span>
+                  </div>
+                </div>
+
+                <button
+                  className={`${styles.downloadBtn} ${downloadingId === item.id ? styles.downloading : ''}`}
+                  onClick={() => handleDownload(item)}
+                  disabled={downloadingId === item.id}
+                >
+                  {downloadingId === item.id ? (
+                    <>
+                      <span className={styles.spinner}></span>
+                      Generating…
+                    </>
+                  ) : (
+                    <>⬇ Download {item.fileType.split(' ')[0]}</>
+                  )}
+                </button>
               </div>
-              <div className={styles.metaRow}>
-                <span className={styles.metaItem}>🔖 {item.version}</span>
-                <span className={styles.metaItem}>🗓 {item.updatedAt}</span>
-              </div>
-            </div>
+            );
+          }
 
-            <button
-              className={`${styles.downloadBtn} ${downloadingId === item.id ? styles.downloading : ''}`}
-              onClick={() => handleDownload(item)}
-              disabled={downloadingId === item.id}
+          const r = entry.item;
+          return (
+            <div
+              key={r.id}
+              className={styles.card}
+              style={{ animationDelay: `${i * 0.07}s` }}
             >
-              {downloadingId === item.id ? (
-                <>
-                  <span className={styles.spinner}></span>
-                  Generating…
-                </>
+              {r.thumbnail ? (
+                <img src={r.thumbnail} alt={r.title} className={styles.thumbImg} />
               ) : (
-                <>⬇ Download {item.fileType.split(' ')[0]}</>
+                <div className={styles.cardHeader}>
+                  <span className={styles.itemIcon}>📄</span>
+                  <span className={`${styles.categoryBadge} ${getCategoryColor(r.category as DownloadItem['category'])}`}>
+                    {r.category}
+                  </span>
+                </div>
               )}
-            </button>
-          </div>
-        ))}
+
+              <div className={styles.cardBody}>
+                <h3 className={styles.itemTitle}>{r.title}</h3>
+                <p className={styles.itemDesc}>{r.description}</p>
+                {r.tags.length > 0 && (
+                  <div className={styles.tagRow}>
+                    {r.tags.map(t => <span key={t} className={styles.tag}>#{t}</span>)}
+                  </div>
+                )}
+                {r.associatedLesson && (
+                  <a
+                    className={styles.lessonLink}
+                    href={`/AI-For-Electronics-Engineering/learn/${r.associatedLesson}`}
+                  >
+                    📎 {lessonTitle(r.associatedLesson)}
+                  </a>
+                )}
+              </div>
+
+              <div className={styles.cardMeta}>
+                <div className={styles.metaRow}>
+                  <span className={`${styles.fileTypeBadge} ${getTypeColor(r.fileType)}`}>
+                    {r.fileType}
+                  </span>
+                  <span className={styles.metaItem}>📦 {r.fileSize}</span>
+                </div>
+                <div className={styles.metaRow}>
+                  <span className={styles.metaItem}>🔖 {r.version}</span>
+                  <span className={styles.metaItem}>
+                    🗓 {new Date(r.uploadedAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                className={styles.downloadBtn}
+                onClick={() => downloadResource(r)}
+              >
+                ⬇ Download {r.fileType}
+              </button>
+            </div>
+          );
+        })}
       </div>
 
       {showCertModal && (

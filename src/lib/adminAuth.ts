@@ -163,6 +163,7 @@ export async function login(
 
 // ── Get session (sync, for UI) ─────────────────────────────────────
 export function getSessionSync(): AdminSession | null {
+  if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') return null;
   try {
     const raw = sessionStorage.getItem(SESSION_KEY);
     if (!raw) return null;
