@@ -9,7 +9,7 @@ export const Navbar = () => {
         <div className={styles.logo}>
           <Link href="/">
             <span className={styles.logoIcon}></span>
-            <span className={styles.logoText}>AI for EE</span>
+            <span className={styles.logoText}>AI for Electronics Engineering</span>
           </Link>
         </div>
         

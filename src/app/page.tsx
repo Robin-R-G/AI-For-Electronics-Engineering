@@ -87,12 +87,7 @@ export default function Home() {
           <div className={`${styles.glowBlob} ${styles.glowCyan}`} />
 
           <div className={styles.heroContent}>
-            <div className={styles.badge}>
-              <span className={styles.pulse}></span>
-              Live Workshop · 2026
-            </div>
-
-            <h1 className={styles.title}>
+             <h1 className={styles.title}>
               AI for <br />
               <span className="text-gradient-hero">Electronics Engineers</span>
             </h1>

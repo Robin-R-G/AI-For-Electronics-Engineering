@@ -90,10 +90,55 @@ const ElectronicsLabContent = () => {
   return (
     <>
       <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '2rem' }}>
-        Welcome to the **Engineering Project Studio**. This studio hosts 78 fully documented hardware, 
+        Welcome to the <strong>Engineering Project Studio</strong>. This studio hosts 78 fully documented hardware, 
         firmware, and power projects. Every curriculum contains schematics, step-by-step checklists, 
         troubleshooting routines, interactive mini-quizzes, and custom GPT AI engineering prompt packs.
       </p>
+
+      {/* Category Horizontal Pills */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 700, letterSpacing: '0.05em' }}>SELECT ENGINEERING DOMAIN</span>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setSelectedCategory('All')}
+            style={{
+              padding: '0.4rem 0.9rem',
+              borderRadius: '9999px',
+              border: '1px solid ' + (selectedCategory === 'All' ? 'var(--color-cyan)' : 'rgba(255,255,255,0.06)'),
+              background: selectedCategory === 'All' ? 'rgba(0, 229, 255, 0.08)' : 'rgba(255,255,255,0.02)',
+              color: selectedCategory === 'All' ? 'var(--color-cyan)' : 'var(--color-text-secondary)',
+              cursor: 'pointer',
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              transition: 'all 0.15s'
+            }}
+          >
+            All
+          </button>
+          {categories.map(cat => {
+            const isActive = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                style={{
+                  padding: '0.4rem 0.9rem',
+                  borderRadius: '9999px',
+                  border: '1px solid ' + (isActive ? 'var(--color-cyan)' : 'rgba(255,255,255,0.06)'),
+                  background: isActive ? 'rgba(0, 229, 255, 0.08)' : 'rgba(255,255,255,0.02)',
+                  color: isActive ? 'var(--color-cyan)' : 'var(--color-text-secondary)',
+                  cursor: 'pointer',
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  transition: 'all 0.15s'
+                }}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Main Two-Column Layout */}
       <div style={{ 
@@ -105,8 +150,8 @@ const ElectronicsLabContent = () => {
       }}>
         {/* Left Drawer (Search & Filters) */}
         <div style={{ 
-          flex: '1 1 320px', 
-          maxWidth: '400px',
+          flex: '1 1 300px', 
+          maxWidth: '360px',
           background: 'rgba(0, 0, 0, 0.25)',
           border: '1px solid var(--color-border)',
           borderRadius: '16px',
@@ -114,7 +159,7 @@ const ElectronicsLabContent = () => {
           display: 'flex',
           flexDirection: 'column',
           gap: '1rem',
-          maxHeight: '900px',
+          maxHeight: '750px',
           overflowY: 'hidden'
         }}>
           {/* Search bar */}
@@ -140,34 +185,9 @@ const ElectronicsLabContent = () => {
             />
           </div>
 
-          {/* Category Dropdown */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>DISCIPLINE CATEGORY</span>
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.6rem',
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                background: 'rgba(255,255,255,0.03)',
-                color: 'var(--color-text-secondary)',
-                outline: 'none',
-                fontSize: '0.85rem',
-                cursor: 'pointer'
-              }}
-            >
-              <option value="All" style={{ background: 'var(--color-dark-slate)' }}>All Domains</option>
-              {categories.map(cat => (
-                <option key={cat} value={cat} style={{ background: 'var(--color-dark-slate)' }}>{cat}</option>
-              ))}
-            </select>
-          </div>
-
           {/* Difficulty filter buttons */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>DIFFICULTY</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>DIFFICULTY</span>
             <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
               {['All', 'Beginner', 'Intermediate', 'Advanced', 'Expert'].map(diff => {
                 const isActive = selectedDifficulty === diff;
@@ -194,15 +214,15 @@ const ElectronicsLabContent = () => {
             </div>
           </div>
 
-          {/* Scrollable Project Cards List */}
+          {/* Scrollable Project Cards List - Clean Compact Form */}
           <div style={{ 
             flex: 1, 
             overflowY: 'auto', 
             display: 'flex', 
             flexDirection: 'column', 
-            gap: '0.6rem',
+            gap: '0.45rem',
             paddingRight: '0.25rem',
-            maxHeight: '560px'
+            maxHeight: '520px'
           }}>
             {filteredProjects.map(p => {
               const isSelected = activeProject?.id === p.id;
@@ -211,33 +231,48 @@ const ElectronicsLabContent = () => {
                   key={p.id}
                   onClick={() => { setSelectedProject(p); setActiveTab('planning'); }}
                   style={{
-                    padding: '0.85rem 1rem',
+                    padding: '0.65rem 0.85rem',
                     background: isSelected ? 'rgba(0, 229, 255, 0.04)' : 'rgba(255,255,255,0.01)',
                     border: '1px solid ' + (isSelected ? 'rgba(0, 229, 255, 0.2)' : 'rgba(255,255,255,0.03)'),
                     borderLeft: '4px solid ' + (isSelected ? 'var(--color-cyan)' : 'rgba(255,255,255,0.1)'),
-                    borderRadius: '8px',
+                    borderRadius: '6px',
                     cursor: 'pointer',
-                    transition: 'all 0.2s',
+                    transition: 'all 0.15s',
                     textAlign: 'left'
                   }}
+                  onMouseEnter={(e) => {
+                    if (!isSelected) {
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isSelected) {
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.01)';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.03)';
+                    }
+                  }}
                 >
-                  <div style={{ 
-                    fontSize: '0.9rem', 
-                    fontWeight: 700, 
-                    color: isSelected ? 'white' : 'var(--color-text-secondary)',
-                    marginBottom: '0.35rem',
-                    lineHeight: '1.3'
-                  }}>
-                    {p.title}
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem' }}>
-                    <span style={{ color: 'var(--color-electric-blue)', fontWeight: 500 }}>{p.category}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ 
+                      fontSize: '0.85rem', 
+                      fontWeight: 700, 
+                      color: isSelected ? 'white' : 'var(--color-text-secondary)',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      flex: 1
+                    }}>
+                      {p.title}
+                    </div>
                     <span style={{ 
                       padding: '1px 5px', 
                       borderRadius: '3px',
-                      background: p.difficulty === 'Beginner' ? 'rgba(52,211,153,0.1)' : p.difficulty === 'Intermediate' ? 'rgba(251,191,36,0.1)' : p.difficulty === 'Advanced' ? 'rgba(248,113,113,0.1)' : 'rgba(167,139,250,0.1)',
-                      color: p.difficulty === 'Beginner' ? '#34d399' : p.difficulty === 'Intermediate' ? '#fbbf24' : '#f87171',
-                      fontWeight: 600
+                      background: p.difficulty === 'Beginner' ? 'rgba(52,211,153,0.08)' : p.difficulty === 'Intermediate' ? 'rgba(251,191,36,0.08)' : p.difficulty === 'Advanced' ? 'rgba(248,113,113,0.08)' : 'rgba(167,139,250,0.08)',
+                      color: p.difficulty === 'Beginner' ? '#34d399' : p.difficulty === 'Intermediate' ? '#fbbf24' : p.difficulty === 'Advanced' ? '#f87171' : '#c084fc',
+                      fontWeight: 700,
+                      fontSize: '0.65rem',
+                      flexShrink: 0
                     }}>{p.difficulty}</span>
                   </div>
                 </div>
