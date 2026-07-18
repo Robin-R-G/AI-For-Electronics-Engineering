@@ -1,0 +1,173 @@
+[
+  {
+    "id": "stm32-led-rtos",
+    "title": "STM32 FreeRTOS LED Scheduler",
+    "difficulty": "Advanced",
+    "components": [
+      "STM32 BluePill (F103C8)",
+      "ST-Link V2",
+      "LEDs ×2",
+      "Current Limiting Resistors ×2",
+      "Breadboard"
+    ],
+    "connections": [
+      "LED 1 Anode → PC13 (via 330Ω resistor)",
+      "LED 2 Anode → PB12 (via 330Ω resistor)",
+      "Cathodes (-) → GND",
+      "ST-Link SWDIO/SWCLK/GND/3.3V connected to STM32 debug port"
+    ],
+    "code": "/* FreeRTOS multi-tasking LED schedule */\n#include \"stm32f1xx_hal.h\"\n#include \"FreeRTOS.h\"\n#include \"task.h\"\n\nvoid Task1_Handler(void* params);\nvoid Task2_Handler(void* params);\n\nint main(void) {\n  HAL_Init();\n  \n  xTaskCreate(Task1_Handler, \"LED_Green\", configMINIMAL_STACK_SIZE, NULL, 1, NULL);\n  xTaskCreate(Task2_Handler, \"LED_Red\", configMINIMAL_STACK_SIZE, NULL, 1, NULL);\n  \n  vTaskStartScheduler();\n  while(1);\n}\n\nvoid Task1_Handler(void* params) {\n  while(1) {\n    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);\n    vTaskDelay(pdMS_TO_TICKS(500));\n  }\n}",
+    "tips": [
+      "Use FreeRTOS API `vTaskDelay()` instead of HAL block delays. `vTaskDelay` relinquishes control, letting other lower-priority threads run.",
+      "Check your FreeRTOS config file: ensure system tick frequencies are set to 1000Hz (1ms resolution)."
+    ]
+  },
+  {
+    "id": "stm32-dma-logger",
+    "title": "STM32 Multi-Channel DMA ADC Logger",
+    "difficulty": "Advanced",
+    "components": [
+      "STM32 BluePill",
+      "SPI SD Card Module",
+      "ST-Link V2",
+      "Analog Sensors ×3",
+      "Breadboard"
+    ],
+    "connections": [
+      "Sensors Analog Out → PA0, PA1, PA2",
+      "SD Card SPI: SCK → PA5, MISO → PA6, MOSI → PA7, CS → PA4"
+    ],
+    "code": "/* STM32 ADC scan with DMA data storage */\n#include \"stm32f1xx_hal.h\"\n\nADC_HandleTypeDef hadc1;\nDMA_HandleTypeDef hdma_adc1;\nuint16_t adcData[3];\n\nvoid setup() {\n  // Configure ADC to scan PA0, PA1, PA2\n  // Configure DMA in circular mode\n  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adcData, 3);\n}\n\nvoid loop() {\n  // Read adcData[0], adcData[1], adcData[2] asynchronously\n  HAL_Delay(1000);\n}",
+    "tips": [
+      "The ADC peripheral updates conversion memory directly in RAM using DMA. Zero CPU Cycles are wasted.",
+      "Place decoupling capacitors near the STM32 analog power pins (VDDA/VSSA) to decouple switching loop noise."
+    ]
+  },
+  {
+    "id": "stm32-lcd",
+    "title": "STM32 parallel 16x2 LCD Driver",
+    "difficulty": "Intermediate",
+    "components": [
+      "STM32 BluePill",
+      "16x2 Character LCD",
+      "10kΩ Contrast Potentiometer",
+      "ST-Link V2",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "LCD RS → PA0",
+      "LCD EN → PA1",
+      "LCD D4-D7 → PA2, PA3, PA4, PA5",
+      "LCD VSS/VCC → GND/5V, Contrast Middle Pin → V0"
+    ],
+    "code": "/* Direct pin manipulation interface for HD44780 */\n#include \"stm32f1xx_hal.h\"\n\nvoid LCD_SendCommand(uint8_t cmd) {\n  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET); // RS = 0\n  // Write upper nibble to D4-D7 pins, pulse EN pin, write lower nibble\n}\n\nvoid LCD_Init() {\n  HAL_Delay(50); // Power up wait\n  LCD_SendCommand(0x02); // 4-bit initialization mode\n  LCD_SendCommand(0x28); // 2 lines, 5x8 matrix\n}",
+    "tips": [
+      "Standard HD44780 LCD controller timing is slow. Inserting microscopic delays (microsecond delays) between pin writes is required for correct rendering.",
+      "The LCD logic requires 5V. Fortunately, most STM32 GPIO pins are 5V-tolerant (FT) in digital output modes."
+    ]
+  },
+  {
+    "id": "stm32-canbus",
+    "title": "STM32 CAN Bus Communication node",
+    "difficulty": "Advanced",
+    "components": [
+      "STM32 BluePill ×2",
+      "TJA1050 CAN Transceivers ×2",
+      "ST-Link V2",
+      "120Ω Terminating Resistors ×2"
+    ],
+    "connections": [
+      "STM32 CAN_TX (PA12) → TJA1050 TXD",
+      "STM32 CAN_RX (PA11) → TJA1050 RXD",
+      "TJA1050 CANH → CANH (with 120Ω resistor parallel)",
+      "TJA1050 CANL → CANL (with 120Ω resistor parallel)"
+    ],
+    "code": "/* CAN Bus message frame TX initialization */\n#include \"stm32f1xx_hal.h\"\n\nCAN_HandleTypeDef hcan;\nCAN_TxHeaderTypeDef TxHeader;\nuint8_t TxData[8];\nuint32_t TxMailbox;\n\nvoid CAN_Config() {\n  hcan.Instance = CAN1;\n  // Baud rate setup: Prescaler = 9, Seg1 = 5, Seg2 = 2 for 500kbps\n  HAL_CAN_Init(&hcan);\n  HAL_CAN_Start(&hcan);\n}\n\nvoid SendFrame() {\n  TxHeader.StdId = 0x123;\n  TxHeader.DLC = 8;\n  TxData[0] = 0xAA;\n  HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox);\n}",
+    "tips": [
+      "A CAN bus MUST be terminated at each end with a 120Ω resistor. Without them, transmission frames fail due to signal reflections.",
+      "Check timing segments (TQ) carefully to avoid clock drift packet errors between nodes."
+    ]
+  },
+  {
+    "id": "stm32-uart",
+    "title": "STM32 UART Interrupt Terminal Node",
+    "difficulty": "Intermediate",
+    "components": [
+      "STM32 BluePill",
+      "USB-to-UART FTDI Adapter",
+      "ST-Link V2",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "STM32 TX (PA9) → FTDI RX",
+      "STM32 RX (PA10) → FTDI TX",
+      "GND → FTDI GND"
+    ],
+    "code": "/* STM32 UART character reception using Interrupts */\n#include \"stm32f1xx_hal.h\"\n\nUART_HandleTypeDef huart1;\nuint8_t rxBuffer[1];\n\nvoid HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {\n  if(huart->Instance == USART1) {\n    // Echo byte back to sender\n    HAL_UART_Transmit_IT(&huart1, rxBuffer, 1);\n    // Re-enable Interrupt\n    HAL_UART_Receive_IT(&huart1, rxBuffer, 1);\n  }\n}\n\nint main(void) {\n  HAL_Init();\n  HAL_UART_Receive_IT(&huart1, rxBuffer, 1);\n  while(1);\n}",
+    "tips": [
+      "Avoid writing print statements inside the ISR. Keep execution code inside `HAL_UART_RxCpltCallback` short to avoid framing errors.",
+      "Mismatching parity, baud rate (e.g. 115200), or stop bits will corrupt received characters."
+    ]
+  },
+  {
+    "id": "stm32-motor-speed",
+    "title": "STM32 Encoder Motor Controller",
+    "difficulty": "Advanced",
+    "components": [
+      "STM32 BluePill",
+      "DC Motor with Quadrature Encoder",
+      "L298N Motor Driver",
+      "ST-Link V2",
+      "Breadboard"
+    ],
+    "connections": [
+      "Encoder Channel A/B → PA0/PA1 (TIM2 CH1/CH2 Input)",
+      "Motor Driver IN1/IN2 → PA6/PA7, PWM ENA → PA8 (TIM1 CH1 Output)"
+    ],
+    "code": "/* Encoder speed acquisition using hardware Timer interface */\n#include \"stm32f1xx_hal.h\"\n\nTIM_HandleTypeDef htim2; // Timer for Encoder\nTIM_HandleTypeDef htim1; // Timer for PWM\n\nvoid setup() {\n  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);\n  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);\n}\n\nint16_t GetEncoderCount() {\n  return (int16_t)__HAL_TIM_GET_COUNTER(&htim2);\n}",
+    "tips": [
+      "STM32 Timer Encoder Mode handles reading quadrature pulses and tracking directions automatically in hardware, freeing up CPU cycles.",
+      "Encoder wires should be shielded or twisted to protect signals from motor line noise coupling."
+    ]
+  },
+  {
+    "id": "stm32-servo",
+    "title": "STM32 multi-Timer PWM Servo Controller",
+    "difficulty": "Intermediate",
+    "components": [
+      "STM32 BluePill",
+      "SG90 Servo Motors ×4",
+      "ST-Link V2",
+      "5V 2A Power Supply",
+      "Breadboard"
+    ],
+    "connections": [
+      "Servo Signals 1-4 → PA0, PA1, PA2, PA3 (TIM2 CH1-CH4)",
+      "VCC → 5V External (+), GND → STM32 GND & 5V External (-)"
+    ],
+    "code": "/* Multi-channel 50Hz PWM Servo Setup */\n#include \"stm32f1xx_hal.h\"\n\nTIM_HandleTypeDef htim2;\n\nvoid Servo_WriteAngle(uint8_t channel, float angle) {\n  // SG90: 50Hz (20ms period). Pulse width: 0.5ms (0 deg) to 2.5ms (180 deg)\n  uint32_t compareVal = (uint32_t)(500 + (angle / 180.0) * 2000);\n  __HAL_TIM_SET_COMPARE(&htim2, channel, compareVal);\n}\n\nvoid setup() {\n  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);\n  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);\n}",
+    "tips": [
+      "Timer calculations: with a 72MHz clock, set Prescaler = 72-1 and Auto-Reload Register (ARR) = 20000-1 to yield a precise 50Hz frequency.",
+      "Powering multiple servo motors directly from BluePill 3.3V lines will cause a brownout crash."
+    ]
+  },
+  {
+    "id": "stm32-temp",
+    "title": "STM32 internal Temperature Sense Logger",
+    "difficulty": "Intermediate",
+    "components": [
+      "STM32 BluePill",
+      "ST-Link V2",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "ST-Link debug connections",
+      "No external sensors required (uses internal STM32 silicon temperature channel)"
+    ],
+    "code": "/* Sampling STM32 Internal Temperature Channel */\n#include \"stm32f1xx_hal.h\"\n\nADC_HandleTypeDef hadc1;\n\nfloat GetInternalTemp() {\n  HAL_ADC_Start(&hadc1);\n  if(HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) {\n    uint32_t raw = HAL_ADC_GetValue(&hadc1);\n    // Calculate temp: Temp = ((V25 - VSENSE) / Avg_Slope) + 25\n    // BluePill specs: V25 = 1.43V, Avg_Slope = 4.3 mV/C\n    float voltage = raw * 3.3 / 4095.0;\n    return ((1.43 - voltage) / 0.0043) + 25.0;\n  }\n  return 0.0;\n}",
+    "tips": [
+      "The internal temp sensor is not designed for precise outdoor readings; it is meant to detect internal MCU thermal overload.",
+      "Enable the internal reference voltage (VREFINT) channel to measure and compensate for fluctuations in external VDD supply rails."
+    ]
+  }
+]

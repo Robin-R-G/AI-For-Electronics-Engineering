@@ -1,0 +1,125 @@
+[
+  {
+    "id": "analog-amplifier",
+    "title": "Class-AB BJT Audio Amplifier",
+    "difficulty": "Intermediate",
+    "components": [
+      "TIP41C NPN Transistor",
+      "TIP42C PNP Transistor",
+      "BC547 NPN Driver",
+      "Diodes (1N4148) ×2",
+      "Capacitors",
+      "Resistors",
+      "8Ω Speaker"
+    ],
+    "connections": [
+      "Input Signal → 10µF Coupling Cap → BC547 Base",
+      "BC547 Collector → Biasing Diodes (1N4148 ×2) → TIP41C Base (NPN) & TIP42C Base (PNP)",
+      "TIP41C Collector → VCC, TIP42C Collector → -VCC (or GND for single supply)",
+      "TIP41C & TIP42C Emitters → 0.47Ω Re Resistors → Output Node → 1000µF AC Cap → 8Ω Speaker"
+    ],
+    "code": "Circuit Assembly & Tuning:\n1. DC Bias: Adjust the collector current of the pre-amplifier driver stage to set the output node voltage to half of VCC.\n2. Crossover Distortion: Use two biasing diodes (1N4148) to turn on the push-pull transistors slightly, preventing crossover distortion.\n3. Coupling Capacitors: Use a large output capacitor (1000µF) to block DC current while passing AC audio signals down to 20Hz.\n4. Thermal Stability: Place emitter degeneration resistors (0.47Ω) to prevent thermal runaway.",
+    "tips": [
+      "Biasing diodes must match the thermal coefficient of push-pull transistors; mounting them close to output transistors prevents thermal runaway.",
+      "Always verify quiescent current consumption during startup. High current indicates transistor bias is set too high, risking burn-out."
+    ]
+  },
+  {
+    "id": "analog-power",
+    "title": "Variable Regulated Power Supply",
+    "difficulty": "Beginner",
+    "components": [
+      "LM317 Variable Regulator",
+      "Transformer (12V-0V-12V)",
+      "1N4007 Diodes ×4",
+      "5kΩ Potentiometer",
+      "240Ω Resistor",
+      "Capacitors"
+    ],
+    "connections": [
+      "Transformer Secondary → Bridge Rectifier (1N4007 ×4)",
+      "Bridge Rectifier Output (+) → 2200µF Filter Cap (+) → LM317 IN",
+      "LM317 OUT → 240Ω Resistor → LM317 ADJ Pin",
+      "LM317 ADJ Pin → 5kΩ Potentiometer → Ground Plane",
+      "LM317 OUT → 10µF Tantalum Output Cap (+) → Vout Terminal"
+    ],
+    "code": "Assembly & Voltage Calibration:\n1. Rectification: Assemble the diode bridge and filter capacitor to convert AC to DC.\n2. Output Voltage Formula: Vout = 1.25V × (1 + Rpot / 240Ω).\n3. Protection Diodes: Place a reverse diode from OUT to IN to protect the regulator from capacitor back-discharge during power-down.\n4. Potentiometer: Use a linear taper potentiometer (type B) to ensure smooth voltage adjustments.",
+    "tips": [
+      "The LM317 ADJ pin regulates by keeping a constant 1.25V reference between the OUT and ADJ pins.",
+      "Use tantalum capacitors on the output to improve transient response and reduce high-frequency ripple."
+    ]
+  },
+  {
+    "id": "analog-charger",
+    "title": "Li-Ion Constant-Current Charger",
+    "difficulty": "Intermediate",
+    "components": [
+      "LM317 Linear Regulator",
+      "1N4007 Diode",
+      "Transistor (BC547)",
+      "0.22Ω Power Resistor",
+      "LED",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "DC Input (+) → LM317 IN",
+      "LM317 OUT → 0.22Ω current sense resistor → Li-Ion Battery (+)",
+      "BC547 Base/Emitter connected across 0.22Ω resistor",
+      "BC547 Collector → LM317 ADJ pin"
+    ],
+    "code": "Calibration & Operations:\n1. Constant Current Stage: When charging current exceeds 3A, the voltage drop across the 0.22Ω resistor exceeds 0.6V, turning on the BC547 transistor and pulling down ADJ to regulate current.\n2. Voltage Limit: Adjust output voltage to a maximum of 4.2V using the regulator voltage divider.\n3. Indication LED: Place an LED in series with the collector line to indicate active current limiting.",
+    "tips": [
+      "Li-Ion batteries are highly sensitive. Never exceed 4.20V per cell; overcharging causes chemical instability.",
+      "For commercial applications, use a dedicated battery management IC (like the TP4056) for temperature and thermal cutoff protections."
+    ]
+  },
+  {
+    "id": "analog-oscillator",
+    "title": "555 Astable Square Wave Oscillator",
+    "difficulty": "Beginner",
+    "components": [
+      "NE555 Timer IC",
+      "10kΩ Potentiometer",
+      "1kΩ Resistor",
+      "10µF Electrolytic Cap",
+      "10nF Ceramic Cap",
+      "LED",
+      "220Ω Resistor"
+    ],
+    "connections": [
+      "NE555 Pin 1 → GND, Pin 8 → VCC, Pin 4 → VCC (Reset disabled)",
+      "NE555 Pin 3 → 220Ω Resistor → LED → GND",
+      "NE555 Pin 5 → 10nF Cap → GND",
+      "NE555 Pin 2 & 6 shorted → 10µF Cap (+) → GND",
+      "VCC → 1kΩ Resistor → Pin 7 → 10kΩ Potentiometer → Pin 6"
+    ],
+    "code": "Tuning & Waveform Steps:\n1. Timing Formula: Frequency = 1.44 / ((R1 + 2*R2) * C1).\n2. Duty Cycle: Adjust the potentiometer to shift the output high/low duty ratio.\n3. Noise Decoupling: Always bypass Control Voltage (Pin 5) with a 10nF ceramic capacitor to GND to prevent noise from triggering false clock states.",
+    "tips": [
+      "The 555 output can source or sink up to 200mA, allowing it to drive buzzers or small relays directly without a transistor.",
+      "Modify output to a 50% duty cycle by placing a signal diode (1N4148) in parallel with R2."
+    ]
+  },
+  {
+    "id": "analog-function",
+    "title": "Op-Amp Function Generator",
+    "difficulty": "Intermediate",
+    "components": [
+      "LM324 Quad Op-Amp",
+      "Dual Power Supply (+12V / -12V)",
+      "Capacitors",
+      "Potentiometers",
+      "Resistors"
+    ],
+    "connections": [
+      "Op-Amp 1: Configured as a Schmitt trigger square-wave generator",
+      "Op-Amp 2: Configured as an integrator converting Square to Triangle waves",
+      "Op-Amp 3: Configured as an active waveshaper (diodes feedback) converting Triangle to Sine waves",
+      "VCC/GND connections to op-amp rail pins"
+    ],
+    "code": "Tuning & Phase Alignment:\n1. Square Wave Stage: Connect feedback resistors from output to non-inverting input of Op-Amp 1.\n2. Integrator Stage: Connect output of Op-Amp 1 through a 10kΩ resistor to the inverting input of Op-Amp 2, with a 100nF capacitor in the feedback loop.\n3. Frequency Control: Use a dual-gang potentiometer to adjust the integration resistance, shifting frequency output synchronously.",
+    "tips": [
+      "Op-amp analog function generators require symmetrical dual power rails (e.g. ±12V) to output waveforms cleanly above and below ground.",
+      "Use high-speed, high slew-rate op-amps (like TL074) to prevent triangle wave peaks from rounding off at frequencies above 10kHz."
+    ]
+  }
+]

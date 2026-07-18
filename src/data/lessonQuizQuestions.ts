@@ -50,11 +50,11 @@ const baseLessonQuizQuestions: Record<string, LessonQuestion[]> = {
         'Deep Learning',
         'Prompt Engineering',
         'Quantum Computing',
-        'Electronics Lab'
+        'Engineering Project Studio'
       ],
       correctAnswer: 'Quantum Computing',
-      explanation: 'The workshop covers AI Fundamentals, ML, Deep Learning, Generative AI, LLMs, AI Tools, Electronics Applications, Electronics Lab, and more — but not Quantum Computing.',
-      whyWrong: 'Deep Learning, Prompt Engineering, and Electronics Lab are all core modules in this workshop curriculum.',
+      explanation: 'The workshop covers AI Fundamentals, ML, Deep Learning, Generative AI, LLMs, AI Tools, Electronics Applications, Engineering Project Studio, and more — but not Quantum Computing.',
+      whyWrong: 'Deep Learning, Prompt Engineering, and Engineering Project Studio are all core modules in this workshop curriculum.',
       commonMistake: 'Confusing the workshop scope with general CS AI programs. This workshop is laser-focused on the intersection of AI and embedded electronics.',
       relatedConcept: 'Workshop curriculum structure',
       practicalUse: 'Knowing the curriculum helps you plan your learning path — skip what you know, dive deep into TinyML and edge inference where EE knowledge gives you an edge.'

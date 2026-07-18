@@ -120,10 +120,10 @@ export const badges: Badge[] = [
   {
     id: 'lab-builder',
     name: 'Lab Builder',
-    description: 'Build your first circuit in the Electronics Lab',
+    description: 'Build your first circuit in the Engineering Project Studio',
     icon: '🔌',
     category: 'special',
-    requirement: 'Complete 1 Electronics Lab activity',
+    requirement: 'Complete 1 Engineering Project Studio activity',
     points: 15,
   },
   {

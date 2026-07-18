@@ -1,0 +1,122 @@
+[
+  {
+    "id": "digital-alu",
+    "title": "4-Bit Arithmetic Logic Unit",
+    "difficulty": "Advanced",
+    "components": [
+      "74LS181 4-bit ALU IC",
+      "DIP Switches ×2 (4-bit Inputs A & B)",
+      "DIP Switch (4-bit Control S0-S3)",
+      "LEDs ×5",
+      "220Ω Resistors",
+      "Breadboard"
+    ],
+    "connections": [
+      "Input A0-A3 → DIP Switch A → 74LS181 A0-A3 (+ 10kΩ pull-downs)",
+      "Input B0-B3 → DIP Switch B → 74LS181 B0-B3 (+ 10kΩ pull-downs)",
+      "Mode Select S0-S3 → Controller DIP Switch",
+      "74LS181 Outputs F0-F3 → 220Ω Resistors → LEDs",
+      "Carry Out Cn+4 → LED 5"
+    ],
+    "code": "Logic & Mode Truth Table:\n1. Arithmetic Mode: Set Mode Pin M = LOW. Select operations using S0-S3: \n   - 0000: F = A\n   - 1001: F = A + B (Addition)\n   - 0110: F = A - B (Subtraction)\n2. Logic Mode: Set Mode Pin M = HIGH. Select logic functions:\n   - 0000: F = NOT A\n   - 1011: F = A AND B\n   - 1110: F = A OR B\n3. Cascade Connection: Tie Carry Out (Cn+4) to Carry In (Cn) of the next stage to build an 8-bit ALU.",
+    "tips": [
+      "The 74LS181 ALU uses active-low logic inputs. Verify whether your logic signals match active-high or active-low operations before testing.",
+      "Always bypass the power pins (VCC/GND) of the IC with a 100nF decoupling capacitor to suppress switching current spikes."
+    ]
+  },
+  {
+    "id": "digital-driver",
+    "title": "74LS47 7-Segment Decoder Driver",
+    "difficulty": "Beginner",
+    "components": [
+      "74LS47 BCD Decoder IC",
+      "7-Segment Display (Common Anode)",
+      "DIP Switch (4-Bit BCD)",
+      "220Ω Resistors ×7",
+      "Breadboard"
+    ],
+    "connections": [
+      "BCD Inputs A-D → DIP Switch → 74LS47 Pins 7, 1, 2, 6 (+ 10kΩ pull-downs)",
+      "74LS47 Outputs a-g → 220Ω Resistors → Display Segment inputs a-g",
+      "7-Segment Display Common Anode pin → 5V",
+      "74LS47 VCC/GND → 5V/GND"
+    ],
+    "code": "Decoder Testing Steps:\n1. Input BCD representation (binary 0000 to 1001) using the DIP switches.\n2. Observe digit output. Inputting 0101 (5 in binary) grounds segment pins a, c, d, f, and g, displaying '5' on the screen.\n3. Input values higher than 9 (1010 to 1111) to check out-of-range display pattern results.\n4. Ground Lamp Test (LT - Pin 3) to illuminate all segments simultaneously for display validation.",
+    "tips": [
+      "The 74LS47 features open-collector active-low outputs, making it compatible with Common Anode displays. Common Cathode displays require active-high drivers (like the 74LS48).",
+      "Do not skip the 7 series resistors; running segments without resistors will blow the LED display modules."
+    ]
+  },
+  {
+    "id": "digital-clock",
+    "title": "Digital Clock Logic Circuit",
+    "difficulty": "Advanced",
+    "components": [
+      "74LS90 BCD Counter ICs ×4",
+      "74LS47 Decoder Drivers ×4",
+      "7-Segment Displays ×4",
+      "NE555 Timer (1Hz Clock)",
+      "Breadboard"
+    ],
+    "connections": [
+      "NE555 Out (1Hz Pulse) → Counter 1 Clock A (seconds digit)",
+      "Counter 1 Outputs (Modulo-10) → Decoder 1 Inputs → Displays 1",
+      "Counter 1 QD (Carry) → Counter 2 Clock A (tens of seconds digit)",
+      "Counter 2 (configured as Modulo-6) Outputs → Decoder 2 → Display 2",
+      "Configure remaining counters for Minutes digits using the same carry sequence"
+    ],
+    "code": "Logic & Modulo Configuration:\n1. Modulo-10: Connect QA (pin 12) to Clock B (pin 1). Link reset pins R0(1) and R0(2) to GND.\n2. Modulo-6 (Tens of Seconds): Reset the counter at count '6' (binary 0110). Connect QB (pin 9) and QC (pin 8) to reset inputs R0(1) and R0(2). The counter resets to 0000 immediately upon reaching six.\n3. Set Hours limits similarly to trigger resets at count '24'.",
+    "tips": [
+      "Logic gate clocks can accumulate jitter over time. For high-precision timekeeping, replace the 555 astable generator with a 32.768kHz quartz crystal oscillator module.",
+      "Check power rails: multiple 74LS series TTL chips draw high quiescent currents."
+    ]
+  },
+  {
+    "id": "digital-counter",
+    "title": "4-Bit Binary Ripple Counter",
+    "difficulty": "Beginner",
+    "components": [
+      "74LS93 4-Bit Binary Counter IC",
+      "NE555 Pulse Generator (10Hz)",
+      "LEDs ×4",
+      "220Ω Resistors ×4",
+      "Breadboard"
+    ],
+    "connections": [
+      "NE555 Pin 3 (Clock Pulse) → 74LS93 Clock A Input (Pin 14)",
+      "74LS93 Output QA (Pin 12) → 74LS93 Clock B Input (Pin 1)",
+      "Outputs QA, QB, QC, QD → 220Ω Resistors → LEDs (Binary representation)",
+      "74LS93 Reset Pins (R01, R02) → GND (Count up continuously)"
+    ],
+    "code": "Binary Counting Sequence:\n1. Clock Trigger: The 74LS93 triggers on negative clock edges.\n2. Cascading: By routing QA output into Clock B, we chain the internal J-K flip-flops, creating a 4-bit divide-by-16 asynchronous binary counter.\n3. Output Reading: The LEDs display count sequences from 0000 (0) up to 1111 (15) in binary.\n4. Reset Test: Connect QD and QB to R01 and R02 to configure a decade counter (resets at count 10).",
+    "tips": [
+      "Asynchronous counters suffer from propagation delay: each flip-flop waits for the previous stage to toggle, causing transient glitch states.",
+      "For high-speed digital designs, use synchronous counters (like the 74LS161) where all flip-flops are clocked in parallel."
+    ]
+  },
+  {
+    "id": "digital-register",
+    "title": "8-Bit Shift Register (74HC595)",
+    "difficulty": "Intermediate",
+    "components": [
+      "74HC595 Shift Register IC",
+      "Arduino Uno",
+      "LEDs ×8",
+      "220Ω Resistors ×8",
+      "Breadboard"
+    ],
+    "connections": [
+      "74HC595 DS (Serial Data - Pin 14) → Arduino D11",
+      "74HC595 SHCP (Shift Clock - Pin 11) → Arduino D12",
+      "74HC595 STCP (Latch Clock - Pin 12) → Arduino D8",
+      "74HC595 OE (Output Enable - Pin 13) → GND",
+      "74HC595 MR (Master Reset - Pin 10) → 5V",
+      "Outputs Q0-Q7 → 220Ω Resistors → LEDs"
+    ],
+    "code": "// Driving 74HC595 Shift Register with Arduino\n#define DATA_PIN 11\n#define CLOCK_PIN 12\n#define LATCH_PIN 8\n\nvoid setup() {\n  pinMode(DATA_PIN, OUTPUT);\n  pinMode(CLOCK_PIN, OUTPUT);\n  pinMode(LATCH_PIN, OUTPUT);\n}\n\nvoid loop() {\n  for (int i = 0; i < 256; i++) {\n    digitalWrite(LATCH_PIN, LOW);\n    // Send 8 bits of data MSB First\n    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, i);\n    digitalWrite(LATCH_PIN, HIGH); // Latch data to outputs\n    delay(100);\n  }\n}",
+    "tips": [
+      "A latch clock (STCP) holds the output states stable while new bits are shifted into internal storage registers, preventing output flickering.",
+      "Cascade multiple 74HC595 chips by connecting Serial Out (Q7' - Pin 9) to the Data input (DS) of the next register."
+    ]
+  }
+]

@@ -1,0 +1,129 @@
+[
+  {
+    "id": "ai-face-lock",
+    "title": "Face Recognition Smart Door Lock",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32-CAM",
+      "FTDI USB adapter",
+      "Solenoid Lock",
+      "12V Power Supply",
+      "5V Relay Module",
+      "Breadboard"
+    ],
+    "connections": [
+      "ESP32-CAM GPIO 12 → Relay Module IN",
+      "Relay COM → 12V Battery (+), NO → Solenoid (+)",
+      "Solenoid (-) → 12V Battery (-)"
+    ],
+    "code": "// OV2640 capture and Haar Cascade / MobileNet face matching\n#include \"esp_camera.h\"\n#include \"esp_http_server.h\"\n\nvoid setup() {\n  // Initialize camera and load neural network weights in PSRAM\n  pinMode(12, OUTPUT);\n}\nvoid loop() {\n  camera_fb_t * fb = esp_camera_fb_get();\n  // Run local face encoding matching\n  if (match_found) {\n    digitalWrite(12, HIGH); // Unlock relay\n    delay(2000);\n    digitalWrite(12, LOW);\n  }\n  esp_camera_fb_return(fb);\n}",
+    "tips": [
+      "Optimize local face recognition by compiling models using ESP-WHO framework for high-speed PSRAM execution.",
+      "Place a flyback diode (1N4007) across the solenoid coils to catch back-EMF spikes when switching the lock OFF."
+    ]
+  },
+  {
+    "id": "ai-attendance",
+    "title": "Smart Attendance using AI Vision",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32-CAM",
+      "FTDI Programmer Module",
+      "Red/Green LEDs",
+      "LCD 16x2 Display",
+      "Active Buzzer",
+      "Breadboard"
+    ],
+    "connections": [
+      "LCD SDA/SCL → GPIO 14/15",
+      "FTDI TX/RX → GPIO 3/1",
+      "GND → Common GND"
+    ],
+    "code": "// Stream frames to local edge server or perform local neural match\n#include \"esp_camera.h\"\n\nvoid setup() {\n  // Camera initialization\n}\n\nvoid loop() {\n  camera_fb_t * fb = esp_camera_fb_get();\n  // Extract face features and send payload via HTTP POST to log database\n  esp_camera_fb_return(fb);\n  delay(3000);\n}",
+    "tips": [
+      "Verify lighting conditions. Dim lighting increases image noise, lowering classification model confidence thresholds.",
+      "Assign static IP configurations to the ESP32-CAM to prevent socket connection timeouts on local servers."
+    ]
+  },
+  {
+    "id": "ai-object-detect",
+    "title": "Edge AI Object Detection Node",
+    "difficulty": "Advanced",
+    "components": [
+      "Raspberry Pi 4",
+      "Raspberry Pi Camera Module V2",
+      "Edge TPU (Google Coral)",
+      "Active Fan",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "Camera Module connected via ribbon cable to CSI slot",
+      "Google Coral TPU plugged into USB 3.0 port (blue port)"
+    ],
+    "code": "# Python script running TensorFlow Lite with Coral Edge TPU delegate\nimport time\nimport cv2\nfrom pycoral.utils import edgetpu\nfrom pycoral.adapters import common\n\n# Load model compiled for Edge TPU\ninterpreter = edgetpu.make_interpreter('ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite')\ninterpreter.allocate_tensors()\n\ncap = cv2.VideoCapture(0)\nwhile cap.isOpened():\n    ret, frame = cap.read()\n    # Resize and run model\n    # Display bounding box output on screen\n    if cv2.waitKey(1) & 0xFF == ord('q'):\n        break",
+    "tips": [
+      "Google Coral TPU accelerates inference by converting float models to quantized 8-bit integer formats.",
+      "Ensure the Coral USB device is plugged into a USB 3.0 port (blue socket). USB 2.0 ports cannot supply sufficient bandwidth, causing dropouts."
+    ]
+  },
+  {
+    "id": "ai-tinyml-gesture",
+    "title": "TinyML IMU Gesture Classifier",
+    "difficulty": "Advanced",
+    "components": [
+      "Arduino Nano 33 BLE Sense",
+      "Micro USB Cable",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "USB Cable → PC (Model inputs read from onboard LSM9DS1 IMU sensor)"
+    ],
+    "code": "// TensorFlow Lite Micro Gesture Recognition Model\n#include <TensorFlowLite.h>\n#include <Arduino_LSM9DS1.h>\n#include \"gesture_model.h\"\n\nvoid setup() {\n  IMU.begin();\n  // Load gesture classifier weights and configure interpreter\n}\n\nvoid loop() {\n  float ax, ay, az;\n  if (IMU.accelerationAvailable()) {\n    IMU.readAcceleration(ax, ay, az);\n    // Log readings, check for motion threshold, and classify\n  }\n}",
+    "tips": [
+      "Use Edge Impulse to capture raw IMU datasets, label gesture movements, and download the optimized C++ source code.",
+      "Ensure the board is mounted firmly to your device or arm to prevent sensor vibration from generating noisy spikes."
+    ]
+  },
+  {
+    "id": "ai-traffic",
+    "title": "AI Edge Traffic Monitoring Node",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32-S3 DevKit with Camera",
+      "Ultrasonic Sensor",
+      "WiFi Router Connection",
+      "Aux Power Supply"
+    ],
+    "connections": [
+      "Camera Module plugged into interface pins",
+      "Ultrasonic Trig/Echo → GPIO 10/11"
+    ],
+    "code": "// Count vehicles and classify traffic densities\n#include \"esp_camera.h\"\n\nvoid setup() {\n  // Setup camera at 10fps\n}\nvoid loop() {\n  camera_fb_t * fb = esp_camera_fb_get();\n  // Execute background subtraction or bounding box classification\n  esp_camera_fb_return(fb);\n}",
+    "tips": [
+      "Deploy models on ESP32-S3 using the vector instruction extensions (ESP-NN) to increase model speed up to 3x.",
+      "Mount camera lenses high to reduce occlusion overlap between vehicles."
+    ]
+  },
+  {
+    "id": "ai-plant-disease",
+    "title": "TinyML Plant Disease Detector",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32-S3 DevKit",
+      "OV2640 Camera",
+      "ST7789 IPS LCD",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "OV2640 connected via camera connector",
+      "ST7789 LCD SPI: MOSI → GPIO 13, SCLK → GPIO 12, CS → GPIO 11, DC → GPIO 10"
+    ],
+    "code": "// Read leaf image and classify health status using MobileNet v1\n#include \"esp_camera.h\"\n#include \"model.h\"\n\nvoid setup() {\n  // Load model weights into memory\n}\nvoid loop() {\n  camera_fb_t * fb = esp_camera_fb_get();\n  // 1. Downsample image to 96x96 pixels\n  // 2. Feed into neural classifier\n  // 3. Print output: Healthy vs. Rust vs. Leaf spot on LCD\n  esp_camera_fb_return(fb);\n  delay(5000);\n}",
+    "tips": [
+      "Crop leaf regions to focus model classifications on leaf spots instead of noisy background details.",
+      "Train classification models with leaf variations across multiple growth phases to prevent model overfitting."
+    ]
+  }
+]

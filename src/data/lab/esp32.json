@@ -1,0 +1,217 @@
+[
+  {
+    "id": "esp32-weather",
+    "title": "IoT Weather Station (OpenWeatherMap)",
+    "difficulty": "Intermediate",
+    "components": [
+      "ESP32 NodeMCU",
+      "BME280 Sensor (I2C)",
+      "SS1306 OLED (I2C)",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "BME280/OLED SCL → ESP32 GPIO22",
+      "BME280/OLED SDA → ESP32 GPIO21",
+      "BME280/OLED VCC → 3.3V, GND → GND"
+    ],
+    "code": "#include <WiFi.h>\n#include <HTTPClient.h>\n#include <Wire.h>\n#include <Adafruit_BME280.h>\n\nconst char* ssid = \"WiFi_SSID\";\nconst char* password = \"WiFi_PASS\";\n\nvoid setup() {\n  Serial.begin(115200);\n  WiFi.begin(ssid, password);\n  // Wait for connection\n}\n\nvoid loop() {\n  if(WiFi.status() == WL_CONNECTED) {\n    HTTPClient http;\n    http.begin(\"http://api.openweathermap.org/data/2.5/weather?q=London&appid=YOUR_API_KEY\");\n    int httpCode = http.GET();\n    if(httpCode > 0) {\n      String payload = http.getString();\n      Serial.println(payload);\n    }\n    http.end();\n  }\n  delay(60000);\n}",
+    "tips": [
+      "Use ESP32's second hardware I2C port if you experience conflict issues driving both the OLED and sensor.",
+      "ESP32 Wi-Fi routines can block main execution loops. Use FreeRTOS tasks to separate acquisitions from networking."
+    ]
+  },
+  {
+    "id": "esp32-relay",
+    "title": "WiFi Multi-Relay Controller",
+    "difficulty": "Intermediate",
+    "components": [
+      "ESP32 NodeMCU",
+      "4-Channel Optoisolated Relay Board",
+      "5V Aux Power Supply",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "Relay IN1-IN4 → ESP32 GPIO 12, 13, 14, 15",
+      "Relay VCC → 5V Aux (+) , Relay GND → 5V Aux (-)",
+      "Tie ESP32 GND to Aux GND"
+    ],
+    "code": "#include <WiFi.h>\n#include <WebServer.h>\n\nWebServer server(80);\nconst int relayPins[] = {12, 13, 14, 15};\n\nvoid handleRoot() {\n  server.send(200, \"text/html\", \"<h1>ESP32 Relay Web Server</h1><a href='/on'>Relay 1 ON</a><br><a href='/off'>Relay 1 OFF</a>\");\n}\n\nvoid setup() {\n  for(int i=0; i<4; i++) {\n    pinMode(relayPins[i], OUTPUT); digitalWrite(relayPins[i], HIGH); // Active LOW relays\n  }\n  server.on(\"/\", handleRoot);\n  server.begin();\n}\n\nvoid loop() {\n  server.handleClient();\n}",
+    "tips": [
+      "Standard relays draw ~70mA each. Running them directly off ESP32 pins will blow the GPIO pins — use optoisolated relay modules.",
+      "Configure active-low relays properly in setup to prevent load clicks during resets."
+    ]
+  },
+  {
+    "id": "esp32-energy",
+    "title": "Smart Non-Invasive Energy Meter",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32 NodeMCU",
+      "SCT-013-000 Current Transformer",
+      "ADS1115 16-Bit ADC (I2C)",
+      "Resistors & Caps",
+      "Breadboard"
+    ],
+    "connections": [
+      "ADS1115 SCL/SDA → ESP32 GPIO22/21",
+      "SCT-013 Current Sensor Output connected to ADS1115 Channel 0 with 22Ω burden resistor and bias network (two 10k resistors and 10uF cap to 3.3V)"
+    ],
+    "code": "#include <Wire.h>\n#include <Adafruit_ADS1X15.h>\n\nAdafruit_ADS1115 ads;\n\nvoid setup() {\n  Serial.begin(115200);\n  ads.begin();\n}\n\nvoid loop() {\n  int16_t rawCurrent = ads.readADC_SingleEnded(0);\n  double voltage = rawCurrent * 0.1875 / 1000.0; // FS = 6.144V\n  double current = voltage * 30.0; // 30A / 1V output ratio\n  Serial.printf(\"Current: %.2f A, Estimated Power: %.1f W\\n\", current, current * 230.0);\n  delay(1000);\n}",
+    "tips": [
+      "Non-invasive CT sensors like SCT-013 output AC current. A DC bias offset of 1.65V (half of 3.3V) is mandatory to read negative waves safely on standard ADCs.",
+      "The ADS1115 high-precision ADC delivers 16-bit resolution, ensuring low-signal accuracy for current spikes."
+    ]
+  },
+  {
+    "id": "esp32-mqtt",
+    "title": "MQTT Sensor Dashboard Node",
+    "difficulty": "Intermediate",
+    "components": [
+      "ESP32 NodeMCU",
+      "DHT22 Sensor",
+      "PubSubClient Library",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "DHT22 DATA → ESP32 GPIO 4 (+ 10kΩ pull-up)",
+      "Power connections to 3.3V & GND"
+    ],
+    "code": "#include <WiFi.h>\n#include <PubSubClient.h>\n#include <DHT.h>\n\nWiFiClient espClient;\nPubSubClient client(espClient);\nDHT dht(4, DHT22);\n\nvoid setup() {\n  client.setServer(\"broker.hivemq.com\", 1883);\n  dht.begin();\n}\n\nvoid loop() {\n  if (!client.connected()) {\n    client.connect(\"ESP32Client\");\n  }\n  client.loop();\n  \n  float t = dht.readTemperature();\n  char msg[10];\n  dtostrf(t, 4, 2, msg);\n  client.publish(\"ee/sensors/temp\", msg);\n  delay(5000);\n}",
+    "tips": [
+      "MQTT is extremely lightweight, making it ideal for low-bandwidth cellular/satellite IoT devices.",
+      "Ensure you generate a unique MQTT Client ID for each device; duplicate Client IDs cause continuous reconnect loops on the broker."
+    ]
+  },
+  {
+    "id": "esp32-webserver",
+    "title": "Dynamic AJAX Web Server",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32 NodeMCU",
+      "DHT22 Sensor",
+      "LDR Sensor",
+      "SPIFFS Storage",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "LDR output to Analog Input GPIO 34 via 10kΩ divider",
+      "DHT22 connected to GPIO 4"
+    ],
+    "code": "#include <WiFi.h>\n#include <ESPAsyncWebServer.h>\n\nAsyncWebServer server(80);\n\nvoid setup() {\n  WiFi.begin(\"SSID\",\"PASS\");\n  \n  server.on(\"/readings\", HTTP_GET, [](AsyncWebServerRequest *request){\n    String json = \"{\\\"analog\\\": \" + String(analogRead(34)) + \"}\";\n    request->send(200, \"application/json\", json);\n  });\n  \n  server.begin();\n}\nvoid loop() {}",
+    "tips": [
+      "Use ESPAsyncWebServer library to enable non-blocking client connections, preventing network overhead from stalling your hardware loop.",
+      "Use the ESP32 SPIFFS/LittleFS tool to upload HTML/CSS assets straight to partition flash."
+    ]
+  },
+  {
+    "id": "esp32-noticeboard",
+    "title": "ESP32 WiFi Smart Notice Board",
+    "difficulty": "Intermediate",
+    "components": [
+      "ESP32 NodeMCU",
+      "P10 LED Matrix Module",
+      "16-Pin Ribbon Cable",
+      "5V 2A Power Adapter",
+      "Level Shifter Module"
+    ],
+    "connections": [
+      "P10 inputs (OE, A, B, CLK, LAT) mapped to ESP32 standard SPI pins via level shifter",
+      "P10 VCC/GND → 5V 2A supply, ESP32 USB power"
+    ],
+    "code": "#include <WiFi.h>\n#include <WebServer.h>\n// Display library references here\n\nWebServer server(80);\nString message = \"Welcome to class!\";\n\nvoid handleUpdate() {\n  if(server.hasArg(\"text\")) message = server.arg(\"text\");\n  server.send(200, \"text/plain\", \"Updated!\");\n}\n\nvoid setup() {\n  server.on(\"/update\", handleUpdate);\n  server.begin();\n}\nvoid loop() {\n  server.handleClient();\n}",
+    "tips": [
+      "P10 LED panels require 5V logic signals. Driving them directly with 3.3V ESP32 outputs can result in ghosting and flickering; use level shifters like the 74HCT245.",
+      "Ensure your 5V power supply has enough current headroom since full-panel white text draws peak currents."
+    ]
+  },
+  {
+    "id": "esp32-camstream",
+    "title": "ESP32-CAM WiFi Video Streamer",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32-CAM Module",
+      "OV2640 Camera Sensor",
+      "FTDI USB-to-TTL Adapter",
+      "External 5V Power Supply"
+    ],
+    "connections": [
+      "FTDI TXD → ESP32-CAM RXD (GPIO3)",
+      "FTDI RXD → ESP32-CAM TXD (GPIO1)",
+      "ESP32-CAM GPIO0 connected to GND for programming mode",
+      "ESP32-CAM 5V/GND → External 5V 1A power supply"
+    ],
+    "code": "#include \"esp_camera.h\"\n#include <WiFi.h>\n\n// Camera config settings\nvoid setup() {\n  WiFi.begin(\"SSID\", \"PASS\");\n  // Configure camera parameters: resolution SVGA, format JPEG\n  esp_err_t err = esp_camera_init(&config);\n}\nvoid loop() {\n  // Stream loop\n}",
+    "tips": [
+      "The ESP32-CAM draws up to 350mA spikes during Wi-Fi transmission. Powering it via FTDI adapter 3.3V lines will cause immediate brownout crashes.",
+      "Remove the GPIO0-to-GND jumper wire after flash programming to start normal runtime boot."
+    ]
+  },
+  {
+    "id": "esp32-facedetect",
+    "title": "Local OV2640 Face Detection",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32-CAM Module",
+      "OV2640 Camera Sensor",
+      "Programming Board",
+      "GND Connection Jumper"
+    ],
+    "connections": [
+      "Setup similar to camera streamer",
+      "Connect GPIO0 to GND to flash, remove to boot"
+    ],
+    "code": "#include \"esp_camera.h\"\n#include \"fb_gfx.h\"\n\n// OV2640 frame allocation and face detection library integrations\nvoid setup() {\n  // Init camera\n}\nvoid loop() {\n  camera_fb_t * fb = esp_camera_fb_get();\n  // Run face classification model directly on frame bytes\n  esp_camera_fb_return(fb);\n}",
+    "tips": [
+      "Face detection algorithms require PSRAM (Pseudo-static RAM) allocation to process high-resolution color buffers.",
+      "Set camera resolution to QVGA (320x240) to limit memory footprint and maximize inference frame rates."
+    ]
+  },
+  {
+    "id": "esp32-agri",
+    "title": "Smart IoT Agriculture Station",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32 NodeMCU",
+      "Capacitive Soil Moisture",
+      "DS18B24 Probe",
+      "5V Relay",
+      "Aux Battery Pack"
+    ],
+    "connections": [
+      "Capacitive Sensor Analog Out → GPIO 32",
+      "DS18B24 Data line → GPIO 15 (+ 4.7kΩ pull-up)",
+      "Relay control → GPIO 13"
+    ],
+    "code": "#include <OneWire.h>\n#include <DallasTemperature.h>\n#include <WiFi.h>\n\nOneWire oneWire(15);\nDallasTemperature sensors(&oneWire);\n\nvoid setup() {\n  sensors.begin();\n  pinMode(13, OUTPUT);\n}\nvoid loop() {\n  sensors.requestTemperatures();\n  float soilTemp = sensors.getTempCByIndex(0);\n  int moisture = analogRead(32);\n  // Publish readings to cloud agricultural dashboard\n  delay(10000);\n}",
+    "tips": [
+      "Capacitive soil sensors do not corrode because the metallic traces are insulated from raw soil contact.",
+      "Wrap agricultural wiring connections in watertight heat-shrink tubing to survive field deployments."
+    ]
+  },
+  {
+    "id": "esp32-watertank",
+    "title": "Ultrasonic Water Tank Monitor",
+    "difficulty": "Intermediate",
+    "components": [
+      "ESP32 NodeMCU",
+      "JSN-SR04T Waterproof Ultrasonic",
+      "Solenoid Valve",
+      "Power Adapter",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "JSN-SR04T Trig → ESP32 GPIO 18",
+      "JSN-SR04T Echo → ESP32 GPIO 19",
+      "Solenoid Relay Control → ESP32 GPIO 5"
+    ],
+    "code": "#define TRIG 18\n#define ECHO 19\n\nvoid setup() {\n  pinMode(TRIG, OUTPUT);\n  pinMode(ECHO, INPUT);\n}\n\nvoid loop() {\n  digitalWrite(TRIG, HIGH); delayMicroseconds(10); digitalWrite(TRIG, LOW);\n  long duration = pulseIn(ECHO, HIGH);\n  long distance = duration * 0.034 / 2;\n  // If level falls below threshold, open valve relay\n  delay(2000);\n}",
+    "tips": [
+      "The JSN-SR04T transducer is waterproof and has a minimum blind spot distance of 20cm. Objects closer than 20cm return invalid echoes.",
+      "Place the sensor at the center top of the tank lid to avoid wall echo interference."
+    ]
+  }
+]

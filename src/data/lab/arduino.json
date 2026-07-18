@@ -1,0 +1,237 @@
+[
+  {
+    "id": "obstacle-robot",
+    "title": "Obstacle Avoiding Robot",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "L298N Motor Driver",
+      "HC-SR04 Ultrasonic Sensor",
+      "SG90 Servo Motor",
+      "DC Gear Motors ×2",
+      "Chassis & Wheels",
+      "4x AA Battery Holder"
+    ],
+    "connections": [
+      "Ultrasonic Trig → Arduino D12, Echo → D11",
+      "Servo Signal Pin → Arduino D10",
+      "Motor Driver IN1-IN4 → Arduino D4-D7",
+      "Motor Driver ENA/ENB → 5V (jumpered)",
+      "Arduino GND → Motor Driver GND → Battery GND"
+    ],
+    "code": "#include <Servo.h>\n#define TRIG 12\n#define ECHO 11\n\nServo servo;\n\nvoid setup() {\n  pinMode(TRIG, OUTPUT);\n  pinMode(ECHO, INPUT);\n  servo.attach(10);\n}\n\nlong readDistance() {\n  digitalWrite(TRIG, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG, LOW);\n  long duration = pulseIn(ECHO, HIGH);\n  return duration * 0.034 / 2;\n}\n\nvoid loop() {\n  long dist = readDistance();\n  if (dist < 20) {\n    // Stop & look around\n    servo.write(45); delay(500);\n    servo.write(135); delay(500);\n    servo.write(90);\n  }\n}",
+    "tips": [
+      "Place a 100nF decoupling capacitor across motor leads to reduce electromagnetic interference (EMI) on the sensor rails.",
+      "The HC-SR04 uses high frequency sound pulses. Sound reflects poorly off soft surfaces like fabrics."
+    ]
+  },
+  {
+    "id": "line-follower",
+    "title": "Line Following Robot",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "IR Sensor Modules ×2",
+      "L293D Motor Driver Shield",
+      "DC Gear Motors ×2",
+      "Chassis & Batteries"
+    ],
+    "connections": [
+      "Left IR Sensor Out → Arduino A0",
+      "Right IR Sensor Out → Arduino A1",
+      "Motors connected to Motor Driver Shield M1 and M2 terminals",
+      "GND lines tied together"
+    ],
+    "code": "// Dual IR Sensor Line Follower\n#define LEFT_IR A0\n#define RIGHT_IR A1\n\nvoid setup() {\n  pinMode(LEFT_IR, INPUT);\n  pinMode(RIGHT_IR, INPUT);\n  // Motor driver setup code\n}\n\nvoid loop() {\n  int leftVal = digitalRead(LEFT_IR);\n  int rightVal = digitalRead(RIGHT_IR);\n  \n  if (leftVal == LOW && rightVal == LOW) {\n    // Move forward\n  } else if (leftVal == HIGH) {\n    // Turn Left\n  } else if (rightVal == HIGH) {\n    // Turn Right\n  }\n}",
+    "tips": [
+      "Adjust the sensitivity potentiometer on the IR sensor modules so they reliably distinguish black tape from light-colored floors.",
+      "Shield IR receivers from direct sunlight to prevent ambient infrared saturation."
+    ]
+  },
+  {
+    "id": "smart-dustbin",
+    "title": "Smart Auto-Opening Dustbin",
+    "difficulty": "Beginner",
+    "components": [
+      "Arduino Uno",
+      "HC-SR04 Ultrasonic Sensor",
+      "SG90 Servo Motor",
+      "Dustbin with hinged lid",
+      "Battery Pack",
+      "Breadboard"
+    ],
+    "connections": [
+      "Ultrasonic Trig → D2, Echo → D3",
+      "Servo Signal → D9",
+      "VCC → 5V, GND → GND"
+    ],
+    "code": "#include <Servo.h>\n#define TRIG 2\n#define ECHO 3\n\nServo servo;\n\nvoid setup() {\n  pinMode(TRIG, OUTPUT);\n  pinMode(ECHO, INPUT);\n  servo.attach(9);\n  servo.write(0); // Lid closed\n}\n\nvoid loop() {\n  digitalWrite(TRIG, HIGH); delayMicroseconds(10); digitalWrite(TRIG, LOW);\n  long duration = pulseIn(ECHO, HIGH);\n  long dist = duration * 0.034 / 2;\n  \n  if (dist < 15) {\n    servo.write(90); // Open Lid\n    delay(3000);\n    servo.write(0);  // Close\n  }\n  delay(500);\n}",
+    "tips": [
+      "Mount the ultrasonic sensor in a front bezel location where hands can trigger it easily.",
+      "Protect wires from moisture inside the bin casing."
+    ]
+  },
+  {
+    "id": "weather-station",
+    "title": "DHT22 LCD Weather Station",
+    "difficulty": "Beginner",
+    "components": [
+      "Arduino Uno",
+      "DHT22 Sensor",
+      "16x2 I2C LCD",
+      "Jumper Wires",
+      "Breadboard"
+    ],
+    "connections": [
+      "DHT22 DATA → Arduino D2 (+ 10kΩ pull-up to 5V)",
+      "LCD SDA/SCL → SDA/SCL pins",
+      "GND → Common GND, VCC → 5V"
+    ],
+    "code": "#include <DHT.h>\n#include <LiquidCrystal_I2C.h>\n\nDHT dht(2, DHT22);\nLiquidCrystal_I2C lcd(0x27, 16, 2);\n\nvoid setup() {\n  dht.begin();\n  lcd.begin(16, 2);\n  lcd.backlight();\n}\n\nvoid loop() {\n  float t = dht.readTemperature();\n  float h = dht.readHumidity();\n  \n  lcd.setCursor(0, 0);\n  lcd.print(\"Temp: \"); lcd.print(t); lcd.print(\" C\");\n  lcd.setCursor(0, 1);\n  lcd.print(\"Hum: \"); lcd.print(h); lcd.print(\" %\");\n  delay(2000);\n}",
+    "tips": [
+      "DHT22 samples at a maximum rate of 0.5Hz (once every 2 seconds). Sampling faster will read stale or cached values.",
+      "For outdoor usage, place the sensor inside a solar radiation shield (Stevenson screen)."
+    ]
+  },
+  {
+    "id": "plant-watering",
+    "title": "Automatic Plant Watering",
+    "difficulty": "Beginner",
+    "components": [
+      "Arduino Uno",
+      "Soil Moisture Sensor",
+      "5V Relay Module",
+      "12V Water Pump",
+      "12V Power Adapter",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "Moisture Sensor VCC → 5V, GND → GND, OUT → A0",
+      "Relay Control Pin → Arduino D8",
+      "Relay COM → 12V Power (+)",
+      "Relay NO → Water Pump (+)",
+      "Water Pump (-) → 12V Power (-)"
+    ],
+    "code": "void setup() {\n  pinMode(8, OUTPUT);\n  digitalWrite(8, LOW); // Relay off\n}\n\nvoid loop() {\n  int val = analogRead(A0);\n  if (val > 700) { // Dry soil\n    digitalWrite(8, HIGH); // Pump ON\n    delay(2000);           // Water for 2 sec\n    digitalWrite(8, LOW);  // Pump OFF\n  }\n  delay(10000);\n}",
+    "tips": [
+      "Soil moisture sensors corrode quickly when powered continuously. Power the sensor using an Arduino GPIO pin only when taking measurements.",
+      "Implement a timeout in code to prevent continuous pumping if the sensor fails or falls out of the pot."
+    ]
+  },
+  {
+    "id": "smart-irrigation",
+    "title": "Multi-Zone Smart Irrigation",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "Soil Moisture Sensors ×3",
+      "5V Relay Modules ×3",
+      "Solenoid Valves ×3",
+      "12V Power Supply",
+      "Breadboard"
+    ],
+    "connections": [
+      "Moisture Sensors AOUT → A0, A1, A2",
+      "Relay Inputs → D2, D3, D4",
+      "Relay Contacts switching 12V supply to Solenoid valves"
+    ],
+    "code": "const int sensors[] = {A0, A1, A2};\nconst int relays[] = {2, 3, 4};\n\nvoid setup() {\n  for(int i=0; i<3; i++) pinMode(relays[i], OUTPUT);\n}\n\nvoid checkZone(int zone) {\n  int val = analogRead(sensors[zone]);\n  if (val > 750) {\n    digitalWrite(relays[zone], HIGH); // Open valve\n  } else {\n    digitalWrite(relays[zone], LOW);  // Close valve\n  }\n}\n\nvoid loop() {\n  for(int i=0; i<3; i++) checkZone(i);\n  delay(60000);\n}",
+    "tips": [
+      "Use heavy-duty solenoid valves designed for 12V DC operation.",
+      "Check for back-EMF feedback from inductive relay coils. Snubber diodes across relays prevent circuit resets."
+    ]
+  },
+  {
+    "id": "smart-parking",
+    "title": "IR Sensor Smart Parking System",
+    "difficulty": "Beginner",
+    "components": [
+      "Arduino Uno",
+      "IR Obstacle Sensors ×3",
+      "Servo Motor (Barrier Gate)",
+      "I2C LCD Display",
+      "Buzzer",
+      "Breadboard"
+    ],
+    "connections": [
+      "IR Slot Sensors → D2, D3, D4",
+      "Servo Motor → D5",
+      "LCD Display SCL/SDA → A5/A4"
+    ],
+    "code": "#include <Servo.h>\n#include <LiquidCrystal_I2C.h>\n\nServo gate;\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nint slots = 3;\n\nvoid setup() {\n  gate.attach(5); gate.write(0);\n  lcd.begin(16,2); lcd.backlight();\n}\n\nvoid loop() {\n  int s1 = digitalRead(2);\n  int s2 = digitalRead(3);\n  int s3 = digitalRead(4);\n  int occupied = (s1==LOW) + (s2==LOW) + (s3==LOW);\n  int free = slots - occupied;\n  \n  lcd.setCursor(0, 0);\n  lcd.print(\"Free Slots: \"); lcd.print(free);\n  delay(500);\n}",
+    "tips": [
+      "IR distance sensors are affected by bright ambient lights. Use IR filter hoods if deploying in windows.",
+      "Initialize gate barriers smoothly to avoid mechanical backlash in toy servo gears."
+    ]
+  },
+  {
+    "id": "home-automation",
+    "title": "Bluetooth Smart Home Controller",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "HC-05 Bluetooth Module",
+      "4-Channel Relay Board",
+      "5V Power Supply",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "HC-05 TXD → Arduino RXD (D0)",
+      "HC-05 RXD → Arduino TXD (D1 via voltage divider)",
+      "Relay Inputs → D8, D9, D10, D11"
+    ],
+    "code": "char val;\nvoid setup() {\n  Serial.begin(9600);\n  for(int i=8; i<=11; i++) {\n    pinMode(i, OUTPUT); digitalWrite(i, LOW);\n  }\n}\n\nvoid loop() {\n  if(Serial.available()) {\n    val = Serial.read();\n    if(val == 'A') digitalWrite(8, HIGH);\n    if(val == 'a') digitalWrite(8, LOW);\n  }\n}",
+    "tips": [
+      "HC-05 module inputs are 3.3V logic. Use a resistor divider (2.2kΩ/1kΩ) on the RX line to reduce Arduino 5V TX signals.",
+      "Verify default baud rates (HC-05 is typically 9600 in data mode, 38400 in AT mode)."
+    ]
+  },
+  {
+    "id": "voice-lights",
+    "title": "Voice Controlled AC Relay Box",
+    "difficulty": "Advanced",
+    "components": [
+      "Arduino Uno",
+      "Elechouse Voice Recognition V3",
+      "Solid State Relay (SSR)",
+      "AC Lamp Holder",
+      "Safe Junction Box"
+    ],
+    "connections": [
+      "VR RX/TX → D2/D3 (Software Serial)",
+      "SSR Control Terminal (+) → D4, (-) → GND",
+      "SSR Load Terminals switching AC Line"
+    ],
+    "code": "#include <SoftwareSerial.h>\n#include \"VoiceRecognitionV3.h\"\n\nVR myVR(2, 3); // RX, TX\nuint8_t records[7]; // save record list\nuint8_t buf[64];\n\nvoid setup() {\n  myVR.begin(9600);\n  pinMode(4, OUTPUT);\n}\n\nvoid loop() {\n  int ret = myVR.recognize(buf, 50);\n  if(ret > 0) {\n    if (buf[1] == 0) { // Trained command 0\n      digitalWrite(4, HIGH);\n    } else if (buf[1] == 1) { // Command 1\n      digitalWrite(4, LOW);\n    }\n  }\n}",
+    "tips": [
+      "AC electricity can be fatal. Use Solid State Relays (SSRs) for high switching speed and optical isolation.",
+      "Ensure voice recognition modules are trained in a room with quiet background noise profiles."
+    ]
+  },
+  {
+    "id": "smart-classroom",
+    "title": "RFID/PIR Smart Classroom System",
+    "difficulty": "Advanced",
+    "components": [
+      "Arduino Uno",
+      "MFRC522 RFID",
+      "PIR Motion Sensor",
+      "5V Relays ×2 (Light/Fan)",
+      "LCD Display",
+      "Buzzer"
+    ],
+    "connections": [
+      "RFID SPI pins → D10-D13",
+      "PIR Sensor → D2",
+      "Relay Pins → D7 (Fan), D8 (Light)",
+      "LCD SDA/SCL → A4/A5"
+    ],
+    "code": "// Class energy saver - turns off load if no occupancy\nunsigned long lastOccupiedTime = 0;\n\nvoid setup() {\n  pinMode(2, INPUT); // PIR\n  pinMode(7, OUTPUT); // Fan\n  pinMode(8, OUTPUT); // Light\n}\n\nvoid loop() {\n  if (digitalRead(2) == HIGH) {\n    lastOccupiedTime = millis();\n    digitalWrite(7, HIGH); digitalWrite(8, HIGH);\n  } else {\n    if (millis() - lastOccupiedTime > 300000) { // 5 mins\n      digitalWrite(7, LOW); digitalWrite(8, LOW); // Turn off\n    }\n  }\n}",
+    "tips": [
+      "PIR sensor detection cone is wider than expected — mount it in corners to sweep classrooms.",
+      "Use zero-cross switching relays to avoid load surge currents when incandescent light packs turn ON."
+    ]
+  }
+]

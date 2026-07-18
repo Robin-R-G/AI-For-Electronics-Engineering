@@ -1,0 +1,163 @@
+[
+  {
+    "id": "iot-home",
+    "title": "IoT Smart Home Central Hub",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32 NodeMCU",
+      "L298N Relay Shield",
+      "PIR Motion Sensor",
+      "DHT22 Sensor",
+      "Buzzer",
+      "Relays ×2",
+      "Breadboard"
+    ],
+    "connections": [
+      "DHT22 DATA → GPIO23",
+      "PIR Sensor Out → GPIO19",
+      "Relay Pins → GPIO18 (Fan), GPIO5 (Bulb)",
+      "Buzzer → GPIO2"
+    ],
+    "code": "#include <WiFi.h>\n#include <PubSubClient.h>\n\nWiFiClient espClient;\nPubSubClient client(espClient);\n\nvoid setup() {\n  WiFi.begin(\"SSID\", \"PASS\");\n  client.setServer(\"broker.emqx.io\", 1883);\n}\n\nvoid loop() {\n  if(!client.connected()) {\n    client.connect(\"HomeHub\");\n  }\n  client.loop();\n  // Periodically read DHT22 / PIR and publish to home/status\n  delay(2000);\n}",
+    "tips": [
+      "Isolate high-voltage relay contacts in a physical enclosure to prevent electric shock.",
+      "Subscribe to home/control topics to receive override signals from mobile apps instantly."
+    ]
+  },
+  {
+    "id": "iot-street",
+    "title": "IoT LDR Smart Street Lights",
+    "difficulty": "Beginner",
+    "components": [
+      "ESP8266 NodeMCU",
+      "LDR Sensor Module",
+      "High-Power LED (5V)",
+      "TIP120 Transistor",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "LDR OUT → NodeMCU A0",
+      "NodeMCU D1 (PWM) → TIP120 Base via 1kΩ resistor",
+      "TIP120 Collector → LED (-)",
+      "LED (+) → 5V external source"
+    ],
+    "code": "void setup() {\n  pinMode(D1, OUTPUT);\n}\n\nvoid loop() {\n  int val = analogRead(A0);\n  if (val < 300) {\n    analogWrite(D1, 255); // Full brightness at night\n  } else {\n    analogWrite(D1, 0);   // Off during day\n  }\n  delay(1000);\n}",
+    "tips": [
+      "Increase PWM frequency to prevent visible LED flickering.",
+      "Protect LDR sensors from receiving light directly from the controlled LED to prevent oscillation."
+    ]
+  },
+  {
+    "id": "iot-city",
+    "title": "IoT Smart City Noise/Light Node",
+    "difficulty": "Intermediate",
+    "components": [
+      "ESP8266 NodeMCU",
+      "Analog Microphone Sensor",
+      "LDR Sensor",
+      "OLED Display",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "Microphone OUT → NodeMCU A0 (via analog multiplexer or single read)",
+      "OLED SDA/SCL → D2/D1",
+      "VCC → 3.3V, GND → GND"
+    ],
+    "code": "#include <Wire.h>\n#include <Adafruit_SSD1306.h>\n\nAdafruit_SSD1306 oled(128, 64, &Wire);\n\nvoid setup() {\n  oled.begin(SSD1306_SWITCHCAPVCC, 0x3C);\n}\nvoid loop() {\n  int noise = analogRead(A0);\n  oled.clearDisplay();\n  oled.setCursor(0,0);\n  oled.printf(\"Noise Level: %d dB\", noise);\n  oled.display();\n  delay(500);\n}",
+    "tips": [
+      "The ESP8266 analog pin only tolerates voltages up to 1.0V. Verify your module includes an onboard voltage divider.",
+      "Sample noise levels in short bursts to capture peak audio transients."
+    ]
+  },
+  {
+    "id": "iot-pollution",
+    "title": "IoT Smart Air Quality Monitor",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32 NodeMCU",
+      "MQ-135 Gas Sensor",
+      "GP2Y1010AU0F Dust Sensor",
+      "OLED Display",
+      "Breadboard"
+    ],
+    "connections": [
+      "MQ-135 Analog Out → GPIO 34",
+      "Dust Sensor Led → GPIO 12, Vo → GPIO 35",
+      "OLED SDA/SCL → GPIO 21/22"
+    ],
+    "code": "#define MQ_PIN 34\n#define DUST_LED 12\n#define DUST_VO 35\n\nvoid setup() {\n  pinMode(DUST_LED, OUTPUT);\n}\n\nfloat readDust() {\n  digitalWrite(DUST_LED, LOW); // Turn on LED\n  delayMicroseconds(280);\n  float val = analogRead(DUST_VO);\n  delayMicroseconds(40);\n  digitalWrite(DUST_LED, HIGH); // Turn off LED\n  return val;\n}\n\nvoid loop() {\n  float dust = readDust();\n  int gas = analogRead(MQ_PIN);\n  // Publish readings to cloud metrics dashboard\n  delay(2000);\n}",
+    "tips": [
+      "MQ gas sensors require a burn-in period of 24-48 hours before returning accurate calibrated measurements.",
+      "The dust sensor internal LED needs a specific pulse profile (0.28ms pulse width) to record particles."
+    ]
+  },
+  {
+    "id": "iot-industrial",
+    "title": "IoT RS485 Modbus Sensor Node",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32 NodeMCU",
+      "MAX485 TTL-to-RS485 Module",
+      "Modbus Soil Temp/EC Probe",
+      "12V Power Adapter",
+      "Breadboard"
+    ],
+    "connections": [
+      "MAX485 DI/RO → ESP32 GPIO 17/16 (UART2)",
+      "MAX485 DE/RE → ESP32 GPIO 4 (Direction)",
+      "MAX485 A/B → Modbus Sensor A/B lines",
+      "Modbus Sensor Power → 12V supply"
+    ],
+    "code": "#include <ModbusMaster.h>\n\n#define MAX485_DE 4\nModbusMaster node;\n\nvoid preTransmission() { digitalWrite(MAX485_DE, 1); }\nvoid postTransmission() { digitalWrite(MAX485_DE, 0); }\n\nvoid setup() {\n  pinMode(MAX485_DE, OUTPUT);\n  Serial2.begin(9600, SERIAL_8N1, 16, 17);\n  node.begin(1, Serial2); // Device ID 1\n  node.preTransmission(preTransmission);\n  node.postTransmission(postTransmission);\n}\nvoid loop() {\n  node.readHoldingRegisters(0x0000, 2);\n  delay(1000);\n}",
+    "tips": [
+      "RS-485 is a half-duplex bus; toggle the DE/RE direction pin HIGH to transmit and LOW to receive Modbus frames.",
+      "Use twisted-pair shielded cabling to maintain communications over industrial distances."
+    ]
+  },
+  {
+    "id": "iot-water",
+    "title": "IoT Water Quality Sensor Node",
+    "difficulty": "Intermediate",
+    "components": [
+      "ESP32 NodeMCU",
+      "Analog pH Sensor Kit",
+      "DS18B20 Temp Probe",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "pH Sensor Analog Out → ESP32 GPIO32",
+      "DS18B20 Data line → ESP32 GPIO15 (+ 4.7kΩ pull-up)"
+    ],
+    "code": "#define PH_PIN 32\n\nfloat getPH() {\n  int raw = analogRead(PH_PIN);\n  float voltage = raw * 3.3 / 4095.0;\n  // Calibrate scale: pH 7 = 2.5V, Slope = -5.7 pH/V\n  float pH = 7.0 + ((2.5 - voltage) / 0.18);\n  return pH;\n}\nvoid setup() {}\nvoid loop() {\n  float value = getPH();\n  delay(2000);\n}",
+    "tips": [
+      "ph probes require periodic calibration in buffer solutions (pH 4.0, 7.0, and 10.0) to maintain measurement accuracy.",
+      "Temperature affects pH readings. Integrate DS18B20 temp values to calculate temperature-compensated pH values."
+    ]
+  },
+  {
+    "id": "iot-hospital",
+    "title": "IoT Patient Health Alert Node",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32 NodeMCU",
+      "MAX30102 Heart Rate Sensor",
+      "Active Buzzer",
+      "OLED Display",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "MAX30102 SDA/SCL → ESP32 GPIO 21/22",
+      "Buzzer Terminal (+) → GPIO 18",
+      "MAX30102 INT → GPIO 19"
+    ],
+    "code": "#include <Wire.h>\n#include \"MAX30105.h\"\n#include \"heartRate.h\"\n\nMAX30105 particleSensor;\n\nvoid setup() {\n  particleSensor.begin(Wire, I2C_SPEED_FAST);\n  particleSensor.setup();\n}\n\nvoid loop() {\n  long irValue = particleSensor.getIR();\n  if (checkForBeat(irValue) == true) {\n    Serial.println(\"BPM detected!\");\n  }\n}",
+    "tips": [
+      "The MAX30102 is highly sensitive to motion artifacts. Keep fingers still on the glass transducer when taking readings.",
+      "The heart rate algorithm requires fast sampling rates (at least 100Hz) to correctly map plethysmographic curves."
+    ]
+  }
+]

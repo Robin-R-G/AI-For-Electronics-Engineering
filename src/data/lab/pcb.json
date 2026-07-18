@@ -1,0 +1,141 @@
+[
+  {
+    "id": "pcb-power",
+    "title": "Linear Regulated Power Supply PCB",
+    "difficulty": "Beginner",
+    "components": [
+      "LM7805 Linear Regulator",
+      "1N4007 Diodes ×4",
+      "1000µF Electrolytic Cap",
+      "100nF Ceramic Cap",
+      "Terminal Blocks ×2",
+      "Heatsink"
+    ],
+    "connections": [
+      "AC Input → Bridge Rectifier (4x 1N4007 Diodes)",
+      "Bridge Rectifier Output (+) → 1000µF Filter Cap (+) → LM7805 Vin",
+      "LM7805 Vout → 100nF Decoupling Cap (+) → DC Output Terminal (+)",
+      "LM7805 GND & Cap Negative leads → Common Ground Plane"
+    ],
+    "code": "Layout & Design Steps:\n1. Schematic Capture: Draw AC bridge rectifier, filter capacitor, regulator, and output caps.\n2. Thermal Management: Place LM7805 with a dedicated tab footprint to mount a heatsink.\n3. Trace Width Calculation: Set AC input and unregulated DC traces to at least 1.5mm (60 mils) to support 1.5A load currents.\n4. Grounding: Connect negative pins via a solid, low-impedance ground pour.\n5. DRC Check: Ensure clearances are at least 0.254mm (10 mils).",
+    "tips": [
+      "Place the large electrolytic capacitor as close to the input pins of the LM7805 regulator as possible to reduce voltage ripple.",
+      "The LM7805 regulator dissipates heat equal to (Vin - Vout) × Iload. Always mount a heatsink if voltage drop is higher than 5V at high load."
+    ]
+  },
+  {
+    "id": "pcb-sensor",
+    "title": "Sensor Breakout PCB (I2C Module)",
+    "difficulty": "Beginner",
+    "components": [
+      "BME280 Sensor Chip",
+      "10kΩ Pull-Up Resistors ×2",
+      "100nF Ceramic Decoupling Cap",
+      "4-Pin Header"
+    ],
+    "connections": [
+      "BME280 VDD → 3.3V Pin",
+      "BME280 GND → GND Plane",
+      "BME280 SDA → SDA Pin (+ 10kΩ pull-up to 3.3V)",
+      "BME280 SCL → SCL Pin (+ 10kΩ pull-up to 3.3V)"
+    ],
+    "code": "Layout & Design Steps:\n1. Footprint Selection: Use standard LGA-8 footprint for BME280 chip (requires precision soldering pads).\n2. Decoupling: Place the 100nF capacitor directly adjacent to the VDD pin (distance < 2mm).\n3. I2C Traces: Route SDA and SCL parallel to keep capacitance matched, avoiding close runs to power traces.\n4. Copper Pour: Keep a ground pour on both the top and bottom layers, linked by stitching vias.\n5. Output Headers: Place a 2.54mm pitch pin header for breadboard integration.",
+    "tips": [
+      "Do not route digital signals directly under the BME280 sensor cavity to prevent clock noise coupling into sensitive pressure sensors.",
+      "I2C pull-up resistors are mandatory — 4.7kΩ or 10kΩ resistors pull up open-drain SDA/SCL lines."
+    ]
+  },
+  {
+    "id": "pcb-relay",
+    "title": "Optoisolated Relay Driver Board",
+    "difficulty": "Intermediate",
+    "components": [
+      "PC817 Optocoupler",
+      "5V Relay",
+      "1N4148 Freewheeling Diode",
+      "BC847 NPN Transistor",
+      "Resistors",
+      "Screw Terminals"
+    ],
+    "connections": [
+      "Input Signal → 220Ω Resistor → PC817 Opto LED Anode",
+      "PC817 Photo-Transistor Collector → 5V Supply, Emitter → BC847 Base",
+      "BC847 Collector → Relay Coil (-), Emitter → GND",
+      "1N4148 Diode Cathode → Relay Coil (+), Anode → Relay Coil (-)"
+    ],
+    "code": "Layout & Design Steps:\n1. Electrical Isolation: Maintain a physical isolation gap of at least 8mm under the optocoupler between low-voltage digital circuits and high-voltage relay rails.\n2. Trace Width: Scale AC trace tracks to 2.5mm (100 mils) to support up to 5A load limits.\n3. Creepage distances: Mill slots into the FR4 board directly under the relay contacts to prevent high-voltage surface arcing.\n4. Snubber Circuit: Place the freewheeling diode directly parallel to the relay coil leads.",
+    "tips": [
+      "Optoisolation blocks high-voltage inductive switching noise from jumping back into sensitive microcontroller GPIO lines.",
+      "Always design screw terminal traces without solder mask (exposed copper) so they can be reinforced with solder to support high currents."
+    ]
+  },
+  {
+    "id": "pcb-buck",
+    "title": "Synchronous Buck Converter PCB",
+    "difficulty": "Advanced",
+    "components": [
+      "LM2596 Controller IC",
+      "100µH Inductor",
+      "1N5822 Schottky Diode",
+      "Capacitors",
+      "Copper Heat Pours"
+    ],
+    "connections": [
+      "Vin Terminal → Input Electrolytic Cap (+) → LM2596 Vin",
+      "LM2596 OUT → Schottky Diode Cathode & Inductor Input",
+      "Inductor Output → Output Filter Cap (+) → Vout Terminal (+)",
+      "Feedback Divider resistors → LM2596 Feedback Pin"
+    ],
+    "code": "Layout & Design Steps:\n1. Loop Minimization: Group the input capacitor, LM2596 OUT pin, Schottky diode, and inductor closely to minimize high-frequency switching loops.\n2. Ground Plane: Run a single, solid ground pour directly under the switching nodes to prevent EMI radiation.\n3. Feedback Protection: Keep the feedback trace away from the inductor and switching nodes to avoid noise coupling.\n4. Thermal Via Stitching: Add multiple thermal vias under the LM2596 exposed pad to transfer heat to the bottom copper layer.",
+    "tips": [
+      "Switching loops generate electromagnetic interference. Keeping trace loops short is the absolute key to passing FCC emission tests.",
+      "The feedback trace should be tapped at the output capacitor, not directly next to the inductor, to read stable voltage levels."
+    ]
+  },
+  {
+    "id": "pcb-amplifier",
+    "title": "Class-D Audio Amplifier PCB",
+    "difficulty": "Advanced",
+    "components": [
+      "TPA3116D2 Class-D Amp IC",
+      "10µH Inductors ×2",
+      "1µF Film Capacitors",
+      "Electrolytic Caps",
+      "Output LC Filter components"
+    ],
+    "connections": [
+      "Audio Input L/R → 1µF Input Coupling Capacitors → TPA3116 inputs",
+      "TPA3116 Outputs → LC low-pass filter (10µH Inductors & 680nF Caps) → Speaker Terminals",
+      "Decoupling Capacitors placed directly at power pins"
+    ],
+    "code": "Layout & Design Steps:\n1. Analog & Digital Ground: Separate analog signal ground tracks from noisy high-current power ground pours, connecting them at a single 'star' ground point.\n2. LC Filter Placement: Route the output LC filters symmetrically to balance impedance on speaker lines.\n3. Bypass Capacitors: Place bypass caps directly at the VCC pins with short traces to GND.\n4. Differential Routing: Route input signal lines as differential pairs to reject ambient noise.",
+    "tips": [
+      "Class-D amplifiers use high-frequency PWM switching to achieve high efficiency, requiring careful output filtering to suppress radio frequency carrier noise.",
+      "Use high-quality inductors with high saturation currents for the output low-pass filter to prevent audio distortion."
+    ]
+  },
+  {
+    "id": "pcb-esp32",
+    "title": "ESP32 Custom Development Board",
+    "difficulty": "Advanced",
+    "components": [
+      "ESP32-WROOM-32D Module",
+      "CP2102 USB-to-UART Bridge",
+      "AMS1117-3.3V LDO Regulator",
+      "USB-C Port",
+      "Tactile Buttons ×2",
+      "Decoupling Caps"
+    ],
+    "connections": [
+      "USB-C VBUS → AMS1117 Input → 3.3V Output",
+      "CP2102 TXD/RXD → ESP32 RXD0/TXD0 (via series resistors)",
+      "Auto-Reset Transistor Circuit (EN & GPIO0) connected to CP2102 DTR & RTS lines",
+      "GPIO0/EN pulled up to 3.3V with 10kΩ resistors"
+    ],
+    "code": "Layout & Design Steps:\n1. Antenna Clearance: Place the ESP32 module on the board edge, keeping a complete copper keep-out zone under the PCB antenna.\n2. Differential USB Lines: Route USB D+/D- lines with 90Ω differential impedance matching rules.\n3. LDO Placement: Place decoupling capacitors directly at the input and output pins of the AMS1117 regulator.\n4. Power Routing: Set 3.3V power rails to 0.76mm (30 mils) width to support peak ESP32 transmission currents (500mA).\n5. Stitching Vias: Create a grid of stitching vias to link top and bottom ground planes.",
+    "tips": [
+      "Never place copper, ground plane, or signal traces under the ESP32 chip antenna; doing so degrades wireless range.",
+      "The ESP32 module requires a clean, stable 3.3V supply. A 10µF tantalum capacitor parallel to a 100nF ceramic capacitor at the VDD pin prevents startup issues."
+    ]
+  }
+]

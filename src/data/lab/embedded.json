@@ -1,0 +1,246 @@
+[
+  {
+    "id": "led-blink",
+    "title": "LED Blink Circuit",
+    "difficulty": "Beginner",
+    "components": [
+      "Arduino Uno",
+      "LED",
+      "220Ω Resistor",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "Arduino D13 → 220Ω Resistor → LED Anode (+)",
+      "LED Cathode (-) → GND"
+    ],
+    "code": "// Blink an LED on pin 13\nvoid setup() {\n  pinMode(13, OUTPUT);\n}\nvoid loop() {\n  digitalWrite(13, HIGH);\n  delay(1000);\n  digitalWrite(13, LOW);\n  delay(1000);\n}",
+    "tips": [
+      "Always use a current-limiting resistor with LEDs to prevent burning.",
+      "220Ω gives ~15mA at 5V — safe for standard LEDs.",
+      "Longer leg is anode (+), shorter leg is cathode (-)."
+    ]
+  },
+  {
+    "id": "digital-dice",
+    "title": "Digital Dice (7-Segment Display)",
+    "difficulty": "Beginner",
+    "components": [
+      "Arduino Uno",
+      "7-Segment Display (Common Cathode)",
+      "220Ω Resistors ×7",
+      "Push Button",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "Display segments a-g → Arduino D2 to D8 via 220Ω resistors",
+      "Display Common Cathode → GND",
+      "Push Button Pin 1 → 5V",
+      "Push Button Pin 2 → Arduino D9 (+ 10kΩ pull-down to GND)"
+    ],
+    "code": "// Digital Dice using 7-Segment display\nconst int segPins[] = {2, 3, 4, 5, 6, 7, 8};\nconst int btnPin = 9;\nconst byte numPatterns[] = {\n  0b00111111, // 0\n  0b00000110, // 1\n  0b01011011, // 2\n  0b01001111, // 3\n  0b01100110, // 4\n  0b01101101, // 5\n  0b01111101, // 6\n};\n\nvoid setup() {\n  for(int i=0; i<7; i++) pinMode(segPins[i], OUTPUT);\n  pinMode(btnPin, INPUT);\n  randomSeed(analogRead(0));\n}\n\nvoid loop() {\n  if(digitalRead(btnPin) == HIGH) {\n    int val = random(1, 7);\n    showNumber(val);\n    delay(500);\n  }\n}\n\nvoid showNumber(int num) {\n  for(int i=0; i<7; i++) {\n    digitalWrite(segPins[i], bitRead(numPatterns[num], i));\n  }\n}",
+    "tips": [
+      "Make sure you configure segments correctly based on whether it is common cathode or common anode.",
+      "The randomSeed() ensures true pseudo-random sequences upon reset."
+    ]
+  },
+  {
+    "id": "traffic-light",
+    "title": "Traffic Light Controller",
+    "difficulty": "Beginner",
+    "components": [
+      "Arduino Uno",
+      "Red LED",
+      "Yellow LED",
+      "Green LED",
+      "220Ω Resistors ×3",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "Red LED Anode → D10 (via 220Ω resistor)",
+      "Yellow LED Anode → D9 (via 220Ω resistor)",
+      "Green LED Anode → D8 (via 220Ω resistor)",
+      "All Cathodes (-) → GND"
+    ],
+    "code": "// Standard Traffic Light Timing Sequence\nvoid setup() {\n  pinMode(10, OUTPUT); // Red\n  pinMode(9, OUTPUT);  // Yellow\n  pinMode(8, OUTPUT);  // Green\n}\n\nvoid loop() {\n  // Green Light on\n  digitalWrite(8, HIGH); digitalWrite(9, LOW); digitalWrite(10, LOW);\n  delay(5000);\n  // Yellow Light on\n  digitalWrite(8, LOW); digitalWrite(9, HIGH); digitalWrite(10, LOW);\n  delay(2000);\n  // Red Light on\n  digitalWrite(8, LOW); digitalWrite(9, LOW); digitalWrite(10, HIGH);\n  delay(5000);\n}",
+    "tips": [
+      "Ensure clean timing loops. In industrial environments, hardware watchdog timers protect traffic controllers from locking up.",
+      "Use colored LEDs matching the lens to avoid spectrum attenuation."
+    ]
+  },
+  {
+    "id": "smart-door-lock",
+    "title": "RFID Smart Door Lock",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "MFRC522 RFID Module",
+      "SG90 Servo Motor",
+      "LEDs (Red/Green)",
+      "Resistors",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "RFID SDA → D10",
+      "RFID SCK → D13",
+      "RFID MOSI → D11",
+      "RFID MISO → D12",
+      "RFID RST → D9",
+      "Servo Signal → D6",
+      "Green LED → D5, Red LED → D4"
+    ],
+    "code": "#include <SPI.h>\n#include <MFRC522.h>\n#include <Servo.h>\n\n#define SS_PIN 10\n#define RST_PIN 9\nMFRC522 rfid(SS_PIN, RST_PIN);\nServo lock;\n\nvoid setup() {\n  SPI.begin();\n  rfid.PCD_Init();\n  lock.attach(6);\n  lock.write(0); // Locked\n}\n\nvoid loop() {\n  if ( ! rfid.PICC_IsNewCardPresent()) return;\n  if ( ! rfid.PICC_ReadCardSerial()) return;\n  \n  // Hardcoded master tag verification\n  if (rfid.uid.uidByte[0] == 0xDE && rfid.uid.uidByte[1] == 0xAD) {\n    lock.write(90); // Unlock\n    delay(3000);\n    lock.write(0);  // Relock\n  }\n}",
+    "tips": [
+      "Servo motor spikes can cause Arduino to reset; place a 470µF decoupling capacitor across the 5V and GND rail.",
+      "SPI lines must have short wire runs to prevent signal distortion."
+    ]
+  },
+  {
+    "id": "smart-attendance",
+    "title": "LCD RFID Attendance Logger",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "MFRC522 RFID Module",
+      "I2C LCD 16x2 Display",
+      "DS3231 RTC Module",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "RTC/LCD SDA → Arduino A4 (+ 4.7kΩ pull-up)",
+      "RTC/LCD SCL → Arduino A5 (+ 4.7kΩ pull-up)",
+      "RFID SPI pins connected to D10-D13",
+      "GND → Common GND, VCC → 5V"
+    ],
+    "code": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <RTClib.h>\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nRTC_DS3231 rtc;\n\nvoid setup() {\n  lcd.begin(16, 2);\n  lcd.backlight();\n  rtc.begin();\n}\n\nvoid loop() {\n  DateTime now = rtc.now();\n  lcd.setCursor(0, 0);\n  lcd.print(\"Time: \");\n  lcd.print(now.hour());\n  lcd.print(\":\");\n  lcd.print(now.minute());\n  delay(1000);\n}",
+    "tips": [
+      "DS3231 is highly accurate because of internal temperature compensation.",
+      "The I2C bus supports multiple devices by allocating unique slave addresses (LCD = 0x27, RTC = 0x68)."
+    ]
+  },
+  {
+    "id": "password-lock",
+    "title": "Matrix Keypad Combination Lock",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "4x4 Matrix Keypad",
+      "SG90 Servo Motor",
+      "Active Buzzer",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "Keypad Rows 1-4 → D2 to D5",
+      "Keypad Cols 1-4 → D6 to D9",
+      "Servo Signal → D10",
+      "Buzzer Terminal (+) → D11"
+    ],
+    "code": "#include <Keypad.h>\n#include <Servo.h>\n\nconst byte ROWS = 4; const byte COLS = 4;\nchar keys[ROWS][COLS] = {\n  {'1','2','3','A'},\n  {'4','5','6','B'},\n  {'7','8','9','C'},\n  {'*','0','#','D'}\n};\nbyte rowPins[ROWS] = {2, 3, 4, 5};\nbyte colPins[COLS] = {6, 7, 8, 9};\nKeypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);\n\nvoid setup() {}\nvoid loop() {\n  char key = keypad.getKey();\n  if (key) {\n    // Password verification logic\n  }\n}",
+    "tips": [
+      "Keypads use matrix scanning to save GPIO pins — 8 pins read 16 buttons.",
+      "Add a mechanical debouncer in code to prevent double keypress triggers."
+    ]
+  },
+  {
+    "id": "smart-alarm",
+    "title": "PIR Intruder Alarm System",
+    "difficulty": "Beginner",
+    "components: ": [
+      "Arduino Uno",
+      "PIR Motion Sensor",
+      "Active Buzzer",
+      "LED",
+      "220Ω Resistor",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "PIR Out → D2",
+      "Buzzer (+) → D3",
+      "LED Anode → D4 via 220Ω resistor",
+      "All GNDs → Arduino GND"
+    ],
+    "code": "void setup() {\n  pinMode(2, INPUT); // PIR\n  pinMode(3, OUTPUT); // Buzzer\n  pinMode(4, OUTPUT); // LED\n}\n\nvoid loop() {\n  if(digitalRead(2) == HIGH) {\n    digitalWrite(4, HIGH);\n    tone(3, 1000); // Alarm sound\n  } else {\n    digitalWrite(4, LOW);\n    noTone(3);\n  }\n  delay(200);\n}",
+    "tips": [
+      "PIR sensors require a warm-up period of 30-60 seconds to calibrate to the background infrared signature.",
+      "Adjust the sensitivity potentiometer on the sensor body to scale detection ranges."
+    ]
+  },
+  {
+    "id": "digital-stopwatch",
+    "title": "Stopwatch with LCD and Interrupts",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "16x2 Character LCD",
+      "Push Buttons ×2",
+      "10kΩ Resistors ×2",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "LCD pins connected via standard 6-wire parallel bus (D4-D7, RS, EN)",
+      "Start/Stop Button → D2 (External Interrupt 0)",
+      "Reset Button → D3 (External Interrupt 1)"
+    ],
+    "code": "#include <LiquidCrystal.h>\nLiquidCrystal lcd(12, 11, 5, 4, 3, 2);\nvolatile boolean running = false;\nvolatile unsigned long elapsed = 0;\n\nvoid setup() {\n  lcd.begin(16, 2);\n  attachInterrupt(0, startStopISR, FALLING);\n}\n\nvoid startStopISR() {\n  running = !running;\n}\n\nvoid loop() {\n  if (running) {\n    elapsed++;\n    lcd.setCursor(0, 0);\n    lcd.print(elapsed / 10.0);\n    delay(100);\n  }\n}",
+    "tips": [
+      "Use 'volatile' keyword for variables modified inside ISRs to prevent the compiler from caching them.",
+      "Hardware debouncers (RC filter) are critical for interrupt buttons to avoid false triggers."
+    ]
+  },
+  {
+    "id": "digital-thermometer",
+    "title": "LM35 Precision Temperature Monitor",
+    "difficulty": "Beginner",
+    "components": [
+      "Arduino Uno",
+      "LM35 Temp Sensor",
+      "I2C LCD 16x2",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections": [
+      "LM35 VCC → 5V",
+      "LM35 GND → GND",
+      "LM35 OUT → Arduino A0",
+      "LCD SDA/SCL → SDA/SCL pins"
+    ],
+    "code": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\n\nvoid setup() {\n  lcd.begin(16, 2);\n}\n\nvoid loop() {\n  int val = analogRead(A0);\n  float mv = (val / 1023.0) * 5000.0;\n  float temp = mv / 10.0; // LM35: 10mV per degree C\n  \n  lcd.setCursor(0,0);\n  lcd.print(\"Temp: \");\n  lcd.print(temp);\n  lcd.print(\" C\");\n  delay(1000);\n}",
+    "tips": [
+      "LM35 linear scale: 10mV/°C. A 0.5V output corresponds to 50°C.",
+      "Configure Arduino analog reference to INTERNAL (1.1V) to improve resolution for low temperatures."
+    ]
+  },
+  {
+    "id": "smart-fan",
+    "title": "Temperature-Controlled DC Fan",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "TMP36 Temp Sensor",
+      "TIP120 NPN Darlington Transistor",
+      "DC Fan (5V-12V)",
+      "1N4007 Diode",
+      "Breadboard",
+      "Jumper Wires"
+    ],
+    "connections: ": [
+      "TMP36 OUT → Arduino A0",
+      "Arduino D3 (PWM) → 1kΩ Resistor → TIP120 Base",
+      "TIP120 Emitter → GND",
+      "TIP120 Collector → DC Fan (-)",
+      "DC Fan (+) → 12V Supply (+)",
+      "1N4007 Diode Cathode → DC Fan (+), Anode → Fan (-)"
+    ],
+    "code": "void setup() {\n  pinMode(3, OUTPUT);\n}\n\nvoid loop() {\n  int val = analogRead(A0);\n  float voltage = val * 5.0 / 1023.0;\n  float tempC = (voltage - 0.5) * 100.0;\n  \n  if(tempC > 30.0) {\n    int speed = map(tempC, 30, 45, 100, 255);\n    analogWrite(3, constrain(speed, 100, 255));\n  } else {\n    analogWrite(3, 0);\n  }\n  delay(1000);\n}",
+    "tips": [
+      "A TIP120 Darlington transistor is ideal for amplification because of its high current gain (hFE).",
+      "The flyback diode suppresses back-EMF spikes when turning off the DC fan."
+    ]
+  }
+]

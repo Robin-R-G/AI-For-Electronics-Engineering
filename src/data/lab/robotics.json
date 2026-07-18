@@ -1,0 +1,145 @@
+[
+  {
+    "id": "robotics-arm",
+    "title": "4-DOF Robotic Arm Controller",
+    "difficulty": "Advanced",
+    "components": [
+      "Arduino Uno",
+      "PCA9685 16-Channel PWM Servo Driver (I2C)",
+      "Micro Servos (SG90) ×4",
+      "Potentiometers ×4",
+      "5V 4A DC Power Supply",
+      "Breadboard"
+    ],
+    "connections": [
+      "PCA9685 SCL/SDA → Arduino A5/A4",
+      "PCA9685 V+ & GND → 5V 4A Supply (+/-)",
+      "Servos (Base, Shoulder, Elbow, Gripper) → PCA9685 Channels 0-3",
+      "Potentiometers outputs → Arduino A0-A3"
+    ],
+    "code": "#include <Wire.h>\n#include <Adafruit_PWMServoDriver.h>\n\nAdafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();\n\nvoid setup() {\n  pwm.begin();\n  pwm.setPWMFreq(60);\n}\n\nvoid loop() {\n  for(int i=0; i<4; i++) {\n    int val = analogRead(i);\n    int pulse = map(val, 0, 1023, 150, 600); // Servo pulse length limits\n    pwm.setPWM(i, 0, pulse);\n  }\n  delay(20);\n}",
+    "tips": [
+      "PCA9685 handles servo PWM signals locally over I2C, freeing the MCU from running software PWM interrupts.",
+      "Always supply power to PCA9685 servo channels from a dedicated external battery/adapter; microcontrollers cannot supply the startup current of 4 motors."
+    ]
+  },
+  {
+    "id": "robotics-bluetooth",
+    "title": "Bluetooth Remote Controlled Car",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "L298N Motor Driver Module",
+      "HC-05 Bluetooth Module",
+      "DC Motors ×2",
+      "Chassis Wheels",
+      "Li-Ion Batteries ×2 (7.4V)",
+      "Breadboard"
+    ],
+    "connections": [
+      "HC-05 TXD → Arduino RXD (D0), RXD → TXD (via divider)",
+      "Motor Driver IN1-IN4 → Arduino D5, D6, D9, D10 (PWM enabled)",
+      "Driver OUT1/OUT2 → Left Motor, OUT3/OUT4 → Right Motor",
+      "7.4V Battery (+) → L298N 12V Pin, GND → Common GND"
+    ],
+    "code": "char command;\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(5, OUTPUT); pinMode(6, OUTPUT);\n  pinMode(9, OUTPUT); pinMode(10, OUTPUT);\n}\n\nvoid loop() {\n  if(Serial.available() > 0){\n    command = Serial.read();\n    if (command == 'F') { // Forward\n      analogWrite(5, 200); digitalWrite(6, LOW);\n      analogWrite(9, 200); digitalWrite(10, LOW);\n    } else if (command == 'S') { // Stop\n      digitalWrite(5, LOW); digitalWrite(9, LOW);\n    }\n  }\n}",
+    "tips": [
+      "PWM speed adjustments (analogWrite) allow smooth acceleration and decelerations, protecting gearboxes from sudden shock.",
+      "The HC-05 enters AT configuration mode when the onboard button is held down at power-up."
+    ]
+  },
+  {
+    "id": "robotics-gesture",
+    "title": "Hand Gesture Controlled Robot",
+    "difficulty": "Advanced",
+    "components": [
+      "Arduino Uno",
+      "HC-05 Bluetooth Module",
+      "MPU6050 Gyro/Accel",
+      "L298N Driver",
+      "DC Motors ×2",
+      "Breadboard",
+      "Glove Mount"
+    ],
+    "connections": [
+      "Glove: MPU6050 SDA/SCL → D2/D3 (or standard I2C), HC-05 TX/RX to serial pins",
+      "Robot car: HC-05 Bluetooth linked as Receiver, OUT1-OUT4 to motors"
+    ],
+    "code": "// Glove Transmitter code snippet reading acceleration angles\n#include <Wire.h>\nconst int MPU_addr=0x68;\n\nvoid setup() {\n  Wire.begin();\n  Wire.beginTransmission(MPU_addr);\n  Wire.write(0x6B); Wire.write(0); Wire.endTransmission(true);\n  Serial.begin(9600);\n}\nvoid loop() {\n  // Read ax, ay values, map to tilt commands, and transmit via Serial\n  delay(100);\n}",
+    "tips": [
+      "Convert accelerometer raw axis values into pitch and roll tilt angles using trignometric arctan formulas.",
+      "Adjust transceiver baud rates to 9600 to minimize data dropouts over 10m ranges."
+    ]
+  },
+  {
+    "id": "robotics-maze",
+    "title": "Maze Solver (Wall Follower)",
+    "difficulty": "Advanced",
+    "components": [
+      "Arduino Uno",
+      "Ultrasonic Sensors ×3 (Left/Front/Right)",
+      "L298N Motor Driver",
+      "DC Gear Motors ×2",
+      "Breadboard",
+      "Li-ion Battery Stack"
+    ],
+    "connections": [
+      "Front Ultrasonic Trig/Echo → D2/D3",
+      "Left Ultrasonic Trig/Echo → D4/D5",
+      "Right Ultrasonic Trig/Echo → D6/D7",
+      "IN1-IN4 → D8, D9, D10, D11"
+    ],
+    "code": "// Wall follower maze solver\nvoid loop() {\n  long front = getDistance(2, 3);\n  long left = getDistance(4, 5);\n  long right = getDistance(6, 7);\n  \n  if (front > 15) {\n    moveForward();\n  } else {\n    if (left > right) {\n      turnLeft();\n    } else {\n      turnRight();\n    }\n  }\n}",
+    "tips": [
+      "Implement a PID loop based on left/right distance readings to keep the robot aligned down the center of the path.",
+      "Ultrasonic sensor cross-talk can trigger false measurements. Introduce a short delay (e.g., 10-20ms) between triggers."
+    ]
+  },
+  {
+    "id": "robotics-warehouse",
+    "title": "Warehouse RFID Cargo Rover",
+    "difficulty": "Advanced",
+    "components": [
+      "Arduino Uno",
+      "RC522 RFID Module",
+      "L293D Shield",
+      "Line sensors",
+      "DC Motors",
+      "Servo Gripper Assembly"
+    ],
+    "connections": [
+      "RFID SDA/RST → D10/D9, standard SPI pins",
+      "Line sensors → A0, A1, A2",
+      "Relay / Gripper Servos → Servo Shield pins"
+    ],
+    "code": "// Read cargo RFID tag, verify payload, and follow line to unload zone\n#include <SPI.h>\n#include <MFRC522.h>\n\nvoid setup() {\n  SPI.begin();\n  // Init RFID reader\n}\nvoid loop() {\n  // Scan for card, read inventory ID, navigate to shelf target\n}",
+    "tips": [
+      "RFID cards use passive magnetic induction; tags must pass within 3cm of the reader antenna to trigger a read.",
+      "Integrate encoders to verify precise forward movements in case tape lines are damaged."
+    ]
+  },
+  {
+    "id": "robotics-fire",
+    "title": "Fire Fighting Autonomous Rover",
+    "difficulty": "Intermediate",
+    "components": [
+      "Arduino Uno",
+      "Flame Sensor Modules ×3",
+      "5V Relay",
+      "5V Submersible Pump",
+      "Water Container",
+      "L298N Driver",
+      "Motors"
+    ],
+    "connections": [
+      "Flame Sensors Digital Out (Left, Center, Right) → D2, D3, D4",
+      "Water Pump Relay Control → D13",
+      "Motor outputs → L298N driver"
+    ],
+    "code": "void setup() {\n  pinMode(2, INPUT); pinMode(3, INPUT); pinMode(4, INPUT);\n  pinMode(13, OUTPUT); // Pump Relay\n}\n\nvoid loop() {\n  int center = digitalRead(3);\n  if (center == LOW) { // Flame detected (Active LOW)\n    stopMotors();\n    digitalWrite(13, HIGH); // Turn pump ON\n    delay(5000);            // Extinguish\n    digitalWrite(13, LOW);  // Turn off\n  }\n}",
+    "tips": [
+      "Flame sensors sense infrared emissions (760nm - 1100nm). Incandescent lamps will cause false triggers; shield sensor faces.",
+      "Isolate the water container and hose to prevent leaks from shorting motor electronics."
+    ]
+  }
+]

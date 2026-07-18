@@ -15,7 +15,7 @@ export const docsSections: DocSection[] = [
   { title: "LLMs", slug: "llms", readingTime: "25 min", difficulty: "Advanced", description: "Large Language Models architecture and capabilities." },
   { title: "AI Tools", slug: "ai-tools", readingTime: "15 min", difficulty: "Beginner", description: "Tools and frameworks for AI development." },
   { title: "Electronics Applications", slug: "electronics-applications", readingTime: "30 min", difficulty: "Intermediate", description: "Applying AI directly to electronics and PCBs." },
-  { title: "Electronics Lab", slug: "electronics-lab", readingTime: "30 min", difficulty: "Intermediate", description: "Virtual electronics lab with breadboard layouts and working code." },
+  { title: "Engineering Project Studio", slug: "electronics-lab", readingTime: "30 min", difficulty: "Intermediate", description: "Virtual electronics lab with breadboard layouts and working code." },
   { title: "Component Encyclopedia", slug: "component-encyclopedia", readingTime: "15 min", difficulty: "Beginner", description: "Searchable library of common electronic components." },
   { title: "Interview Preparation", slug: "interview-prep", readingTime: "20 min", difficulty: "Intermediate", description: "Technical interview questions with explanations." },
   { title: "Project Builder", slug: "project-builder", readingTime: "15 min", difficulty: "Intermediate", description: "Build projects with AI-suggested architecture and prompts." },
