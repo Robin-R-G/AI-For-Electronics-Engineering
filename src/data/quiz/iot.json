@@ -1,0 +1,130 @@
+[
+  {
+    "id": "iot-1",
+    "category": "debugging-scenarios",
+    "difficulty": "Beginner",
+    "question": "An ESP32 resets whenever a relay turns ON. What is the most likely cause?",
+    "options": [
+      "Wrong GPIO pin number used in code",
+      "Power supply noise, inductive kickback, or voltage drop caused by the relay current draw",
+      "Incorrect WiFi password configured in the firmware",
+      "Missing third-party driver library for the relay"
+    ],
+    "correctAnswer": "Power supply noise, inductive kickback, or voltage drop caused by the relay current draw",
+    "explanation": "Relays are inductive loads. Turning them on draws a sudden current spike, and turning them off induces high-voltage kickback. If the ESP32 shares the same power line without proper flyback protection (diode) or decoupling capacitors, it experiences a brownout reset.",
+    "relatedLesson": "electronics-lab",
+    "tags": ["esp32", "relay-glitch", "inductive-kickback", "brownout"]
+  },
+  {
+    "id": "iot-2",
+    "category": "concept-understanding",
+    "difficulty": "Beginner",
+    "question": "Which communication protocol is designed as a lightweight publish/subscribe model, ideal for low-bandwidth IoT sensor networks?",
+    "options": [
+      "HTTP/REST",
+      "MQTT (Message Queuing Telemetry Transport)",
+      "FTP (File Transfer Protocol)",
+      "SMTP"
+    ],
+    "correctAnswer": "MQTT (Message Queuing Telemetry Transport)",
+    "explanation": "MQTT is a client-server publish/subscribe messaging transport protocol. It is lightweight, has very low header overhead, and is designed for high-latency, low-bandwidth, and remote connections.",
+    "relatedLesson": "project-builder",
+    "tags": ["mqtt", "publish-subscribe", "iot-basics"]
+  },
+  {
+    "id": "iot-3",
+    "category": "engineering-decisions",
+    "difficulty": "Intermediate",
+    "question": "You are building a battery-powered agricultural sensor node that must transmit data every 30 minutes over a distance of 2 kilometers. Which wireless technology is most appropriate?",
+    "options": [
+      "Wi-Fi",
+      "Bluetooth LE",
+      "LoRaWAN",
+      "Zigbee"
+    ],
+    "correctAnswer": "LoRaWAN",
+    "explanation": "LoRaWAN is designed for Long Range (several kilometers) and low power consumption, allowing nodes to run for years on coin-cell batteries by sleeping between small data transmissions.",
+    "relatedLesson": "electronics-applications",
+    "tags": ["lorawan", "wireless-range", "power-budget"]
+  },
+  {
+    "id": "iot-4",
+    "category": "practical-application",
+    "difficulty": "Intermediate",
+    "question": "What is the role of deep sleep modes in IoT devices like the ESP32?",
+    "options": [
+      "To protect the microcontroller from overheating during operation",
+      "To reduce current consumption to microamps by turning off the CPU and radio, waking up only via timers or interrupts to send data",
+      "To download firmware updates in the background",
+      "To increase CPU clock speeds when running heavy ML models"
+    ],
+    "correctAnswer": "To reduce current consumption to microamps by turning off the CPU and radio, waking up only via timers or interrupts to send data",
+    "explanation": "Active ESP32 nodes draw over 100mA. By putting the device in deep sleep (~10µA draw) between sensor reads, the battery life is extended from hours to months or years.",
+    "relatedLesson": "electronics-applications",
+    "tags": ["deep-sleep", "low-power", "duty-cycle"]
+  },
+  {
+    "id": "iot-5",
+    "category": "debugging-scenarios",
+    "difficulty": "Advanced",
+    "question": "An ESP32-based OTA (Over-The-Air) firmware update fails halfway through because of a power loss. Upon reboot, the device continues to run the previous stable firmware. Why did it not break (brick) the device?",
+    "options": [
+      "The ESP32 has secondary backup cores that run the code",
+      "A dual-partition (two OTA slots) scheme was used: the bootloader boots the active partition and only switches once the new partition is verified",
+      "The ESP32 stores its entire firmware code in volatile RAM",
+      "The chip automatically rewinds physical clock cycles to restore flash state"
+    ],
+    "correctAnswer": "A dual-partition (two OTA slots) scheme was used: the bootloader boots the active partition and only switches once the new partition is verified",
+    "explanation": "Reliable OTA systems use two app partitions. The new firmware is written to the inactive slot. The active slot continues running. If power is lost or verification fails, the bootloader defaults back to the active slot, ensuring the device is never bricked.",
+    "relatedLesson": "project-builder",
+    "tags": ["ota", "dual-partition", "reliability", "firmware"]
+  },
+  {
+    "id": "iot-6",
+    "category": "circuit-reasoning",
+    "difficulty": "Advanced",
+    "question": "When designing an RF trace on a PCB for a 2.4GHz Wi-Fi antenna, why is impedance matching to 50 ohms critical?",
+    "options": [
+      "To maximize current flow to charge the onboard battery",
+      "To ensure maximum power transfer and minimize RF signal reflections that degrade wireless range and sensitivity",
+      "To step down signal voltage to protect the RF chip front-end",
+      "To prevent high-frequency signals from radiating into the chassis ground"
+    ],
+    "correctAnswer": "To ensure maximum power transfer and minimize RF signal reflections that degrade wireless range and sensitivity",
+    "explanation": "RF outputs and antennas are designed for a 50-ohm load. Traces carrying these signals must match this impedance. A mismatch causes RF energy to reflect back to the transmitter, causing signal loss, interference, and potential hardware damage.",
+    "relatedLesson": "electronics-lab",
+    "tags": ["rf-design", "coplanar-waveguide", "antenna", "impedance"]
+  },
+  {
+    "id": "iot-7",
+    "category": "concept-understanding",
+    "difficulty": "Expert",
+    "question": "What is the primary vulnerability in MQTT communication networks that do not enforce TLS encryption?",
+    "options": [
+      "Messages can be corrupted by thermal noise on the server side",
+      "All sensor data, client credentials, and control commands are transmitted in cleartext, exposing the network to eavesdropping and credential theft via packet sniffing",
+      "Clients cannot authenticate with the broker without TLS active",
+      "The broker runs out of TCP sockets under standard cleartext traffic"
+    ],
+    "correctAnswer": "All sensor data, client credentials, and control commands are transmitted in cleartext, exposing the network to eavesdropping and credential theft via packet sniffing",
+    "explanation": "Without TLS (Transport Layer Security) wrapper, standard MQTT packets flow in plain text. Anyone on the path (including public Wi-Fi networks) can capture the packets, reading API tokens, passwords, and sensitive industrial data.",
+    "relatedLesson": "project-builder",
+    "tags": ["mqtt-security", "tls-encryption", "vulnerability"]
+  },
+  {
+    "id": "iot-8",
+    "category": "engineering-decisions",
+    "difficulty": "Expert",
+    "question": "Explain the benefit of utilizing CoAP (Constrained Application Protocol) over MQTT for extremely resource-constrained battery-powered sensor nodes.",
+    "options": [
+      "CoAP supports TLS while MQTT only supports plain text connections",
+      "CoAP is built on UDP, reducing connection setup overhead and packet sizes (binary headers), whereas MQTT relies on TCP connection persistence",
+      "CoAP supports larger media payloads than MQTT",
+      "CoAP runs on a proprietary hardware layer that consumes zero battery power"
+    ],
+    "correctAnswer": "CoAP is built on UDP, reducing connection setup overhead and packet sizes (binary headers), whereas MQTT relies on TCP connection persistence",
+    "explanation": "CoAP uses UDP (connectionless). A sensor can wake up, fire a single UDP datagram with a small binary header, and immediately sleep. MQTT requires a TCP 3-way handshake and keep-alive packets, which keeps the radio active longer, draining battery.",
+    "relatedLesson": "project-builder",
+    "tags": ["coap", "udp", "low-power", "communication-overhead"]
+  }
+]

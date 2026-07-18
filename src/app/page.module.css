@@ -341,3 +341,237 @@
   .actions { flex-direction: column; width: 100%; max-width: 320px; }
   .scrollIndicator { display: none; }
 }
+
+/* ── Question of the Day Section ── */
+.qotdSection {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 0 8rem;
+}
+
+.qotdCard {
+  background: var(--glass-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(12px);
+  text-align: left;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.qotdMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.qotdBadge {
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--color-cyan);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.qotdLesson {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.qotdQuestion {
+  color: var(--color-white);
+  font-size: 1.25rem;
+  line-height: 1.5;
+  margin: 0 0 1.75rem 0;
+  font-weight: 600;
+}
+
+.qotdOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.qotdOptionBtn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--color-text-secondary);
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.qotdOptionBtn:hover:not(.disabledOption) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.optionSelected {
+  background: rgba(0, 229, 255, 0.05) !important;
+  border-color: var(--color-cyan) !important;
+  color: var(--color-cyan) !important;
+}
+
+.optionCorrect {
+  background: rgba(52, 211, 153, 0.1) !important;
+  border-color: #34d399 !important;
+  color: #34d399 !important;
+  font-weight: 600;
+}
+
+.optionIncorrect {
+  background: rgba(248, 113, 113, 0.1) !important;
+  border-color: #f87171 !important;
+  color: #f87171 !important;
+}
+
+.disabledOption {
+  cursor: not-allowed;
+}
+
+.qotdOptionLetter {
+  font-weight: bold;
+  background: rgba(255,255,255,0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.qotdFeedbackPanel {
+  animation: slideDown 0.3s ease-out;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.qotdFeedbackHeader {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.textSuccess {
+  color: #34d399;
+}
+
+.textDanger {
+  color: #f87171;
+}
+
+.qotdExplanation {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+.qotdLinksBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.qotdLessonRedirect {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-cyan);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.qotdLessonRedirect:hover {
+  color: #00b4cc;
+}
+
+.qotdAiPromptBlock {
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.qotdAiPromptBlock h5 {
+  margin: 0 0 0.5rem 0;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.qotdPromptText {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--color-text-secondary);
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: monospace;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.copyPromptBtn {
+  background: var(--color-cyan);
+  color: var(--color-dark-slate);
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.copyPromptBtn:hover {
+  background: #00b4cc;
+}
+
+.qotdRedirectMainBtn {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-text-secondary);
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 1.5rem;
+  text-decoration: none;
+  text-align: center;
+}
+
+.qotdRedirectMainBtn:hover {
+  color: white;
+  border-color: white;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

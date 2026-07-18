@@ -1,0 +1,130 @@
+[
+  {
+    "id": "ai-1",
+    "category": "engineering-decisions",
+    "difficulty": "Beginner",
+    "question": "A student asks an AI tool: 'Write Arduino code.' Why is this a poor engineering prompt?",
+    "options": [
+      "Arduino cannot be programmed by AI systems",
+      "It lacks project requirements, pin mappings, hardware specs, and constraints",
+      "AI models are physically unable to generate C++ code",
+      "Arduino programming requires no explanation or configuration"
+    ],
+    "correctAnswer": "It lacks project requirements, pin mappings, hardware specs, and constraints",
+    "explanation": "A good engineering prompt must provide clear specifications: the microcontroller board, connected peripherals, pin mapping, timing constraints, libraries to use, and expected behavior. Without these, AI outputs generic and often incorrect code.",
+    "relatedLesson": "prompt-engineering",
+    "tags": ["prompt-engineering", "arduino", "best-practices"]
+  },
+  {
+    "id": "ai-2",
+    "category": "concept-understanding",
+    "difficulty": "Beginner",
+    "question": "What is the difference between supervised and unsupervised machine learning?",
+    "options": [
+      "Supervised learning does not use algorithms; unsupervised does",
+      "Supervised learning requires labeled training data; unsupervised learning finds hidden structures in unlabeled data",
+      "Supervised learning only runs on cloud servers; unsupervised runs on microcontrollers",
+      "Supervised learning is only used for image classification"
+    ],
+    "correctAnswer": "Supervised learning requires labeled training data; unsupervised learning finds hidden structures in unlabeled data",
+    "explanation": "Supervised learning trains models on input-output pairs (labels) to predict categories or values. Unsupervised learning groups data points based on features (e.g., clustering motor vibrations without failure labels).",
+    "relatedLesson": "ai-fundamentals",
+    "tags": ["ml-basics", "supervised", "unsupervised"]
+  },
+  {
+    "id": "ai-3",
+    "category": "practical-application",
+    "difficulty": "Intermediate",
+    "question": "When quantizing a deep neural network from float32 to int8 for deployment on a microcontroller, what is the primary tradeoff?",
+    "options": [
+      "The network size increases, but accuracy improves significantly",
+      "The network is compressed by ~4x with faster integer inference, but there may be a minor loss in accuracy",
+      "The model can only run on cloud-connected hardware after quantization",
+      "Quantization is only compatible with decision tree algorithms"
+    ],
+    "correctAnswer": "The network is compressed by ~4x with faster integer inference, but there may be a minor loss in accuracy",
+    "explanation": "Quantization converts 32-bit floats to 8-bit integers. This reduces RAM/Flash usage by ~4x and enables fast execution on MCUs with SIMD units, but can lead to quantization noise and slight accuracy loss.",
+    "relatedLesson": "deep-learning",
+    "tags": ["quantization", "tinyml", "edge-inference"]
+  },
+  {
+    "id": "ai-4",
+    "category": "circuit-reasoning",
+    "difficulty": "Intermediate",
+    "question": "Which neural network architecture is optimized for processing time-series sensor data like accelerometer or gyroscope sequences?",
+    "options": [
+      "Generative Adversarial Network (GAN)",
+      "1D Convolutional Neural Network (1D-CNN) or Recurrent Neural Network (RNN)",
+      "Standard Multi-Layer Perceptron (MLP) without temporal sequence indexing",
+      "Deconvolutional Neural Network"
+    ],
+    "correctAnswer": "1D Convolutional Neural Network (1D-CNN) or Recurrent Neural Network (RNN)",
+    "explanation": "1D-CNNs extract local shift-invariant temporal features from time-series channels, while RNNs (like LSTMs) maintain memory states across sequences, making them suitable for sensor streams.",
+    "relatedLesson": "deep-learning",
+    "tags": ["sensor-fusion", "time-series", "rnn", "cnn"]
+  },
+  {
+    "id": "ai-5",
+    "category": "engineering-decisions",
+    "difficulty": "Advanced",
+    "question": "You are designing an autoencoder-based anomaly detector for an industrial drill. What is the role of reconstruction error during inference?",
+    "options": [
+      "It represents the speed at which the model compiles",
+      "It measures how poorly the model reconstructs normal sensor data, indicating anomaly levels",
+      "It calculates the physical torque on the drill bit",
+      "It is only used during training to adjust learning rate"
+    ],
+    "correctAnswer": "It measures how poorly the model reconstructs normal sensor data, indicating anomaly levels",
+    "explanation": "An autoencoder is trained on normal operating data. During inference, if the drill exhibits abnormal behavior (e.g., severe vibration), the autoencoder fails to reconstruct the input well, resulting in a high reconstruction error that triggers an alert.",
+    "relatedLesson": "machine-learning",
+    "tags": ["anomaly-detection", "autoencoder", "predictive-maintenance"]
+  },
+  {
+    "id": "ai-6",
+    "category": "real-world-situations",
+    "difficulty": "Advanced",
+    "question": "A model trained to inspect PCBs for solder bridges achieves 99% accuracy. However, in production, it misses 30% of actual defects. Why is overall accuracy a poor metric here?",
+    "options": [
+      "Because the camera hardware is too old",
+      "Because the defects are rare (severe class imbalance), so predicting 'no defect' for everything yields high accuracy",
+      "Because deep learning models cannot run in real-time factory settings",
+      "Because the model was trained with the wrong color space"
+    ],
+    "correctAnswer": "Because defects are rare (severe class imbalance), so predicting 'no defect' for everything yields high accuracy",
+    "explanation": "PCB defects are typically rare (e.g., 1 in 100). A baseline that always says 'no defect' gets 99% accuracy but misses every single defect. Metrics like Precision, Recall, and F1-score are much better suited for imbalanced datasets.",
+    "relatedLesson": "machine-learning",
+    "tags": ["metrics", "class-imbalance", "quality-control"]
+  },
+  {
+    "id": "ai-7",
+    "category": "concept-understanding",
+    "difficulty": "Expert",
+    "question": "How does the Transformer self-attention mechanism achieve contextual representations for sequential token sequences?",
+    "options": [
+      "By applying static convolution filters across time frames sequentially",
+      "By calculating dynamic, pairwise similarity weights (Queries, Keys, Values) across all elements in the sequence simultaneously",
+      "By running a feedback loop with hidden states from left to right",
+      "By mapping input sequences to a standard lookup table"
+    ],
+    "correctAnswer": "By calculating dynamic, pairwise similarity weights (Queries, Keys, Values) across all elements in the sequence simultaneously",
+    "explanation": "Self-attention computes weights by projecting inputs into Query (Q), Key (K), and Value (V) matrices. The dot product of Q and K divided by the scaling factor gives the attention scores, allowing the model to aggregate context from the entire sequence.",
+    "relatedLesson": "llms",
+    "tags": ["transformers", "attention-mechanism", "deep-learning"]
+  },
+  {
+    "id": "ai-8",
+    "category": "engineering-decisions",
+    "difficulty": "Expert",
+    "question": "When deploying LLMs for hardware design validation, why is Retrieval-Augmented Generation (RAG) preferred over fine-tuning?",
+    "options": [
+      "RAG makes the model run faster on smaller microcontrollers",
+      "RAG dynamically injects verified datasheet context into the prompt, reducing hallucinations and enabling source attribution",
+      "Fine-tuning completely eliminates hallucinations but is too expensive to compute",
+      "RAG is a hardware-based acceleration block inside the FPGA"
+    ],
+    "correctAnswer": "RAG dynamically injects verified datasheet context into the prompt, reducing hallucinations and enabling source attribution",
+    "explanation": "RAG queries an external vector database of component datasheets and reference manuals, injecting the exact relevant specs into the context. This minimizes LLM hallucinations and allows engineers to audit the source references directly.",
+    "relatedLesson": "llms",
+    "tags": ["rag", "llm-validation", "engineering-tools"]
+  }
+]

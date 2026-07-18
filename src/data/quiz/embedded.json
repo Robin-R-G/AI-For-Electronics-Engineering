@@ -1,0 +1,130 @@
+[
+  {
+    "id": "emb-1",
+    "category": "concept-understanding",
+    "difficulty": "Beginner",
+    "question": "What does GPIO mean in microcontrollers?",
+    "options": [
+      "General Purpose Input/Output",
+      "Global Protocol Input Operation",
+      "Graphical Peripheral Integrated Output",
+      "Ground Path Impedance Optimization"
+    ],
+    "correctAnswer": "General Purpose Input/Output",
+    "explanation": "GPIO pins are software-configurable pins that can be set as inputs (to read high/low levels or analog sensors) or outputs (to drive LEDs, relays, or signal lines).",
+    "relatedLesson": "electronics-lab",
+    "tags": ["gpio", "mcu-basics", "hardware-io"]
+  },
+  {
+    "id": "emb-2",
+    "category": "concept-understanding",
+    "difficulty": "Beginner",
+    "question": "Which protocol uses a Master-Slave architecture with only two communication wires?",
+    "options": [
+      "SPI (Serial Peripheral Interface)",
+      "UART (Universal Asynchronous Receiver-Transmitter)",
+      "I2C (Inter-Integrated Circuit)",
+      "CAN (Controller Area Network)"
+    ],
+    "correctAnswer": "I2C (Inter-Integrated Circuit)",
+    "explanation": "I2C uses exactly two lines: SDA (Serial Data) and SCL (Serial Clock) with open-drain configurations requiring pull-up resistors. It supports multiple masters/slaves on the same bus using addressing.",
+    "relatedLesson": "component-encyclopedia",
+    "tags": ["i2c", "protocols", "communication"]
+  },
+  {
+    "id": "emb-3",
+    "category": "practical-application",
+    "difficulty": "Intermediate",
+    "question": "Why is a pull-up resistor used on the SDA and SCL lines in I2C?",
+    "options": [
+      "To limit current to prevent the master from burning out",
+      "Because I2C pins are open-drain and cannot actively pull the line high",
+      "To filter high-frequency noise from power supplies",
+      "To step down the voltage from 5V to 3.3V"
+    ],
+    "correctAnswer": "Because I2C pins are open-drain and cannot actively pull the line high",
+    "explanation": "I2C lines use open-drain drivers, meaning devices can only pull the lines low. The pull-up resistors are required to restore the bus to a logic high when no device is actively driving the line low.",
+    "relatedLesson": "component-encyclopedia",
+    "tags": ["i2c", "pull-up", "hardware-design"]
+  },
+  {
+    "id": "emb-4",
+    "category": "debugging-scenarios",
+    "difficulty": "Intermediate",
+    "question": "A watchdog timer (WDT) resets a microcontroller. What is the primary purpose of a WDT?",
+    "options": [
+      "To count the number of instructions executed to track power usage",
+      "To recover from firmware lockups or infinite loops by resetting the CPU if not kicked regularly",
+      "To monitor the battery voltage and switch to standby mode",
+      "To speed up database transactions"
+    ],
+    "correctAnswer": "To recover from firmware lockups or infinite loops by resetting the CPU if not kicked regularly",
+    "explanation": "A watchdog timer is a hardware countdown timer. The firmware must regularly 'feed' or 'kick' the watchdog. If the firmware freezes or enters an infinite loop, the watchdog expires and resets the system to recover.",
+    "relatedLesson": "electronics-applications",
+    "tags": ["watchdog", "robustness", "debugging"]
+  },
+  {
+    "id": "emb-5",
+    "category": "concept-understanding",
+    "difficulty": "Advanced",
+    "question": "What is the difference between a mutex and a semaphore in a real-time operating system (RTOS)?",
+    "options": [
+      "Semaphores only support binary values, whereas mutexes support integers",
+      "A mutex has an ownership concept and supports priority inheritance to prevent priority inversion; a semaphore is a general signaling mechanism",
+      "A mutex can only be used inside interrupt service routines",
+      "They are identical concepts, named differently by compiler vendors"
+    ],
+    "correctAnswer": "A mutex has an ownership concept and supports priority inheritance to prevent priority inversion; a semaphore is a general signaling mechanism",
+    "explanation": "Mutexes represent mutual exclusion and can only be released by the thread that acquired them, supporting priority inheritance to mitigate priority inversion. Semaphores are signaling variables (binary/counting) used for task synchronization and do not have an owner.",
+    "relatedLesson": "electronics-applications",
+    "tags": ["rtos", "mutex", "semaphore", "multitasking"]
+  },
+  {
+    "id": "emb-6",
+    "category": "debugging-scenarios",
+    "difficulty": "Advanced",
+    "question": "In a C-based microcontroller application, why is declaring a variable accessed inside an Interrupt Service Routine (ISR) as 'volatile' necessary?",
+    "options": [
+      "It tells the linker to place the variable in flash memory instead of RAM",
+      "It prevents the compiler optimizer from caching the variable in registers, forcing it to be read from RAM every time",
+      "It makes the variable thread-safe automatically by adding hardware locks",
+      "It encrypts the variable to prevent memory dumping"
+    ],
+    "correctAnswer": "It prevents the compiler optimizer from caching the variable in registers, forcing it to be read from RAM every time",
+    "explanation": "Since an ISR can modify a variable at any moment outside the normal program flow, the compiler optimizer might assume the value hasn't changed and read a cached copy from a CPU register. 'volatile' tells the compiler that the variable can change asynchronously.",
+    "relatedLesson": "electronics-lab",
+    "tags": ["volatile", "isr", "c-programming", "optimization"]
+  },
+  {
+    "id": "emb-7",
+    "category": "concept-understanding",
+    "difficulty": "Expert",
+    "question": "Analyze DMA impact on embedded real-time systems in terms of bus contention and CPU offloading.",
+    "options": [
+      "DMA completely locks the system bus, preventing the CPU from executing code from flash during transactions",
+      "DMA offloads data transfers directly between peripherals and memory, but can introduce deterministic bus latency and contention that must be factored into real-time task scheduling",
+      "DMA is only useful for non-realtime applications since it runs asynchronously without hardware synchronization",
+      "DMA increases CPU overhead because the CPU must manage every byte transferred in real-time"
+    ],
+    "correctAnswer": "DMA offloads data transfers directly between peripherals and memory, but can introduce deterministic bus latency and contention that must be factored into real-time task scheduling",
+    "explanation": "While DMA offloads byte-by-byte transfer from the CPU, it shares the system bus matrix with the CPU. High-speed DMA (e.g., ADC streaming or display updates) can delay CPU instruction fetching or data access due to bus arbitration, impacting real-time execution bounds.",
+    "relatedLesson": "electronics-applications",
+    "tags": ["dma", "bus-contention", "real-time", "rtos"]
+  },
+  {
+    "id": "emb-8",
+    "category": "engineering-decisions",
+    "difficulty": "Expert",
+    "question": "Which memory architecture is typically utilized in high-reliability automotive microcontrollers to automatically detect and correct single-bit failures?",
+    "options": [
+      "SRAM with zero-wait states",
+      "ECC (Error-Correcting Code) RAM/Flash",
+      "Dual-channel cache memory",
+      "Symmetric Multiprocessing RAM blocks"
+    ],
+    "correctAnswer": "ECC (Error-Correcting Code) RAM/Flash",
+    "explanation": "ECC memory adds extra parity bits to data words, allowing the hardware controller to automatically detect and correct single-bit errors (and detect double-bit errors) caused by cosmic rays or electrical noise, complying with safety-critical standards like ISO 26262.",
+    "relatedLesson": "interview-prep",
+    "tags": ["ecc-memory", "functional-safety", "reliability", "iso-26262"]
+  }
+]

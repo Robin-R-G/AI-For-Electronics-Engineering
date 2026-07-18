@@ -1,4 +1,4 @@
-export type Difficulty = 'Easy' | 'Medium' | 'Hard';
+export type Difficulty = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert' | 'Easy' | 'Medium' | 'Hard';
 
 export type QuestionCategory =
   | 'concept-understanding'
@@ -22,4 +22,5 @@ export interface QuizQuestion {
   explanation: string;
   relatedLesson: string;
   tags: string[];
+  topic?: string;
 }

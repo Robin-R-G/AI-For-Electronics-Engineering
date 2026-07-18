@@ -1,0 +1,130 @@
+[
+  {
+    "id": "stm-1",
+    "category": "concept-understanding",
+    "difficulty": "Beginner",
+    "question": "What is the standard ARM core family utilized in STM32 microcontrollers?",
+    "options": [
+      "ARM Cortex-M (e.g., M0, M3, M4, M7)",
+      "ARM Cortex-A (e.g., A53, A72)",
+      "ARM Cortex-R (e.g., R5, R8)",
+      "ARM Classic v7"
+    ],
+    "correctAnswer": "ARM Cortex-M (e.g., M0, M3, M4, M7)",
+    "explanation": "STM32 microcontrollers are based on the ARM Cortex-M family, which is explicitly optimized for low-power, cost-sensitive, real-time deterministic embedded systems.",
+    "relatedLesson": "electronics-lab",
+    "tags": ["stm32", "arm-cortex", "mcu-architecture"]
+  },
+  {
+    "id": "stm-2",
+    "category": "practical-application",
+    "difficulty": "Beginner",
+    "question": "Which software tool is widely used to configure pinouts, clocks, and peripherals for STM32 microcontrollers and generate initialization C code?",
+    "options": [
+      "STM32CubeMX",
+      "Arduino IDE",
+      "Keil uVision Pro",
+      "LTspice"
+    ],
+    "correctAnswer": "STM32CubeMX",
+    "explanation": "STM32CubeMX is a graphical configuration tool from STMicroelectronics that configures MCU peripherals, clocks, and pinout, automatically generating initialization code for various IDEs.",
+    "relatedLesson": "electronics-lab",
+    "tags": ["stm32cubemx", "configuration", "code-generation"]
+  },
+  {
+    "id": "stm-3",
+    "category": "concept-understanding",
+    "difficulty": "Intermediate",
+    "question": "What is the purpose of the SysTick timer in STM32 applications?",
+    "options": [
+      "To count clock cycles for high-speed PWM generation",
+      "To act as a low-level RTOS system tick timer, triggering regular interrupts for task switching",
+      "To measure external pulse widths on GPIO pins",
+      "To monitor power supply rail variations"
+    ],
+    "correctAnswer": "To act as a low-level RTOS system tick timer, triggering regular interrupts for task switching",
+    "explanation": "The SysTick timer is a standard 24-bit down counter built directly into the ARM Cortex-M core. It is primarily used by RTOS kernels (like FreeRTOS) to generate a periodic interrupt (typically 1ms) for system scheduling.",
+    "relatedLesson": "electronics-applications",
+    "tags": ["systick", "rtos-tick", "timers"]
+  },
+  {
+    "id": "stm-4",
+    "category": "debugging-scenarios",
+    "difficulty": "Intermediate",
+    "question": "An STM32 microcontroller branches to the HardFault_Handler. What does this indicate?",
+    "options": [
+      "The microcontroller has completed its main loop and is in sleep mode",
+      "A critical CPU error occurred (e.g., division by zero, invalid memory access, or stack overflow)",
+      "The battery voltage dropped below the browout threshold",
+      "An external sensor failed to acknowledge an I2C command"
+    ],
+    "correctAnswer": "A critical CPU error occurred (e.g., division by zero, invalid memory access, or stack overflow)",
+    "explanation": "A HardFault is triggered by the ARM core when a severe fault occurs that cannot be handled by other handlers (e.g., dereferencing a null pointer, unaligned memory access, or executing garbage code).",
+    "relatedLesson": "electronics-applications",
+    "tags": ["hardfault", "debugging", "exception-handling"]
+  },
+  {
+    "id": "stm-5",
+    "category": "concept-understanding",
+    "difficulty": "Advanced",
+    "question": "Explain STM32 interrupt latency and the factors that influence it on Cortex-M cores.",
+    "options": [
+      "It is a constant 3 clock cycles, independent of memory wait states or current instruction execution",
+      "It is the delay between interrupt assertion and execution of the first ISR instruction, influenced by tail-chaining, register stacking (12 cycles), flash wait states, and higher-priority interrupts",
+      "Interrupt latency is only determined by the priority set in the NVIC",
+      "Interrupt latency refers to the time it takes to transmit data over SPI inside an ISR"
+    ],
+    "correctAnswer": "It is the delay between interrupt assertion and execution of the first ISR instruction, influenced by tail-chaining, register stacking (12 cycles), flash wait states, and higher-priority interrupts",
+    "explanation": "On Cortex-M4 cores, hardware stacking takes 12 cycles. Latency increases if wait states are active on Flash, if a higher-priority ISR is executing, or if a multi-cycle instruction (like division or LDM/STM) is being interrupted. Tail-chaining reduces stacking overhead to 6 cycles for sequential interrupts.",
+    "relatedLesson": "electronics-applications",
+    "tags": ["interrupt-latency", "cortex-m4", "nvic", "real-time"]
+  },
+  {
+    "id": "stm-6",
+    "category": "practical-application",
+    "difficulty": "Advanced",
+    "question": "How do STM32 NVIC priority groupings (Preemption Priority vs. Subpriority) operate?",
+    "options": [
+      "Preemption priority determines if an interrupt can nest (interrupt a running ISR); Subpriority resolves concurrent triggers without preemption",
+      "They are identical priority rankings, defined for redundancy in case one fails",
+      "Subpriority determines task switching order in the RTOS; preemption priority is for hardware only",
+      "They define which DMA channel has high-speed access to memory"
+    ],
+    "correctAnswer": "Preemption priority determines if an interrupt can nest (interrupt a running ISR); Subpriority resolves concurrent triggers without preemption",
+    "explanation": "In NVIC, priority is split into preemption priority and subpriority. A higher preemption priority interrupt will preempt an active lower priority ISR. If two interrupts with the same preemption priority trigger at the same time, the subpriority determines which executes first, but they cannot preempt one another.",
+    "relatedLesson": "electronics-applications",
+    "tags": ["nvic", "interrupts", "preemption", "nesting"]
+  },
+  {
+    "id": "stm-7",
+    "category": "concept-understanding",
+    "difficulty": "Expert",
+    "question": "What is the function of the ART Accelerator (Adaptive Real-Time Memory Accelerator) in high-frequency STM32 microcontrollers (e.g., STM32F4/F7)?",
+    "options": [
+      "It is a hardware floating-point calculation block",
+      "It is an instruction/data cache that hides Flash memory wait-state latency, achieving 0-wait-state execution at high clock rates",
+      "It is a clock generator that multiplies crystal frequencies",
+      "It accelerates graphics rendering on color displays"
+    ],
+    "correctAnswer": "It is an instruction/data cache that hides Flash memory wait-state latency, achieving 0-wait-state execution at high clock rates",
+    "explanation": "Flash memory cannot keep up with high CPU frequencies (e.g., 168MHz STM32F4). The CPU would normally waste cycles in wait-states. The ART Accelerator acts as a cache that buffers instructions and branch targets, allowing full core speed execution from Flash.",
+    "relatedLesson": "electronics-lab",
+    "tags": ["art-accelerator", "flash-memory", "cache", "latency"]
+  },
+  {
+    "id": "stm-8",
+    "category": "debugging-scenarios",
+    "difficulty": "Expert",
+    "question": "You observe that code running on an STM32F7 executes significantly slower when placed in AXI-SRAM compared to ITCM (Instruction Tightly Coupled Memory). What architectural feature explains this?",
+    "options": [
+      "AXI-SRAM operates at half the supply voltage",
+      "ITCM is directly connected to the CPU core via a dedicated 64-bit bus with zero wait states; AXI-SRAM transfers must traverse the system bus matrix, incurring arbitration and bus latency",
+      "ITCM contains hardware compression blocks that shrink compiled binaries",
+      "AXI-SRAM requires software-initiated refresh cycles like DRAM"
+    ],
+    "correctAnswer": "ITCM is directly connected to the CPU core via a dedicated 64-bit bus with zero wait states; AXI-SRAM transfers must traverse the system bus matrix, incurring arbitration and bus latency",
+    "explanation": "Tightly Coupled Memory (ITCM/DTCM) bypasses the system bus matrix and cache controller, providing direct, maximum-bandwidth, single-cycle access to the CPU core. AXI-SRAM access goes through the AXI bus matrix, suffering from wait-states and bus contention.",
+    "relatedLesson": "interview-prep",
+    "tags": ["tcm", "sram", "bus-matrix", "performance-optimization"]
+  }
+]

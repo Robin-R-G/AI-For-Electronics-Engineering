@@ -408,4 +408,10 @@ const baseQuizQuestions: QuizQuestion[] = [
 export const quizQuestions: QuizQuestion[] = [
   ...baseQuizQuestions,
   ...standaloneExamQuestions,
-];
+].map(q => {
+  let diff = q.difficulty;
+  if ((q.difficulty as string) === 'Easy') diff = 'Beginner';
+  else if ((q.difficulty as string) === 'Medium') diff = 'Intermediate';
+  else if ((q.difficulty as string) === 'Hard') diff = 'Advanced';
+  return { ...q, difficulty: diff };
+});

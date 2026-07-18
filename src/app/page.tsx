@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import styles from "./page.module.css";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -9,6 +9,7 @@ import { PCBDecor } from "@/components/animations/PCBDecor";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/navigation";
+import { getQuestionOfTheDay, QuestionOfTheDay } from "@/lib/quizService";
 
 const modules = [
   {
@@ -37,6 +38,15 @@ const modules = [
 export default function Home() {
   const router = useRouter();
   const heroRef = useRef<HTMLElement>(null);
+
+  const [qotd, setQotd] = useState<QuestionOfTheDay | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    setQotd(getQuestionOfTheDay());
+  }, []);
 
   const handleHeroMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
     const hero = heroRef.current;
@@ -147,6 +157,98 @@ export default function Home() {
             ))}
           </div>
         </section>
+
+        {/* ── Question of the Day Section ───────────────────────── */}
+        {qotd && (
+          <section className={`${styles.qotdSection} reveal`}>
+            <div className={styles.modulesHeader}>
+              <span className={styles.sectionTag}>Daily Brain Teaser</span>
+              <h2>Question of the Day</h2>
+              <p>Sharpen your engineering intuition and build smarter hardware systems.</p>
+            </div>
+            <div className={styles.qotdCard}>
+              <div className={styles.qotdMeta}>
+                <span className={styles.qotdBadge}>💡 Interactive QOTD</span>
+                <span className={styles.qotdLesson}>
+                  Lesson: {qotd.relatedLesson.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())}
+                </span>
+              </div>
+              <h3 className={styles.qotdQuestion}>{qotd.question}</h3>
+              <div className={styles.qotdOptions}>
+                {qotd.options.map((opt: string, i: number) => {
+                  const letter = String.fromCharCode(65 + i);
+                  const isSelected = selectedAnswer === opt;
+                  const isCorrect = opt === qotd.correctAnswer;
+                  
+                  let btnStyle = styles.qotdOptionBtn;
+                  if (isSelected) {
+                    btnStyle += ` ${styles.optionSelected}`;
+                  }
+                  if (submitted) {
+                    if (isCorrect) {
+                      btnStyle += ` ${styles.optionCorrect}`;
+                    } else if (isSelected) {
+                      btnStyle += ` ${styles.optionIncorrect}`;
+                    }
+                    btnStyle += ` ${styles.disabledOption}`;
+                  }
+                  return (
+                    <button
+                      key={opt}
+                      className={btnStyle}
+                      disabled={submitted}
+                      onClick={() => setSelectedAnswer(opt)}
+                    >
+                      <span className={styles.qotdOptionLetter}>{letter}</span>
+                      <span>{opt}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {!submitted ? (
+                <Button 
+                  variant="primary" 
+                  disabled={!selectedAnswer}
+                  onClick={() => setSubmitted(true)}
+                >
+                  Submit Answer
+                </Button>
+              ) : (
+                <div className={styles.qotdFeedbackPanel}>
+                  <div className={`${styles.qotdFeedbackHeader} ${selectedAnswer === qotd.correctAnswer ? styles.textSuccess : styles.textDanger}`}>
+                    {selectedAnswer === qotd.correctAnswer ? '🟢 Correct!' : '🔴 Incorrect'}
+                  </div>
+                  <p className={styles.qotdExplanation}>{qotd.explanation}</p>
+                  
+                  <div className={styles.qotdLinksBox}>
+                    <a 
+                      href={`/AI-For-Electronics-Engineering/learn/${qotd.relatedLesson}`}
+                      className={styles.qotdLessonRedirect}
+                    >
+                      📖 Study Lesson: {qotd.relatedLesson.replace(/-/g, ' ').toUpperCase()} →
+                    </a>
+                    
+                    <div className={styles.qotdAiPromptBlock}>
+                      <h5>🤖 Explore Further with AI</h5>
+                      <div className={styles.qotdPromptText}>{qotd.aiPrompt}</div>
+                      <button 
+                        className={styles.copyPromptBtn}
+                        onClick={() => {
+                          navigator.clipboard.writeText(qotd.aiPrompt);
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 2000);
+                        }}
+                      >
+                        {copied ? '✓ Copied' : '📋 Copy AI Prompt'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
 
       </div>
     </>

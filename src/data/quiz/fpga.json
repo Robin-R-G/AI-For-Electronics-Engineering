@@ -1,0 +1,130 @@
+[
+  {
+    "id": "fpg-1",
+    "category": "concept-understanding",
+    "difficulty": "Beginner",
+    "question": "What does FPGA stand for?",
+    "options": [
+      "Field Programmable Gate Array",
+      "Fast Processing Graphic Accelerator",
+      "Floating Point Generator Array",
+      "Fixed Program Logic Architecture"
+    ],
+    "correctAnswer": "Field Programmable Gate Array",
+    "explanation": "An FPGA is an integrated circuit designed to be configured by a customer or a designer after manufacturing using a hardware description language (HDL).",
+    "relatedLesson": "live-demonstrations",
+    "tags": ["fpga-basics", "digital-logic"]
+  },
+  {
+    "id": "fpg-2",
+    "category": "practical-application",
+    "difficulty": "Beginner",
+    "question": "Which language is commonly used to design digital logic circuits for FPGAs?",
+    "options": [
+      "Python",
+      "Verilog or VHDL",
+      "C++",
+      "Assembly"
+    ],
+    "correctAnswer": "Verilog or VHDL",
+    "explanation": "Verilog and VHDL are hardware description languages (HDLs) used to model and describe digital circuits, which are then synthesized into hardware gates on FPGAs or ASICs.",
+    "relatedLesson": "live-demonstrations",
+    "tags": ["hdl", "verilog", "vhdl"]
+  },
+  {
+    "id": "fpg-3",
+    "category": "concept-understanding",
+    "difficulty": "Intermediate",
+    "question": "What is a Look-Up Table (LUT) in an FPGA?",
+    "options": [
+      "A database stored in the external flash memory for sensor calibration data",
+      "A hardware component that implements arbitrary combinational logic functions by indexing static truth tables",
+      "A cache register for arithmetic division operations",
+      "A list of software commands compiled by the compiler"
+    ],
+    "correctAnswer": "A hardware component that implements arbitrary combinational logic functions by indexing static truth tables",
+    "explanation": "FPGAs do not contain actual gates for every logic expression. Instead, they use LUTs (typically 4-input or 6-input SRAM blocks) that store the truth table of the logic function, acting as flexible boolean logic generators.",
+    "relatedLesson": "live-demonstrations",
+    "tags": ["lut", "combinational-logic", "fpga-fabric"]
+  },
+  {
+    "id": "fpg-4",
+    "category": "circuit-reasoning",
+    "difficulty": "Intermediate",
+    "question": "What is the difference between blocking (=) and non-blocking (<=) assignments in Verilog?",
+    "options": [
+      "Blocking is used for sequential logic; non-blocking is for combinational logic",
+      "Blocking assignments execute sequentially within a block (like software); non-blocking assignments execute in parallel (modelling hardware registers)",
+      "Blocking assignments consume more FPGA routing resources",
+      "Blocking assignments are only used inside testbenches"
+    ],
+    "correctAnswer": "Blocking assignments execute sequentially within a block (like software); non-blocking assignments execute in parallel (modelling hardware registers)",
+    "explanation": "Blocking (=) assignments update their target immediately, blocking subsequent statements. Non-blocking (<=) assignments evaluate their RHS immediately but only update the LHS at the end of the time step, capturing flip-flop behavior.",
+    "relatedLesson": "live-demonstrations",
+    "tags": ["verilog-assignments", "sequential-logic", "simulation"]
+  },
+  {
+    "id": "fpg-5",
+    "category": "circuit-reasoning",
+    "difficulty": "Advanced",
+    "question": "What is 'timing closure' in FPGA development?",
+    "options": [
+      "Closing the FPGA design software after a build is finished",
+      "Meeting all setup and hold timing constraints for every register-to-register path under worst-case thermal and voltage conditions",
+      "Reducing the clock speed of the design until it no longer glitches",
+      "Disabling interrupts to ensure deterministic program execution"
+    ],
+    "correctAnswer": "Meeting all setup and hold timing constraints for every register-to-register path under worst-case thermal and voltage conditions",
+    "explanation": "Timing closure is achieved when the synthesis and place-and-route tools confirm that signals travel between all flip-flops fast enough to meet setup time requirements, and slowly enough to avoid hold-time violations.",
+    "relatedLesson": "live-demonstrations",
+    "tags": ["timing-closure", "place-and-route", "constraints"]
+  },
+  {
+    "id": "fpg-6",
+    "category": "engineering-decisions",
+    "difficulty": "Advanced",
+    "question": "Why is 'metastability' a critical concern when crossing clock domains (CDC) in FPGA designs?",
+    "options": [
+      "Because the FPGA power grid can become unstable and trigger a reset",
+      "Because a signal changing too close to a register clock edge violates setup/hold times, causing the register output to oscillate in an unstable intermediate state",
+      "Because the compilation time increases when multiple clocks are defined",
+      "Because compilers cannot optimize circuits with two clocks"
+    ],
+    "correctAnswer": "Because a signal changing too close to a register clock edge violates setup/hold times, causing the register output to oscillate in an unstable intermediate state",
+    "explanation": "Metastability occurs when setup/hold times are violated, and a flip-flop output fails to settle into a stable '0' or '1' within the clock cycle. This can cause downstream logic to resolve differently, leading to system failure. Use synchronization registers (double flop) to resolve CDC.",
+    "relatedLesson": "live-demonstrations",
+    "tags": ["metastability", "clock-domain-crossing", "synchronizers"]
+  },
+  {
+    "id": "fpg-7",
+    "category": "concept-understanding",
+    "difficulty": "Expert",
+    "question": "How does pipelining improve the maximum operating frequency (Fmax) of an FPGA design?",
+    "options": [
+      "Pipelining increases the clock frequency directly at the PLL clock generator",
+      "Pipelining inserts register stages that break long combinational paths into shorter segments, reducing propagation delay and enabling higher clock frequencies at the expense of latency",
+      "Pipelining compresses the logic equations to use fewer LUTs",
+      "Pipelining enables the CPU core to execute multiple threads at once"
+    ],
+    "correctAnswer": "Pipelining inserts register stages that break long combinational paths into shorter segments, reducing propagation delay and enabling higher clock frequencies at the expense of latency",
+    "explanation": "Fmax is limited by the longest combinational path (critical path) between two registers. By placing intermediate registers (pipelining) inside that path, the maximum delay is cut down, allowing the system clock to run faster, though output is delayed by N cycles.",
+    "relatedLesson": "interview-prep",
+    "tags": ["pipelining", "fmax", "critical-path", "throughput"]
+  },
+  {
+    "id": "fpg-8",
+    "category": "engineering-decisions",
+    "difficulty": "Expert",
+    "question": "What is the primary advantage of DSP (Digital Signal Processing) slices over standard LUT fabric in FPGA architectures?",
+    "options": [
+      "DSP slices consume zero power during multiplication",
+      "DSP slices contain dedicated hard-macro multipliers, accumulators, and pre-adders that compute arithmetic operations at higher speeds and with much lower routing resource usage",
+      "DSP slices can execute C++ code directly without synthesis",
+      "DSP slices act as analog-to-digital converters on the FPGA fabric"
+    ],
+    "correctAnswer": "DSP slices contain dedicated hard-macro multipliers, accumulators, and pre-adders that compute arithmetic operations at higher speeds and with much lower routing resource usage",
+    "explanation": "Multiplication in standard LUT fabric requires a large number of LUTs and interconnects, which creates a massive, slow combinational path. DSP slices (like DSP48 in Xilinx) are dedicated silicon blocks that perform high-speed, low-latency multiply-accumulate operations, crucial for neural network layers.",
+    "relatedLesson": "interview-prep",
+    "tags": ["dsp-slices", "hardware-multipliers", "performance", "tinyml"]
+  }
+]
