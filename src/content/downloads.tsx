@@ -357,7 +357,11 @@ const DownloadsContent = () => {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [certName, setCertName] = useState('');
   const [showCertModal, setShowCertModal] = useState(false);
-  const liveResources = useSyncExternalStore(subscribeStorage, () => getFiles(), () => []);
+  const [liveResources, setLiveResources] = React.useState<StoredFile[]>([]);
+  React.useEffect(() => {
+    setLiveResources(getFiles());
+    return subscribeStorage(() => setLiveResources(getFiles()));
+  }, []);
 
   const filtered = useMemo<DisplayItem[]>(() => {
     const publicResources = liveResources.filter(

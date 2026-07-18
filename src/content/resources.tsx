@@ -99,7 +99,12 @@ const ResourcesContent = () => {
 };
 
 function ResourceGallery() {
-  const resources = useSyncExternalStore(subscribeStorage, getFiles, () => []);
+  const [resources, setResources] = React.useState<any[]>([]);
+  React.useEffect(() => {
+    setResources(getFiles());
+    return subscribeStorage(() => setResources(getFiles()));
+  }, []);
+
   const publicResources = resources.filter(
     (r) => r.visibility === 'public' &&
       r.bucket !== 'lesson-files' && r.bucket !== 'certificates' &&
