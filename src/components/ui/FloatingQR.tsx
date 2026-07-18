@@ -9,7 +9,7 @@ export const FloatingQR = () => {
   const [shared, setShared] = useState(false);
   const qrContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const workshopUrl = window.location.origin;
+  const workshopUrl = window.location.origin + '/AI-For-Electronics-Engineering/';
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard.writeText(workshopUrl);

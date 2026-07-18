@@ -1,11 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import styles from './Footer.module.css';
 
 const Footer = () => {
+  const router = useRouter();
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const clickCount = useRef(0);
+  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +21,17 @@ const Footer = () => {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Secret admin access: click version 5 times within 3 seconds
+  const handleVersionClick = () => {
+    clickCount.current += 1;
+    if (clickTimer.current) clearTimeout(clickTimer.current);
+    clickTimer.current = setTimeout(() => { clickCount.current = 0; }, 3000);
+    if (clickCount.current >= 5) {
+      clickCount.current = 0;
+      router.push('/AI-For-Electronics-Engineering/admin');
+    }
   };
 
   return (
@@ -103,7 +118,13 @@ const Footer = () => {
           </div>
 
           <div className={styles.meta}>
-            <span>v1.0.0</span>
+            <span
+              onClick={handleVersionClick}
+              title="v1.0.0"
+              style={{ cursor: 'default', userSelect: 'none' }}
+            >
+              v1.0.0
+            </span>
             <span className={styles.dot}>&middot;</span>
             <span>&copy; {new Date().getFullYear()} AI for EE Workshop</span>
           </div>

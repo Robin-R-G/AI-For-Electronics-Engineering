@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { login, getSessionSync } from '@/lib/adminAuth';
 import styles from './page.module.css';
 
 export default function AdminLoginPage() {
@@ -10,75 +11,50 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [checking, setChecking] = useState(true);
+  const [lockoutSeconds, setLockoutSeconds] = useState(0);
 
-  // Redirect if already logged in
   useEffect(() => {
-    let active = true;
-    const token = localStorage.getItem('admin_token');
-    if (!token) {
-      queueMicrotask(() => { if (active) setChecking(false); });
-      return;
+    const session = getSessionSync();
+    if (session) {
+      router.replace('/AI-For-Electronics-Engineering/admin/dashboard');
     }
-    fetch('/api/admin/session', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(r => r.json())
-      .then(data => {
-        if (!active) return;
-        if (data.valid) {
-          router.replace('/admin/dashboard');
-        } else {
-          localStorage.removeItem('admin_token');
-          setChecking(false);
-        }
-      })
-      .catch(() => {
-        if (!active) return;
-        localStorage.removeItem('admin_token');
-        setChecking(false);
-      });
-    return () => { active = false; };
   }, [router]);
+
+  // Lockout countdown
+  useEffect(() => {
+    if (lockoutSeconds <= 0) return;
+    const timer = setInterval(() => {
+      setLockoutSeconds(prev => {
+        if (prev <= 1) { clearInterval(timer); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [lockoutSeconds > 0]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    try {
-      const res = await fetch('/api/admin/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+    const result = await login(email, password);
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Login failed');
-        setLoading(false);
-        return;
+    if (result.success) {
+      router.push('/AI-For-Electronics-Engineering/admin/dashboard');
+    } else {
+      setError(result.error || 'Invalid credentials');
+      if (result.lockoutSeconds) {
+        setLockoutSeconds(result.lockoutSeconds);
       }
-
-      localStorage.setItem('admin_token', data.token);
-      router.push('/admin/dashboard');
-    } catch {
-      setError('Connection error. Please try again.');
       setLoading(false);
     }
   };
 
-  if (checking) {
-    return (
-      <div className={styles.page}>
-        <div className={styles.loadingSpinner}>
-          <div className={styles.spinner} />
-          <p>Verifying session...</p>
-        </div>
-      </div>
-    );
-  }
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${m}:${sec.toString().padStart(2, '0')}`;
+  };
 
   return (
     <div className={styles.page}>
@@ -106,6 +82,12 @@ export default function AdminLoginPage() {
             </div>
           )}
 
+          {lockoutSeconds > 0 && (
+            <div className={styles.lockout}>
+              Account locked. Try again in {formatTime(lockoutSeconds)}
+            </div>
+          )}
+
           <div className={styles.field}>
             <label htmlFor="email">Email</label>
             <input
@@ -117,6 +99,7 @@ export default function AdminLoginPage() {
               required
               autoComplete="email"
               autoFocus
+              disabled={lockoutSeconds > 0}
             />
           </div>
 
@@ -130,13 +113,14 @@ export default function AdminLoginPage() {
               placeholder="Enter your password"
               required
               autoComplete="current-password"
+              disabled={lockoutSeconds > 0}
             />
           </div>
 
           <button
             type="submit"
             className={styles.submitBtn}
-            disabled={loading || !email || !password}
+            disabled={loading || !email || !password || lockoutSeconds > 0}
           >
             {loading ? (
               <>
@@ -150,7 +134,7 @@ export default function AdminLoginPage() {
         </form>
 
         <div className={styles.footer}>
-          <p>Authorized personnel only. All access is logged.</p>
+          <p>Authorized personnel only. Session expires in 24 hours.</p>
         </div>
       </div>
     </div>

@@ -3,14 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { getSessionSync, destroySession, AdminSession } from '@/lib/adminAuth';
 import styles from './page.module.css';
-
-interface SessionData {
-  valid: boolean;
-  email?: string;
-  role?: string;
-  expiresAt?: string;
-}
 
 interface Stats {
   totalModules: number;
@@ -23,7 +17,7 @@ interface Stats {
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [session, setSession] = useState<SessionData | null>(null);
+  const [session, setSession] = useState<AdminSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'modules' | 'users' | 'settings'>('overview');
 
@@ -44,35 +38,18 @@ export default function AdminDashboard() {
   ];
 
   useEffect(() => {
-    const token = localStorage.getItem('admin_token');
-    if (!token) {
-      router.replace('/admin');
-      return;
+    const s = getSessionSync();
+    if (!s) {
+      router.replace('/AI-For-Electronics-Engineering/admin/login');
+    } else {
+      setSession(s);
+      setLoading(false);
     }
-
-    fetch('/api/admin/session', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(r => r.json())
-      .then(data => {
-        if (!data.valid) {
-          localStorage.removeItem('admin_token');
-          router.replace('/admin');
-        } else {
-          setSession(data);
-          setLoading(false);
-        }
-      })
-      .catch(() => {
-        localStorage.removeItem('admin_token');
-        router.replace('/admin');
-      });
   }, [router]);
 
-  const handleLogout = async () => {
-    await fetch('/api/admin/logout', { method: 'POST' });
-    localStorage.removeItem('admin_token');
-    router.replace('/admin');
+  const handleLogout = () => {
+    destroySession();
+    router.replace('/AI-For-Electronics-Engineering/admin/login');
   };
 
   if (loading || !session) {
@@ -85,6 +62,8 @@ export default function AdminDashboard() {
       </div>
     );
   }
+
+  const sessionExpiry = new Date(session.exp).toLocaleString();
 
   return (
     <div className={styles.page}>
@@ -116,7 +95,7 @@ export default function AdminDashboard() {
 
         <div className={styles.sidebarFooter}>
           <div className={styles.userInfo}>
-            <div className={styles.avatar}>{session.email?.charAt(0).toUpperCase()}</div>
+            <div className={styles.avatar}>{session.email.charAt(0).toUpperCase()}</div>
             <div>
               <p className={styles.userEmail}>{session.email}</p>
               <p className={styles.userRole}>{session.role}</p>
@@ -144,7 +123,7 @@ export default function AdminDashboard() {
               {activeTab === 'settings' && 'Platform Settings'}
             </h1>
             <p className={styles.pageSubtitle}>
-              Session expires: {session.expiresAt ? new Date(session.expiresAt).toLocaleString() : 'N/A'}
+              Session expires: {sessionExpiry}
             </p>
           </div>
         </header>
@@ -197,19 +176,19 @@ export default function AdminDashboard() {
             <div className={styles.section}>
               <h2>Quick Actions</h2>
               <div className={styles.actionsGrid}>
-                <Link href="/learn/introduction" className={styles.actionCard}>
+                <Link href="/AI-For-Electronics-Engineering/learn/introduction" className={styles.actionCard}>
                   <span className={styles.actionIcon}>📖</span>
                   <span>View Workshop</span>
                 </Link>
-                <Link href="/learn/quiz" className={styles.actionCard}>
+                <Link href="/AI-For-Electronics-Engineering/learn/quiz" className={styles.actionCard}>
                   <span className={styles.actionIcon}>📝</span>
                   <span>Take Quiz</span>
                 </Link>
-                <Link href="/learn/badges" className={styles.actionCard}>
+                <Link href="/AI-For-Electronics-Engineering/learn/badges" className={styles.actionCard}>
                   <span className={styles.actionIcon}>🏆</span>
                   <span>View Badges</span>
                 </Link>
-                <Link href="/learn/electronics-lab" className={styles.actionCard}>
+                <Link href="/AI-For-Electronics-Engineering/learn/electronics-lab" className={styles.actionCard}>
                   <span className={styles.actionIcon}>🔌</span>
                   <span>Electronics Lab</span>
                 </Link>
@@ -332,22 +311,29 @@ export default function AdminDashboard() {
                 <div className={styles.settingItem}>
                   <div>
                     <h3>Authentication</h3>
-                    <p>SHA-256 hashed credentials + HMAC-SHA256 JWT tokens</p>
+                    <p>SHA-256 hashed credentials + HMAC-SHA256 signed sessions</p>
                   </div>
                   <span className={styles.secureBadge}>Secure</span>
                 </div>
                 <div className={styles.settingItem}>
                   <div>
                     <h3>Session Duration</h3>
-                    <p>24 hours (configurable via SESSION_EXPIRY_HOURS)</p>
+                    <p>24 hours (stored in sessionStorage, signed with HMAC)</p>
                   </div>
                 </div>
                 <div className={styles.settingItem}>
                   <div>
-                    <h3>Credential Storage</h3>
-                    <p>Environment variables in .env.local (never committed to git)</p>
+                    <h3>Brute Force Protection</h3>
+                    <p>5 max attempts, 5 minute lockout</p>
                   </div>
-                  <span className={styles.secureBadge}>Secure</span>
+                  <span className={styles.secureBadge}>Protected</span>
+                </div>
+                <div className={styles.settingItem}>
+                  <div>
+                    <h3>Deployment</h3>
+                    <p>GitHub Pages static export (output: export)</p>
+                  </div>
+                  <span className={styles.secureBadge}>Static</span>
                 </div>
               </div>
             </div>

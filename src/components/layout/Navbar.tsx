@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import styles from './Navbar.module.css';
-import { Button } from '@/components/ui/Button';
 
 export const Navbar = () => {
   return (
@@ -19,10 +18,6 @@ export const Navbar = () => {
           <Link href="/learn/resources" className={styles.link}>Resources</Link>
           <Link href="/presenter" className={styles.link}>Speaker</Link>
         </nav>
-        
-        <div className={styles.actions}>
-          <Button variant="secondary" className={styles.navBtn}>Login</Button>
-        </div>
       </div>
     </header>
   );

@@ -525,3 +525,18 @@ html {
   h1 { font-size: clamp(2rem, 8vw, 3rem); }
   h2 { font-size: clamp(1.6rem, 6vw, 2.5rem); }
 }
+
+/* ═══════════════════════════════════════════════════
+   ADMIN PANEL — hide global chrome
+═══════════════════════════════════════════════════ */
+.admin-body > .pcb-background,
+.admin-body > .floating-qr-wrapper,
+.admin-body > .main-content > .page-transition > .pcb-background,
+.admin-body > footer {
+  display: none !important;
+}
+
+.admin-body {
+  background: var(--color-dark-slate);
+  min-height: 100vh;
+}
