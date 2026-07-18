@@ -16,18 +16,21 @@ const modules = [
     title: "Neural Networks for Hardware",
     desc: "Learn how to optimize neural networks for constrained environments and microcontrollers.",
     icon: "🧠",
+    slug: "deep-learning",
   },
   {
     id: "02",
     title: "Edge AI & Inference",
     desc: "Implement fast, low-power inference engines directly on the PCB using TinyML.",
     icon: "⚡",
+    slug: "ai-fundamentals",
   },
   {
     id: "03",
     title: "Sensor Data Fusion",
     desc: "Merge complex sensor data streams using machine learning models for real-time decisions.",
     icon: "📡",
+    slug: "machine-learning",
   },
 ];
 
@@ -132,7 +135,7 @@ export default function Home() {
                 interactive
                 spotlight
                 gradientBorder
-                onClick={() => router.push('/learn/ai-fundamentals')}
+                onClick={() => router.push('/learn/' + mod.slug)}
               >
                 <div className={`${styles.moduleCard} reveal reveal-delay-${i + 1}`}>
                   <div className={styles.moduleId}>{mod.icon} {mod.id}</div>

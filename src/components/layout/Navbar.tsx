@@ -15,9 +15,9 @@ export const Navbar = () => {
         </div>
         
         <nav className={styles.navLinks}>
-          <Link href="#agenda" className={styles.link}>Agenda</Link>
-          <Link href="#resources" className={styles.link}>Resources</Link>
-          <Link href="#speaker" className={styles.link}>Speaker</Link>
+          <Link href="/#agenda" className={styles.link}>Agenda</Link>
+          <Link href="/learn/resources" className={styles.link}>Resources</Link>
+          <Link href="/presenter" className={styles.link}>Speaker</Link>
         </nav>
         
         <div className={styles.actions}>

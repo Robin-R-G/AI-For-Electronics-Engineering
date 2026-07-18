@@ -1,18 +1,18 @@
 'use client';
 
 import React from 'react';
-import { badges, badgeCategories } from '@/data/badges';
+import { badges } from '@/data/badges';
 import { useProgress } from '@/context/ProgressContext';
 
 const BadgesContent = () => {
-  const { earnedBadges, totalPoints, readSlugs, quizScores, promptsCopied, labsCompleted, questionsViewed } = useProgress();
+  const { earnedBadges, totalPoints, readSlugs, quizScores, promptsCopied, labsCompleted, questionsViewed, earnBadge } = useProgress();
 
   const totalBadges = badges.length;
   const earnedCount = earnedBadges.length;
   const progressPercent = Math.round((earnedCount / totalBadges) * 100);
 
   // Auto-earn badges based on progress
-  const checkAndEarnBadges = () => {
+  React.useEffect(() => {
     const earned = new Set(earnedBadges);
 
     if (readSlugs.length >= 1 && !earned.has('first-lesson')) earnBadge('first-lesson');
@@ -28,19 +28,7 @@ const BadgesContent = () => {
     if (promptsCopied >= 5 && !earned.has('prompt-crafter')) earnBadge('prompt-crafter');
     if (labsCompleted.length >= 1 && !earned.has('lab-builder')) earnBadge('lab-builder');
     if (questionsViewed >= 10 && !earned.has('interview-ready')) earnBadge('interview-ready');
-  };
-
-  const earnBadge = (id: string) => {
-    // Import dynamically to avoid issues
-    import('@/context/ProgressContext').then(mod => {
-      // This is handled by the hook above
-    });
-  };
-
-  // Run check on render
-  React.useEffect(() => {
-    checkAndEarnBadges();
-  }, [readSlugs, quizScores, promptsCopied, labsCompleted, questionsViewed]);
+  }, [earnedBadges, readSlugs, quizScores, promptsCopied, labsCompleted, questionsViewed, earnBadge]);
 
   return (
     <>

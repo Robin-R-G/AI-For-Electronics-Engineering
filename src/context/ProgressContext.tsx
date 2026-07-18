@@ -1,7 +1,16 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { badges, Badge } from '@/data/badges';
+import React, { createContext, useContext, useCallback, useSyncExternalStore } from 'react';
+import { badges } from '@/data/badges';
+
+type ProgressData = {
+  readSlugs: string[];
+  quizScores: Record<string, number>;
+  promptsCopied: number;
+  labsCompleted: string[];
+  questionsViewed: number;
+  earnedBadges: string[];
+};
 
 type ProgressContextType = {
   readSlugs: string[];
@@ -36,121 +45,123 @@ const ProgressContext = createContext<ProgressContextType>({
 });
 
 const STORAGE_KEY = 'ai-workshop-progress';
-const BADGES_KEY = 'ai-workshop-badges';
+const EMPTY: ProgressData = {
+  readSlugs: [],
+  quizScores: {},
+  promptsCopied: 0,
+  labsCompleted: [],
+  questionsViewed: 0,
+  earnedBadges: [],
+};
+
+type Listener = () => void;
+let listeners: Listener[] = [];
+let cached: ProgressData = EMPTY;
+let initialized = false;
+
+function init() {
+  if (initialized || typeof window === 'undefined') return;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    cached = raw
+      ? {
+          readSlugs: (JSON.parse(raw) as Partial<ProgressData>).readSlugs || [],
+          quizScores: (JSON.parse(raw) as Partial<ProgressData>).quizScores || {},
+          promptsCopied: (JSON.parse(raw) as Partial<ProgressData>).promptsCopied || 0,
+          labsCompleted: (JSON.parse(raw) as Partial<ProgressData>).labsCompleted || [],
+          questionsViewed: (JSON.parse(raw) as Partial<ProgressData>).questionsViewed || 0,
+          earnedBadges: (JSON.parse(raw) as Partial<ProgressData>).earnedBadges || [],
+        }
+      : EMPTY;
+  } catch {
+    cached = EMPTY;
+  }
+  initialized = true;
+}
+
+function emit() {
+  for (const l of listeners) l();
+}
+
+function subscribe(cb: Listener) {
+  init();
+  listeners.push(cb);
+  return () => {
+    listeners = listeners.filter((l) => l !== cb);
+  };
+}
+
+function getSnapshot() {
+  init();
+  return cached;
+}
+
+function getServerSnapshot() {
+  return EMPTY;
+}
+
+function setStore(patch: Partial<ProgressData>) {
+  const next = { ...getSnapshot(), ...patch };
+  cached = next;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    // ignore write failures
+  }
+  emit();
+}
 
 export const ProgressProvider = ({ children }: { children: React.ReactNode }) => {
-  const [readSlugs, setReadSlugs] = useState<string[]>([]);
-  const [quizScores, setQuizScores] = useState<Record<string, number>>({});
-  const [earnedBadges, setEarnedBadges] = useState<string[]>([]);
-  const [promptsCopied, setPromptsCopied] = useState(0);
-  const [labsCompleted, setLabsCompleted] = useState<string[]>([]);
-  const [questionsViewed, setQuestionsViewed] = useState(0);
+  const data = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const data = JSON.parse(saved);
-        setReadSlugs(data.readSlugs || []);
-        setQuizScores(data.quizScores || {});
-        setPromptsCopied(data.promptsCopied || 0);
-        setLabsCompleted(data.labsCompleted || []);
-        setQuestionsViewed(data.questionsViewed || 0);
-      }
-      const savedBadges = localStorage.getItem(BADGES_KEY);
-      if (savedBadges) {
-        setEarnedBadges(JSON.parse(savedBadges));
-      }
-    } catch {
-      console.error('Failed to parse progress from localStorage');
-    }
-  }, []);
+  const markAsRead = useCallback((slug: string) => {
+    if (data.readSlugs.includes(slug)) return;
+    setStore({ readSlugs: [...data.readSlugs, slug] });
+  }, [data.readSlugs]);
 
-  const persistProgress = useCallback((data: Partial<ReturnType<typeof getProgressData>>) => {
-    try {
-      const current = getProgressData();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...current, ...data }));
-    } catch { /* ignore */ }
-  }, []);
-
-  const getProgressData = () => ({
-    readSlugs,
-    quizScores,
-    promptsCopied,
-    labsCompleted,
-    questionsViewed,
-  });
-
-  const markAsRead = (slug: string) => {
-    setReadSlugs(prev => {
-      if (prev.includes(slug)) return prev;
-      const next = [...prev, slug];
-      persistProgress({ readSlugs: next });
-      return next;
+  const saveQuizScore = useCallback((quizId: string, score: number) => {
+    setStore({
+      quizScores: { ...data.quizScores, [quizId]: Math.max(data.quizScores[quizId] || 0, score) },
     });
-  };
+  }, [data.quizScores]);
 
-  const saveQuizScore = (quizId: string, score: number) => {
-    setQuizScores(prev => {
-      const next = { ...prev, [quizId]: Math.max(prev[quizId] || 0, score) };
-      persistProgress({ quizScores: next });
-      return next;
-    });
-  };
+  const earnBadge = useCallback((badgeId: string) => {
+    if (data.earnedBadges.includes(badgeId)) return;
+    setStore({ earnedBadges: [...data.earnedBadges, badgeId] });
+  }, [data.earnedBadges]);
 
-  const earnBadge = (badgeId: string) => {
-    setEarnedBadges(prev => {
-      if (prev.includes(badgeId)) return prev;
-      const next = [...prev, badgeId];
-      localStorage.setItem(BADGES_KEY, JSON.stringify(next));
-      return next;
-    });
-  };
+  const incrementPromptsCopied = useCallback(() => {
+    setStore({ promptsCopied: data.promptsCopied + 1 });
+  }, [data.promptsCopied]);
 
-  const incrementPromptsCopied = () => {
-    setPromptsCopied(prev => {
-      const next = prev + 1;
-      persistProgress({ promptsCopied: next });
-      return next;
-    });
-  };
+  const completeLab = useCallback((labId: string) => {
+    if (data.labsCompleted.includes(labId)) return;
+    setStore({ labsCompleted: [...data.labsCompleted, labId] });
+  }, [data.labsCompleted]);
 
-  const completeLab = (labId: string) => {
-    setLabsCompleted(prev => {
-      if (prev.includes(labId)) return prev;
-      const next = [...prev, labId];
-      persistProgress({ labsCompleted: next });
-      return next;
-    });
-  };
+  const incrementQuestionsViewed = useCallback(() => {
+    setStore({ questionsViewed: data.questionsViewed + 1 });
+  }, [data.questionsViewed]);
 
-  const incrementQuestionsViewed = () => {
-    setQuestionsViewed(prev => {
-      const next = prev + 1;
-      persistProgress({ questionsViewed: next });
-      return next;
-    });
-  };
-
-  const totalPoints = earnedBadges.reduce((sum, badgeId) => {
-    const badge = badges.find(b => b.id === badgeId);
+  const totalPoints = data.earnedBadges.reduce((sum, badgeId) => {
+    const badge = badges.find((b) => b.id === badgeId);
     return sum + (badge?.points || 0);
   }, 0);
 
   return (
     <ProgressContext.Provider value={{
-      readSlugs,
+      readSlugs: data.readSlugs,
       markAsRead,
-      quizScores,
+      quizScores: data.quizScores,
       saveQuizScore,
-      earnedBadges,
+      earnedBadges: data.earnedBadges,
       earnBadge,
       totalPoints,
-      promptsCopied,
+      promptsCopied: data.promptsCopied,
       incrementPromptsCopied,
-      labsCompleted,
+      labsCompleted: data.labsCompleted,
       completeLab,
-      questionsViewed,
+      questionsViewed: data.questionsViewed,
       incrementQuestionsViewed,
     }}>
       {children}
