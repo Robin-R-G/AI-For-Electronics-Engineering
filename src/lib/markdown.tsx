@@ -166,6 +166,7 @@ export default function MarkdownView({ markdown }: { markdown: string }) {
                 </video>
               );
             }
+            // eslint-disable-next-line @next/next/no-img-element
             return <img className={styles.media} src={resolved} alt={String(alt ?? '')} />;
           },
           a({ href, children }) {

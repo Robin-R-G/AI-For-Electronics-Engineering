@@ -12,7 +12,7 @@ const LOCKOUT_MS = 5 * 60 * 1000; // 5 minutes
 // This is inherently visible in client bundle for static sites — acceptable for
 // a single-admin educational platform, not for multi-user SaaS.
 const ADMIN_EMAIL = 'robin@ai-ee-workshop.com';
-const ADMIN_PASSWORD_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+const ADMIN_PASSWORD_HASH = 'f0ce0e86206541c60bc47be815f83eba98004f63c883e6d71ff5cc929cb5f9ca';
 
 // ── SHA-256 hashing via Web Crypto API ─────────────────────────────
 async function sha256(message: string): Promise<string> {

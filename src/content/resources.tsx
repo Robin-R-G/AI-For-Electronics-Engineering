@@ -5,7 +5,7 @@ import { useSyncExternalStore } from 'react';
 import Callout from '@/components/course/Callout';
 import MiniQuiz from '@/components/course/MiniQuiz';
 import KeyTakeaways from '@/components/course/KeyTakeaways';
-import { getResources, subscribeResources } from '@/lib/resources';
+import { getFiles, subscribeStorage, fileTypeLabel, formatBytes } from '@/lib/storage';
 
 const ResourcesContent = () => {
   return (
@@ -99,8 +99,12 @@ const ResourcesContent = () => {
 };
 
 function ResourceGallery() {
-  const resources = useSyncExternalStore(subscribeResources, getResources, () => []);
-  const publicResources = resources.filter(r => r.visibility === 'public');
+  const resources = useSyncExternalStore(subscribeStorage, getFiles, () => []);
+  const publicResources = resources.filter(
+    (r) => r.visibility === 'public' &&
+      r.bucket !== 'lesson-files' && r.bucket !== 'certificates' &&
+      r.bucket !== 'images' && r.bucket !== 'videos'
+  );
 
   if (publicResources.length === 0) {
     return (
@@ -141,15 +145,15 @@ function ResourceGallery() {
               {r.category}
             </span>
             <span style={{ fontSize: 12, opacity: 0.7 }}>
-              {r.fileType} · {r.fileSize}
+              {fileTypeLabel(r)} · {formatBytes(r.size)}
             </span>
           </div>
-          <h3 style={{ margin: '0 0 .4rem' }}>{r.title}</h3>
+          <h3 style={{ margin: '0 0 .4rem' }}>{r.originalName}</h3>
           <p style={{ fontSize: 14, opacity: 0.85, margin: '0 0 .8rem' }}>
             {r.description}
           </p>
           <a
-            href={r.fileData}
+            href={r.dataUrl}
             download={r.fileName}
             style={{
               display: 'inline-block',

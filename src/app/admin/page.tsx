@@ -30,7 +30,7 @@ export default function AdminLoginPage() {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [lockoutSeconds > 0]);
+  }, [lockoutSeconds]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -16,6 +16,7 @@ export interface LessonEntry {
 const KEY = 'workshop_lessons_v1';
 
 function read(): Record<string, LessonEntry> {
+  if (typeof window === 'undefined') return {};
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return {};

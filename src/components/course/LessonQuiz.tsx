@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { lessonQuizQuestions, LessonQuestion } from '@/data/lessonQuizQuestions';
+import React, { useState } from 'react';
+import { lessonQuizQuestions } from '@/data/lessonQuizQuestions';
 import { useProgress } from '@/context/ProgressContext';
 import CertificateModal from '@/components/quiz/CertificateModal';
 import styles from './LessonQuiz.module.css';

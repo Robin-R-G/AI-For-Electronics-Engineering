@@ -1,12 +1,37 @@
 'use client';
 import React, { useState, useMemo } from 'react';
 import { quizQuestions, Difficulty } from '@/data/quizQuestions';
+import { generateQuizSession } from '@/lib/quizRandomizer';
 import CertificateModal from '@/components/quiz/CertificateModal';
 import styles from './quiz.module.css';
+
+const HISTORY_KEY = 'workshop_quiz_history_v1';
+const HISTORY_LIMIT = 12;
+
+function readHistory(): string[][] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(HISTORY_KEY);
+    return raw ? (JSON.parse(raw) as string[][]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeHistory(history: string[][]) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, HISTORY_LIMIT)));
+  } catch {
+    /* storage full / unavailable — randomization still works for this attempt */
+  }
+}
 
 export const QuizContent = () => {
   const [started, setStarted] = useState(false);
   const [difficultyFilter, setDifficultyFilter] = useState<'All' | Difficulty>('All');
+  const [questionsPerAttempt, setQuestionsPerAttempt] = useState<number>(10);
+  const [sessionQuestions, setSessionQuestions] = useState(quizQuestions);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -20,9 +45,18 @@ export const QuizContent = () => {
     return quizQuestions.filter(q => q.difficulty === difficultyFilter);
   }, [difficultyFilter]);
 
-  const currentQuestion = activeQuestions[currentIdx];
+  const plannedCount = Math.min(questionsPerAttempt, activeQuestions.length);
+  const currentQuestion = sessionQuestions[currentIdx];
 
   const handleStart = () => {
+    // ponytail: fresh randomized set per attempt, avoids recent repeats for this user.
+    const history = readHistory();
+    const session = generateQuizSession(activeQuestions, {
+      sessionSize: plannedCount,
+      recentSessions: history,
+    });
+    setSessionQuestions(session);
+    writeHistory([session.map((q) => q.id), ...history]);
     setStarted(true);
     setCurrentIdx(0);
     setScore(0);
@@ -40,7 +74,7 @@ export const QuizContent = () => {
   };
 
   const handleNext = () => {
-    if (currentIdx + 1 < activeQuestions.length) {
+    if (currentIdx + 1 < sessionQuestions.length) {
       setCurrentIdx(prev => prev + 1);
       setSelectedAnswer(null);
       setSubmitted(false);
@@ -56,9 +90,9 @@ export const QuizContent = () => {
   };
 
   const scorePercentage = useMemo(() => {
-    if (activeQuestions.length === 0) return 0;
-    return Math.round((score / activeQuestions.length) * 100);
-  }, [score, activeQuestions]);
+    if (sessionQuestions.length === 0) return 0;
+    return Math.round((score / sessionQuestions.length) * 100);
+  }, [score, sessionQuestions]);
 
   const canClaimCertificate = scorePercentage >= 80;
 
@@ -87,8 +121,23 @@ export const QuizContent = () => {
             </div>
           </div>
 
+          <div className={styles.difficultySelection}>
+            <h3>Questions per Attempt:</h3>
+            <div className={styles.difficultyGrid}>
+              {[10, 15, 20, activeQuestions.length].filter((v, i, a) => a.indexOf(v) === i).map((n) => (
+                <button
+                  key={n}
+                  className={`${styles.diffBtn} ${questionsPerAttempt === n ? styles.activeDiff : ''}`}
+                  onClick={() => setQuestionsPerAttempt(n)}
+                >
+                  {n >= activeQuestions.length ? 'All' : `${n}`}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <button onClick={handleStart} className={styles.startBtn}>
-            Start Quiz ({activeQuestions.length} Questions)
+            Start Quiz ({plannedCount} Questions)
           </button>
         </div>
       )}
@@ -97,7 +146,7 @@ export const QuizContent = () => {
         <div className={styles.quizCard}>
           <div className={styles.quizHeader}>
             <span className={styles.progressText}>
-              Question {currentIdx + 1} of {activeQuestions.length}
+              Question {currentIdx + 1} of {sessionQuestions.length}
             </span>
             <span className={`${styles.difficultyBadge} ${
               currentQuestion.difficulty === 'Easy' ? styles.badgeEasy :
@@ -107,18 +156,34 @@ export const QuizContent = () => {
             </span>
           </div>
 
-          <h3 className={styles.questionText}>{currentQuestion.questionText}</h3>
+          <div className={styles.metaRow}>
+            <span className={`${styles.categoryBadge} ${
+              currentQuestion.category === 'concept-understanding' ? styles.catConcept :
+              currentQuestion.category === 'practical-application' ? styles.catPractical :
+              currentQuestion.category === 'debugging-scenarios' ? styles.catDebug :
+              currentQuestion.category === 'circuit-reasoning' ? styles.catCircuit :
+              currentQuestion.category === 'engineering-decisions' ? styles.catDecision :
+              currentQuestion.category === 'real-world-situations' ? styles.catReal :
+              currentQuestion.category === 'interview-style' ? styles.catInterview :
+              styles.catIndustry
+            }`}>
+              {currentQuestion.category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+            </span>
+            {currentQuestion.relatedLesson && (
+              <span className={styles.lessonTag}>📖 {currentQuestion.relatedLesson.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</span>
+            )}
+          </div>
 
-          {/* Conditional image for Image ID questions */}
-          {currentQuestion.type === 'image-id' && currentQuestion.imageUrl && (
+          <h3 className={styles.questionText}>{currentQuestion.question}</h3>
+
+          {currentQuestion.imageUrl && (
             <div className={styles.imageContainer}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={currentQuestion.imageUrl} alt="MCU Layout Blueprint" className={styles.quizImage} />
+              <img src={currentQuestion.imageUrl} alt="Question reference image" className={styles.quizImage} />
             </div>
           )}
 
-          {/* Conditional code snippet for Coding questions */}
-          {currentQuestion.type === 'coding' && currentQuestion.codeSnippet && (
+          {currentQuestion.codeSnippet && (
             <pre className={styles.codeSnippet}>
               <code>{currentQuestion.codeSnippet}</code>
             </pre>
@@ -165,7 +230,7 @@ export const QuizContent = () => {
               </button>
             ) : (
               <button onClick={handleNext} className={styles.nextBtn}>
-                {currentIdx + 1 < activeQuestions.length ? 'Next Question' : 'View Results'}
+                {currentIdx + 1 < sessionQuestions.length ? 'Next Question' : 'View Results'}
               </button>
             )}
           </div>
@@ -175,6 +240,11 @@ export const QuizContent = () => {
             <div className={styles.explanationBox}>
               <h4>{selectedAnswer === currentQuestion.correctAnswer ? '🟢 Correct!' : '🔴 Incorrect'}</h4>
               <p>{currentQuestion.explanation}</p>
+              <div className={styles.tagRow}>
+                {currentQuestion.tags.map(tag => (
+                  <span key={tag} className={styles.tag}>{tag.replace(/-/g, ' ')}</span>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -185,7 +255,7 @@ export const QuizContent = () => {
           <h2>Quiz Completed! 🎉</h2>
           <div className={styles.scoreCircle}>
             <span className={styles.percentage}>{scorePercentage}%</span>
-            <span className={styles.scoreText}>{score} / {activeQuestions.length} Correct</span>
+            <span className={styles.scoreText}>{score} / {sessionQuestions.length} Correct</span>
           </div>
 
           <p className={styles.resultsDesc}>
@@ -210,7 +280,7 @@ export const QuizContent = () => {
       {showCertificate && (
         <CertificateModal
           score={score}
-          total={activeQuestions.length}
+          total={sessionQuestions.length}
           onClose={() => setShowCertificate(false)}
         />
       )}

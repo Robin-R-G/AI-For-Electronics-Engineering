@@ -123,11 +123,62 @@
 .badgeMedium { background: rgba(255, 215, 0, 0.1); color: #ffd700; }
 .badgeHard { background: rgba(255, 0, 80, 0.1); color: #ff0050; }
 
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.categoryBadge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.catConcept { background: rgba(99, 102, 241, 0.12); color: #818cf8; }
+.catPractical { background: rgba(16, 185, 129, 0.12); color: #34d399; }
+.catDebug { background: rgba(239, 68, 68, 0.12); color: #f87171; }
+.catCircuit { background: rgba(245, 158, 11, 0.12); color: #fbbf24; }
+.catDecision { background: rgba(139, 92, 246, 0.12); color: #a78bfa; }
+.catReal { background: rgba(236, 72, 153, 0.12); color: #f472b6; }
+.catInterview { background: rgba(14, 165, 233, 0.12); color: #38bdf8; }
+.catIndustry { background: rgba(249, 115, 22, 0.12); color: #fb923c; }
+
+.lessonTag {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
 .questionText {
   color: var(--color-white);
   font-size: 1.35rem;
   line-height: 1.5;
   margin: 0 0 2rem 0;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tag {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--color-text-tertiary);
+  font-weight: 500;
 }
 
 /* Image Q */

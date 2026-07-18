@@ -9,6 +9,8 @@ import styles from '../docs.module.css';
 import DocNavigation from '@/components/ui/DocNavigation';
 import ChapterHeader from '@/components/course/ChapterHeader';
 import LessonResources from '@/components/course/LessonResources';
+import MarkdownView from '@/lib/markdown';
+import { getLessonOverride } from '@/lib/lessonContent';
 
 const ContentComponents: Record<string, React.FC> = {
   'introduction': React.lazy(() => import('@/content/introduction')),
@@ -51,17 +53,20 @@ export default function DocPageClient({ slugPromise }: { slugPromise: Promise<st
   }
 
   const Content = ContentComponents[slug];
+  const override = isClient ? getLessonOverride(slug) : null;
 
   return (
     <div>
-      <ChapterHeader 
-        title={section.title} 
-        readingTime={section.readingTime} 
-        difficulty={section.difficulty} 
+      <ChapterHeader
+        title={section.title}
+        readingTime={section.readingTime}
+        difficulty={section.difficulty}
       />
-      
+
       <div className={styles.docContent}>
-        {isClient && Content ? (
+        {override ? (
+          <MarkdownView markdown={override} />
+        ) : isClient && Content ? (
           <React.Suspense fallback={<div className={styles.placeholder}>Loading premium content...</div>}>
             <Content />
           </React.Suspense>
@@ -71,8 +76,6 @@ export default function DocPageClient({ slugPromise }: { slugPromise: Promise<st
           </p>
         )}
       </div>
-
-      <LessonResources slug={slug} />
 
       <DocNavigation currentSlug={slug} />
 

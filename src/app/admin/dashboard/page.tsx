@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import { getSessionSync, destroySession, AdminSession } from '@/lib/adminAuth';
 import { docsSections } from '@/lib/docsConfig';
@@ -8,7 +8,7 @@ import {
   BUCKETS,
   BUCKET_LABELS,
   getFiles,
-  saveFile,
+  saveFileAsync,
   deleteFile,
   subscribeStorage,
   fileTypeLabel,
@@ -16,7 +16,6 @@ import {
 } from '@/lib/storage';
 import {
   CertificateSettings,
-  DEFAULT_SETTINGS,
   getSettings,
   saveSettings,
   resetSettings,
@@ -55,7 +54,7 @@ type Tab =
   | 'lessons';
 
 export default function AdminDashboardPage() {
-  const [admin, setAdmin] = useState<AdminSession | null>(() => getSessionSync());
+  const [admin] = useState<AdminSession | null>(() => getSessionSync());
   const [tab, setTab] = useState<Tab>('overview');
   const [fileCount, setFileCount] = useState(0);
 
@@ -79,39 +78,37 @@ export default function AdminDashboardPage() {
       <div className={styles.page}>
         <div className={styles.loadingSpinner}>
           <span className={styles.spinner}></span>
-          <p>Verifying access…</p>
+          <p>Verifying accessâ€¦</p>
         </div>
       </div>
     );
   }
 
-  const sessionExpires = new Date(admin.exp).toLocaleString();
-
   return (
     <div className={styles.page}>
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
-          <div className={styles.logoIcon}>⚡</div>
+          <div className={styles.logoIcon}>âš¡</div>
           <span className={styles.logoText}>EE Workshop Admin</span>
         </div>
         <nav className={styles.nav}>
           <button className={`${styles.navItem} ${tab === 'overview' ? styles.activeNav : ''}`} onClick={() => setTab('overview')}>
-            📊 Overview
+            ðŸ“Š Overview
           </button>
           <button className={`${styles.navItem} ${tab === 'upload' ? styles.activeNav : ''}`} onClick={() => setTab('upload')}>
-            ⬆ Upload Resource
+            â¬† Upload Resource
           </button>
           <button className={`${styles.navItem} ${tab === 'storage' ? styles.activeNav : ''}`} onClick={() => setTab('storage')}>
-            🗂 Storage ({fileCount})
+            ðŸ—‚ Storage ({fileCount})
           </button>
           <button className={`${styles.navItem} ${tab === 'certificate' ? styles.activeNav : ''}`} onClick={() => setTab('certificate')}>
-            🎖 Certificate
+            ðŸŽ– Certificate
           </button>
           <button className={`${styles.navItem} ${tab === 'analytics' ? styles.activeNav : ''}`} onClick={() => setTab('analytics')}>
-            📈 Analytics
+            ðŸ“ˆ Analytics
           </button>
           <button className={`${styles.navItem} ${tab === 'lessons' ? styles.activeNav : ''}`} onClick={() => setTab('lessons')}>
-            📝 Edit Lessons
+            ðŸ“ Edit Lessons
           </button>
         </nav>
         <div className={styles.sidebarFooter}>
@@ -123,7 +120,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           <button className={styles.logoutBtn} onClick={handleLogout}>
-            ⎋ Sign Out
+            âŽ‹ Sign Out
           </button>
         </div>
       </aside>
@@ -144,7 +141,7 @@ export default function AdminDashboardPage() {
             {tab === 'certificate' && 'Set workshop name, instructor, logos, signature, and generate certificates.'}
             {tab === 'analytics' && 'Local activity tracked in this browser and aggregated here.'}
             {tab === 'lessons' && 'Edit any lesson with Markdown, media, math, and version history.'}
-            {tab === 'overview' && 'AI for Electronics Engineers — Workshop'}
+            {tab === 'overview' && 'AI for Electronics Engineers â€” Workshop'}
           </p>
         </div>
 
@@ -164,7 +161,7 @@ export default function AdminDashboardPage() {
   );
 }
 
-/* ─────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function OverviewTab({ fileCount, onGo }: { fileCount: number; onGo: (t: Tab) => void }) {
   return (
     <>
@@ -191,23 +188,23 @@ function OverviewTab({ fileCount, onGo }: { fileCount: number; onGo: (t: Tab) =>
         <h2>Quick Actions</h2>
         <div className={styles.actionsGrid}>
           <button className={styles.actionCard} onClick={() => onGo('upload')}>
-            <span className={styles.actionIcon}>⬆</span>
+            <span className={styles.actionIcon}>â¬†</span>
             Upload Resource
           </button>
           <button className={styles.actionCard} onClick={() => onGo('certificate')}>
-            <span className={styles.actionIcon}>🎖</span>
+            <span className={styles.actionIcon}>ðŸŽ–</span>
             Certificates
           </button>
           <button className={styles.actionCard} onClick={() => onGo('analytics')}>
-            <span className={styles.actionIcon}>📈</span>
+            <span className={styles.actionIcon}>ðŸ“ˆ</span>
             Analytics
           </button>
           <button className={styles.actionCard} onClick={() => onGo('lessons')}>
-            <span className={styles.actionIcon}>📝</span>
+            <span className={styles.actionIcon}>ðŸ“</span>
             Edit Lessons
           </button>
           <a className={styles.actionCard} href="/AI-For-Electronics-Engineering/">
-            <span className={styles.actionIcon}>🌐</span>
+            <span className={styles.actionIcon}>ðŸŒ</span>
             View Site
           </a>
         </div>
@@ -222,7 +219,7 @@ function OverviewTab({ fileCount, onGo }: { fileCount: number; onGo: (t: Tab) =>
           </div>
           <div className={styles.infoCard}>
             <h3>Storage</h3>
-            <p>Browser localStorage — no backend. All uploads organized into structured buckets.</p>
+            <p>Browser localStorage â€” no backend. All uploads organized into structured buckets.</p>
           </div>
         </div>
       </div>
@@ -230,7 +227,7 @@ function OverviewTab({ fileCount, onGo }: { fileCount: number; onGo: (t: Tab) =>
   );
 }
 
-/* ─────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function StorageUploadForm({ onSaved }: { onSaved: () => void }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -240,6 +237,7 @@ function StorageUploadForm({ onSaved }: { onSaved: () => void }) {
   const [tags, setTags] = useState('');
   const [visibility, setVisibility] = useState<'public' | 'private'>('public');
   const [lessonSlug, setLessonSlug] = useState('');
+  const [displayOrder, setDisplayOrder] = useState(0);
   const [file, setFile] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [error, setError] = useState('');
@@ -249,7 +247,7 @@ function StorageUploadForm({ onSaved }: { onSaved: () => void }) {
 
   const reset = () => {
     setTitle(''); setDescription(''); setCategory('Document'); setBucket('');
-    setVersion('v1.0'); setTags(''); setVisibility('public'); setLessonSlug('');
+    setVersion('v1.0'); setTags(''); setVisibility('public'); setLessonSlug(''); setDisplayOrder(0);
     setFile(null); setThumbnail(null);
     if (fileRef.current) fileRef.current.value = '';
     if (thumbRef.current) thumbRef.current.value = '';
@@ -260,11 +258,17 @@ function StorageUploadForm({ onSaved }: { onSaved: () => void }) {
     setError('');
     if (!title.trim() || !description.trim()) { setError('Title and description are required.'); return; }
     if (!file) { setError('Please choose a file to upload.'); return; }
+    const ALLOWED = ['pdf', 'pptx', 'docx', 'zip', 'png', 'jpg', 'jpeg', 'txt', 'csv', 'md'];
+    const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+    if (!ALLOWED.includes(ext)) {
+      setError(`Unsupported format. Allowed: ${ALLOWED.join(', ').toUpperCase()}`);
+      return;
+    }
 
     setSaving(true);
     try {
       const thumbData = thumbnail ? await settingsFileToDataUrl(thumbnail) : undefined;
-      const record = await saveFile({
+      const record = await saveFileAsync({
         file,
         title: title.trim(),
         bucket: bucket || undefined,
@@ -274,13 +278,14 @@ function StorageUploadForm({ onSaved }: { onSaved: () => void }) {
         version: version.trim() || 'v1.0',
         visibility,
         lessonSlug: lessonSlug || undefined,
+        displayOrder: Number(displayOrder) || 0,
         thumbnail: thumbData,
       });
       void record;
       reset();
       onSaved();
     } catch {
-      setError('Storage failed — the file may be too large for this browser (limit ~5 MB).');
+      setError('Storage failed â€” the file may be too large for this browser (limit ~5 MB).');
     } finally {
       setSaving(false);
     }
@@ -298,7 +303,7 @@ function StorageUploadForm({ onSaved }: { onSaved: () => void }) {
 
         <label className={styles.field}>
           <span>Category *</span>
-          <input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Document, Code, Template…" />
+          <input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Document, Code, Templateâ€¦" />
         </label>
 
         <label className={styles.field}>
@@ -314,6 +319,11 @@ function StorageUploadForm({ onSaved }: { onSaved: () => void }) {
         <label className={styles.field}>
           <span>Version</span>
           <input value={version} onChange={(e) => setVersion(e.target.value)} placeholder="v1.0" />
+        </label>
+
+        <label className={styles.field}>
+          <span>Display Order</span>
+          <input type="number" value={displayOrder} onChange={(e) => setDisplayOrder(Number(e.target.value))} placeholder="0" />
         </label>
 
         <label className={styles.field}>
@@ -346,8 +356,8 @@ function StorageUploadForm({ onSaved }: { onSaved: () => void }) {
 
         <label className={styles.field}>
           <span>File *</span>
-          <input ref={fileRef} type="file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} required />
-          {file && <span className={styles.fileHint}>{file.name} · {formatBytes(file.size)}</span>}
+          <input ref={fileRef} type="file" accept=".pdf,.pptx,.docx,.zip,.png,.jpg,.jpeg,.txt,.csv,.md" onChange={(e) => setFile(e.target.files?.[0] ?? null)} required />
+          {file && <span className={styles.fileHint}>{file.name} Â· {formatBytes(file.size)}</span>}
         </label>
 
         <label className={styles.field}>
@@ -358,13 +368,13 @@ function StorageUploadForm({ onSaved }: { onSaved: () => void }) {
       </div>
 
       <button type="submit" className={styles.submitBtn} disabled={saving}>
-        {saving ? 'Saving…' : 'Upload & Organize'}
+        {saving ? 'Savingâ€¦' : 'Upload & Organize'}
       </button>
     </form>
   );
 }
 
-/* ─────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function StorageManager() {
   const [files, setFiles] = useState<StoredFile[]>([]);
   const [bucket, setBucket] = useState<Bucket | 'all'>('all');
@@ -399,7 +409,7 @@ function StorageManager() {
     <div>
       <div className={styles.usageBar}>
         <div className={styles.usageLabel}>
-          Storage used: <strong>{formatBytes(usage.total)}</strong> · {files.length} files
+          Storage used: <strong>{formatBytes(usage.total)}</strong> Â· {files.length} files
         </div>
         <div className={styles.usageTrack}>
           {BUCKETS.map((b) => {
@@ -417,7 +427,7 @@ function StorageManager() {
         <div className={styles.usageLegend}>
           {BUCKETS.map((b) => (
             <span key={b} className={styles.usageChip}>
-              {BUCKET_LABELS[b]} · {formatBytes(usage.byBucket[b] ?? 0)}
+              {BUCKET_LABELS[b]} Â· {formatBytes(usage.byBucket[b] ?? 0)}
             </span>
           ))}
         </div>
@@ -452,7 +462,7 @@ function StorageManager() {
                     {f.visibility}
                   </span>
                 </td>
-                <td>{f.lessonSlug || '—'}</td>
+                <td>{f.lessonSlug || 'â€”'}</td>
                 <td>
                   {confirmId === f.id ? (
                     <span>
@@ -475,7 +485,7 @@ function StorageManager() {
   );
 }
 
-/* ─────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function CertificateManager() {
   const [s, setS] = useState<CertificateSettings>(() => getSettings());
   const [status, setStatus] = useState('');
@@ -498,7 +508,7 @@ function CertificateManager() {
     if (!file) return;
     try {
       update({ [key]: await settingsFileToDataUrl(file) });
-      flash('Image loaded — click Preview to see it.');
+      flash('Image loaded â€” click Preview to see it.');
     } catch {
       flash('Could not read image.');
     }
@@ -506,7 +516,7 @@ function CertificateManager() {
 
   const handleSave = () => {
     saveSettings(s);
-    flash('Saved ✓');
+    flash('Saved âœ“');
     if (previewRef.current) renderCertificate(previewRef.current, s, previewName.trim() || 'Sample Participant');
   };
 
@@ -587,7 +597,7 @@ function CertificateManager() {
             <input value={s.certSubtitle} onChange={(e) => update({ certSubtitle: e.target.value })} />
           </label>
           <label className={styles.field} style={{ gridColumn: '1 / -1' }}>
-            <span>Body Text (use ↵ for new line)</span>
+            <span>Body Text (use â†µ for new line)</span>
             <textarea value={s.bodyText} rows={3} onChange={(e) => update({ bodyText: e.target.value })} />
           </label>
           <label className={styles.field} style={{ gridColumn: '1 / -1' }}>
@@ -632,24 +642,24 @@ function CertificateManager() {
         <div className={styles.previewControls}>
           <input className={styles.nameInput} value={previewName} onChange={(e) => setPreviewName(e.target.value)} placeholder="Preview name" />
           <button className={styles.smallBtn} onClick={handlePreview}>Update Preview</button>
-          <button className={styles.smallBtn} onClick={handleDownloadPng}>⬇ PNG</button>
+          <button className={styles.smallBtn} onClick={handleDownloadPng}>â¬‡ PNG</button>
         </div>
       </section>
 
       <section className={styles.certSection}>
         <h2>Generate PDF Certificates</h2>
         <p className={styles.sectionDesc}>
-          Enter one participant name per line. A PDF is generated automatically — one
+          Enter one participant name per line. A PDF is generated automatically â€” one
           certificate per name (multi-page when more than one).
         </p>
         <textarea className={styles.namesArea} value={names} onChange={(e) => setNames(e.target.value)} placeholder={'Robin R G\nAlice Thomas\nBob Martin'} rows={6} />
         <button className={styles.submitBtn} onClick={handleGenerate} disabled={generating}>
-          {generating ? 'Generating…' : '⚙ Generate PDF Certificates'}
+          {generating ? 'Generatingâ€¦' : 'âš™ Generate PDF Certificates'}
         </button>
       </section>
 
       <div className={styles.certActions}>
-        <button className={styles.submitBtn} onClick={handleSave}>💾 Save Settings</button>
+        <button className={styles.submitBtn} onClick={handleSave}>ðŸ’¾ Save Settings</button>
         <button className={styles.cancelBtn} onClick={handleReset}>Reset to Defaults</button>
         {status && <span className={styles.statusMsg}>{status}</span>}
       </div>
@@ -671,6 +681,7 @@ function ImageField({
       <span className={styles.imgLabel}>{label} <em>({hint})</em></span>
       {value ? (
         <div className={styles.imgThumbWrap}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={value} alt={label} className={styles.imgThumb} />
           <button className={styles.delLink} onClick={onClear}>Remove</button>
         </div>
@@ -681,7 +692,7 @@ function ImageField({
   );
 }
 
-/* ─────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function AnalyticsDashboard() {
   const [summary, setSummary] = useState(() => summarize());
 
@@ -753,7 +764,7 @@ function AnalyticsDashboard() {
             {summary.recentUploads.map((f) => (
               <li key={f.id}>
                 <span className={styles.upName}>{f.originalName}</span>
-                <span className={styles.upMeta}>{BUCKET_LABELS[f.bucket]} · {fileTypeLabel(f)} · {formatBytes(f.size)}</span>
+                <span className={styles.upMeta}>{BUCKET_LABELS[f.bucket]} Â· {fileTypeLabel(f)} Â· {formatBytes(f.size)}</span>
                 <span className={styles.upMeta}>{new Date(f.uploadedAt).toLocaleDateString()}</span>
               </li>
             ))}
@@ -774,7 +785,7 @@ function AnalyticsDashboard() {
         <div className={styles.usageLegend}>
           {BUCKETS.map((b) => (
             <span key={b} className={styles.usageChip}>
-              {BUCKET_LABELS[b]} · {formatBytes(summary.storage.byBucket[b] ?? 0)}
+              {BUCKET_LABELS[b]} Â· {formatBytes(summary.storage.byBucket[b] ?? 0)}
             </span>
           ))}
         </div>
@@ -789,7 +800,7 @@ function AnalyticsDashboard() {
   );
 }
 
-/* ─────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function LessonEditor() {
   const [slug, setSlug] = useState(docsSections[0].slug);
   const [content, setContent] = useState('');
@@ -809,7 +820,6 @@ function LessonEditor() {
     const onChange = () => load(slug);
     onChange();
     return subscribeLessons(onChange);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   // Auto-save (debounced 900ms)
@@ -837,11 +847,11 @@ function LessonEditor() {
   const mediaFiles = getFiles().filter(
     (f) => f.mimeType.startsWith('image/') || f.mimeType.startsWith('video/')
   );
-  const insertMedia = (id: string, title: string, isVideo: boolean) => {
+  const insertMedia = (id: string, title: string) => {
     insert(`![${title}](store://${id})\n`);
   };
 
-  const sampleInteractive = '```interactive\n' + JSON.stringify({ type: 'reveal', question: 'What is Ohm’s Law?', answer: 'V = I × R' }, null, 2) + '\n```\n';
+  const sampleInteractive = '```interactive\n' + JSON.stringify({ type: 'reveal', question: 'What is Ohmâ€™s Law?', answer: 'V = I Ã— R' }, null, 2) + '\n```\n';
 
   return (
     <div className={styles.editorGrid}>
@@ -883,11 +893,11 @@ function LessonEditor() {
               defaultValue=""
               onChange={(e) => {
                 const f = mediaFiles.find((m) => m.id === e.target.value);
-                if (f) insertMedia(f.id, f.originalName, f.mimeType.startsWith('video/'));
+                if (f) insertMedia(f.id, f.originalName);
                 e.target.value = '';
               }}
             >
-              <option value="">Choose image/video…</option>
+              <option value="">Choose image/videoâ€¦</option>
               {mediaFiles.map((m) => (
                 <option key={m.id} value={m.id}>{m.originalName} ({fileTypeLabel(m)})</option>
               ))}
@@ -900,7 +910,7 @@ function LessonEditor() {
             {preview ? 'Edit' : 'Preview'}
           </button>
           <button className={styles.smallBtn} onClick={() => { saveLessonContent(slug, content, 'manual save'); setHasOverride(true); setSavedHint('Saved'); setTimeout(() => setSavedHint(''), 1500); }}>
-            💾 Save Version
+            ðŸ’¾ Save Version
           </button>
           <button className={styles.cancelBtn} onClick={() => { resetLesson(slug); load(slug); }}>
             Reset to Default
@@ -911,7 +921,7 @@ function LessonEditor() {
         <div className={styles.historyBox}>
           <h3>Version History ({history.length})</h3>
           {history.length === 0 ? (
-            <p className={styles.empty}>No versions yet — start editing.</p>
+            <p className={styles.empty}>No versions yet â€” start editing.</p>
           ) : (
             <ul className={styles.historyList}>
               {history.map((v) => (

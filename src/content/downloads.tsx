@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useMemo, useSyncExternalStore } from 'react';
 import { downloadsData, downloadCategories, DownloadItem } from '@/data/downloadsData';
-import { Resource, getResources, subscribeResources } from '@/lib/resources';
+import { StoredFile, getFiles, subscribeStorage, fileTypeLabel, formatBytes } from '@/lib/storage';
 import { docsSections } from '@/lib/docsConfig';
 import { getSettings } from '@/lib/settings';
 import { renderCertificate } from '@/lib/certificate';
@@ -350,17 +350,21 @@ const imageGenerators: Record<string, (name?: string) => HTMLCanvasElement> = {
 
 type DisplayItem =
   | { kind: 'seed'; item: DownloadItem }
-  | { kind: 'resource'; item: Resource };
+  | { kind: 'resource'; item: StoredFile };
 
 const DownloadsContent = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [certName, setCertName] = useState('');
   const [showCertModal, setShowCertModal] = useState(false);
-  const liveResources = useSyncExternalStore(subscribeResources, () => getResources(), () => []);
+  const liveResources = useSyncExternalStore(subscribeStorage, () => getFiles(), () => []);
 
   const filtered = useMemo<DisplayItem[]>(() => {
-    const publicResources = liveResources.filter(r => r.visibility === 'public');
+    const publicResources = liveResources.filter(
+      (r) => r.visibility === 'public' &&
+        r.bucket !== 'lesson-files' && r.bucket !== 'certificates' &&
+        r.bucket !== 'images' && r.bucket !== 'videos'
+    );
     const ordered = [...publicResources].sort((a, b) =>
       a.displayOrder - b.displayOrder || a.uploadedAt.localeCompare(b.uploadedAt)
     );
@@ -383,9 +387,9 @@ const DownloadsContent = () => {
     }, 500);
   };
 
-  const downloadResource = (item: Resource) => {
+  const downloadResource = (item: StoredFile) => {
     const a = document.createElement('a');
-    a.href = item.fileData;
+    a.href = item.dataUrl;
     a.download = item.fileName;
     document.body.appendChild(a);
     a.click();
@@ -496,7 +500,8 @@ const DownloadsContent = () => {
               style={{ animationDelay: `${i * 0.07}s` }}
             >
               {r.thumbnail ? (
-                <img src={r.thumbnail} alt={r.title} className={styles.thumbImg} />
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={r.thumbnail} alt={r.originalName} className={styles.thumbImg} />
               ) : (
                 <div className={styles.cardHeader}>
                   <span className={styles.itemIcon}>📄</span>
@@ -507,29 +512,29 @@ const DownloadsContent = () => {
               )}
 
               <div className={styles.cardBody}>
-                <h3 className={styles.itemTitle}>{r.title}</h3>
+                <h3 className={styles.itemTitle}>{r.originalName}</h3>
                 <p className={styles.itemDesc}>{r.description}</p>
                 {r.tags.length > 0 && (
                   <div className={styles.tagRow}>
                     {r.tags.map(t => <span key={t} className={styles.tag}>#{t}</span>)}
                   </div>
                 )}
-                {r.associatedLesson && (
+                {r.lessonSlug && (
                   <a
                     className={styles.lessonLink}
-                    href={`/AI-For-Electronics-Engineering/learn/${r.associatedLesson}`}
+                    href={`/AI-For-Electronics-Engineering/learn/${r.lessonSlug}`}
                   >
-                    📎 {lessonTitle(r.associatedLesson)}
+                    📎 {lessonTitle(r.lessonSlug)}
                   </a>
                 )}
               </div>
 
               <div className={styles.cardMeta}>
                 <div className={styles.metaRow}>
-                  <span className={`${styles.fileTypeBadge} ${getTypeColor(r.fileType)}`}>
-                    {r.fileType}
+                  <span className={`${styles.fileTypeBadge} ${getTypeColor(fileTypeLabel(r))}`}>
+                    {fileTypeLabel(r)}
                   </span>
-                  <span className={styles.metaItem}>📦 {r.fileSize}</span>
+                  <span className={styles.metaItem}>📦 {formatBytes(r.size)}</span>
                 </div>
                 <div className={styles.metaRow}>
                   <span className={styles.metaItem}>🔖 {r.version}</span>
@@ -543,7 +548,7 @@ const DownloadsContent = () => {
                 className={styles.downloadBtn}
                 onClick={() => downloadResource(r)}
               >
-                ⬇ Download {r.fileType}
+                ⬇ Download {fileTypeLabel(r)}
               </button>
             </div>
           );

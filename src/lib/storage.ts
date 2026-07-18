@@ -40,6 +40,7 @@ export interface StoredFile {
   title: string;
   fileName: string; // unique within bucket
   originalName: string;
+  thumbnail: string; // data URL, '' = none
   mimeType: string;
   size: number; // bytes
   dataUrl: string;
@@ -49,13 +50,13 @@ export interface StoredFile {
   version: string;
   visibility: 'public' | 'private';
   lessonSlug?: string;
+  displayOrder: number;
   uploadedAt: string; // ISO
   updatedAt: string; // ISO
   metadata: Record<string, string>;
 }
 
 const STORAGE_KEY = 'workshop_storage_v1';
-const MAX_EVENTS = 5000;
 
 interface StorageState {
   files: StoredFile[];
@@ -84,10 +85,6 @@ export function getFile(id: string): StoredFile | undefined {
   return getFiles().find((f) => f.id === id);
 }
 
-function extOf(name: string): string {
-  return name.split('.').pop()?.toLowerCase() ?? '';
-}
-
 // Automatically pick a bucket from the chosen category / file type.
 export function resolveBucket(input: {
   category: string;
@@ -98,9 +95,6 @@ export function resolveBucket(input: {
 }): Bucket {
   if (input.forceBucket) return input.forceBucket;
   if (input.lessonSlug) return 'lesson-files';
-  const ext = input.mimeType.startsWith('image/') ? 'img'
-    : input.mimeType.startsWith('video/') ? 'vid'
-    : extOf(input.originalNameSafe ?? '');
   if (input.mimeType.startsWith('image/')) return 'images';
   if (input.mimeType.startsWith('video/')) return 'videos';
   const cat = input.category.toLowerCase();
@@ -134,6 +128,7 @@ export interface SaveFileInput {
   version?: string;
   visibility?: 'public' | 'private';
   lessonSlug?: string;
+  displayOrder?: number;
   thumbnail?: string;
   metadata?: Record<string, string>;
 }
@@ -156,6 +151,7 @@ export function saveFile(input: SaveFileInput): StoredFile {
     title: input.title ?? input.file.name,
     fileName,
     originalName: input.file.name,
+    thumbnail: input.thumbnail ?? '',
     mimeType: input.file.type || 'application/octet-stream',
     size: input.file.size,
     dataUrl: '', // filled below
@@ -165,6 +161,7 @@ export function saveFile(input: SaveFileInput): StoredFile {
     version: input.version ?? 'v1.0',
     visibility: input.visibility ?? 'public',
     lessonSlug: input.lessonSlug,
+    displayOrder: input.displayOrder ?? 0,
     uploadedAt: now,
     updatedAt: now,
     metadata: input.metadata ?? {},
