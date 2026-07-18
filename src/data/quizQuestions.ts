@@ -1,30 +1,9 @@
-export type Difficulty = 'Easy' | 'Medium' | 'Hard';
+import { standaloneExamQuestions } from './questionBank/standaloneExam';
+import type { Difficulty, QuestionCategory, QuizQuestion } from './quizTypes';
 
-export type QuestionCategory =
-  | 'concept-understanding'
-  | 'practical-application'
-  | 'debugging-scenarios'
-  | 'circuit-reasoning'
-  | 'engineering-decisions'
-  | 'real-world-situations'
-  | 'interview-style'
-  | 'industry-oriented';
+export type { Difficulty, QuestionCategory, QuizQuestion } from './quizTypes';
 
-export interface QuizQuestion {
-  id: string;
-  category: QuestionCategory;
-  difficulty: Difficulty;
-  question: string;
-  codeSnippet?: string;
-  imageUrl?: string;
-  options: [string, string, string, string];
-  correctAnswer: string;
-  explanation: string;
-  relatedLesson: string;
-  tags: string[];
-}
-
-export const quizQuestions: QuizQuestion[] = [
+const baseQuizQuestions: QuizQuestion[] = [
   // ── Concept Understanding ──────────────────────────────────────────
   {
     id: 'cu-1',
@@ -424,4 +403,9 @@ export const quizQuestions: QuizQuestion[] = [
     relatedLesson: 'interview-prep',
     tags: ['industry-oriented', 'aerospace', 'do-178c', 'certification', 'safety-critical', 'formal-verification']
   }
+];
+
+export const quizQuestions: QuizQuestion[] = [
+  ...baseQuizQuestions,
+  ...standaloneExamQuestions,
 ];

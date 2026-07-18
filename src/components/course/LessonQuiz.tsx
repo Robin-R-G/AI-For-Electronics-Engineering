@@ -189,10 +189,50 @@ export default function LessonQuiz({ slug, lessonTitle }: LessonQuizProps) {
           </button>
         ) : (
           <div className={styles.feedback}>
-            <div className={selectedAnswer === currentQuestion.correctAnswer ? styles.feedbackCorrect : styles.feedbackWrong}>
-              <strong>{selectedAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Not quite.'}</strong>
-            </div>
-            <p className={styles.explanation}>{currentQuestion.explanation}</p>
+            {selectedAnswer === currentQuestion.correctAnswer ? (
+              <>
+                <div className={styles.feedbackCorrect}>
+                  <span className={styles.feedbackIcon}>✓</span>
+                  <strong>Correct Answer</strong>
+                </div>
+                <div className={styles.feedbackSection}>
+                  <p className={styles.feedbackHeading}>Why this is correct</p>
+                  <p className={styles.explanation}>{currentQuestion.explanation}</p>
+                </div>
+                <div className={styles.feedbackSection}>
+                  <p className={styles.feedbackHeading}>Practical engineering usage</p>
+                  <p className={styles.explanation}>{currentQuestion.practicalUse}</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.feedbackWrong}>
+                  <span className={styles.feedbackIcon}>✗</span>
+                  <strong>Incorrect Answer</strong>
+                </div>
+                <div className={styles.feedbackSection}>
+                  <p className={styles.feedbackHeading}>
+                    Correct Answer: <span className={styles.correctAnswerText}>{currentQuestion.correctAnswer}</span>
+                  </p>
+                </div>
+                <div className={styles.feedbackSection}>
+                  <p className={styles.feedbackHeading}>Why your answer is wrong</p>
+                  <p className={styles.explanation}>{currentQuestion.whyWrong}</p>
+                </div>
+                <div className={styles.feedbackSection}>
+                  <p className={styles.feedbackHeading}>Why the correct answer is right</p>
+                  <p className={styles.explanation}>{currentQuestion.explanation}</p>
+                </div>
+                <div className={styles.feedbackSection}>
+                  <p className={styles.feedbackHeading}>Common mistake students make</p>
+                  <p className={styles.explanation}>{currentQuestion.commonMistake}</p>
+                </div>
+                <div className={styles.feedbackSection}>
+                  <p className={styles.feedbackHeading}>Related concept to study</p>
+                  <p className={styles.explanation}>{currentQuestion.relatedConcept}</p>
+                </div>
+              </>
+            )}
             <button className={styles.nextBtn} onClick={handleNext}>
               {currentIdx + 1 < questions.length ? 'Next Question →' : 'See Results'}
             </button>

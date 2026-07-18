@@ -9,6 +9,7 @@ import styles from '../docs.module.css';
 import DocNavigation from '@/components/ui/DocNavigation';
 import ChapterHeader from '@/components/course/ChapterHeader';
 import LessonResources from '@/components/course/LessonResources';
+import LessonQuiz from '@/components/course/LessonQuiz';
 import MarkdownView from '@/lib/markdown';
 import { getLessonOverride } from '@/lib/lessonContent';
 
@@ -77,9 +78,11 @@ export default function DocPageClient({ slugPromise }: { slugPromise: Promise<st
         )}
       </div>
 
-      <DocNavigation currentSlug={slug} />
-
       <LessonResources slug={slug} />
+
+      <LessonQuiz slug={slug} lessonTitle={section.title} />
+
+      <DocNavigation currentSlug={slug} />
     </div>
   );
 }

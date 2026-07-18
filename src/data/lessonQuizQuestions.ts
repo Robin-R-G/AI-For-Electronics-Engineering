@@ -1,3 +1,18 @@
+import { aiFundamentalsQuestions } from './questionBank/aiFundamentals';
+import { machineLearningQuestions } from './questionBank/machineLearning';
+import { deepLearningQuestions } from './questionBank/deepLearning';
+import { generativeAiQuestions } from './questionBank/generativeAi';
+import { edgeAiTinyMlQuestions } from './questionBank/edgeAiTinyMl';
+import { embeddedSystemsQuestions } from './questionBank/embeddedSystems';
+import { mcuPlatformsQuestions } from './questionBank/mcuPlatforms';
+import { sensorsIoTQuestions } from './questionBank/sensorsIoT';
+import { protocolsQuestions } from './questionBank/protocols';
+import { pcbElectronicsQuestions } from './questionBank/pcbElectronics';
+import { fpgaVerilogQuestions } from './questionBank/fpgaVerilog';
+import { signalProcessingQuestions } from './questionBank/signalProcessing';
+import { controlRoboticsQuestions } from './questionBank/controlRobotics';
+import { careerProblemSolvingQuestions } from './questionBank/careerProblemSolving';
+
 export interface LessonQuestion {
   id: string;
   question: string;
@@ -5,12 +20,12 @@ export interface LessonQuestion {
   correctAnswer: string;
   explanation: string;
   whyWrong?: string;
-  commonMistake: string;
-  relatedConcept: string;
-  practicalUse: string;
+  commonMistake?: string;
+  relatedConcept?: string;
+  practicalUse?: string;
 }
 
-export const lessonQuizQuestions: Record<string, LessonQuestion[]> = {
+const baseLessonQuizQuestions: Record<string, LessonQuestion[]> = {
   'introduction': [
     {
       id: 'intro-q1',
@@ -526,4 +541,37 @@ export const lessonQuizQuestions: Record<string, LessonQuestion[]> = {
   'quiz': [],
   'downloads': [],
   'badges': []
+};
+
+export const lessonQuizQuestions: Record<string, LessonQuestion[]> = {
+  ...baseLessonQuizQuestions,
+  'ai-fundamentals': [...baseLessonQuizQuestions['ai-fundamentals'], ...aiFundamentalsQuestions],
+  'machine-learning': [...baseLessonQuizQuestions['machine-learning'], ...machineLearningQuestions],
+  'deep-learning': [...baseLessonQuizQuestions['deep-learning'], ...deepLearningQuestions],
+  'generative-ai': [...baseLessonQuizQuestions['generative-ai'], ...generativeAiQuestions],
+  'electronics-applications': [
+    ...baseLessonQuizQuestions['electronics-applications'],
+    ...embeddedSystemsQuestions,
+    ...sensorsIoTQuestions,
+    ...protocolsQuestions,
+    ...controlRoboticsQuestions,
+    ...edgeAiTinyMlQuestions,
+  ],
+  'electronics-lab': [
+    ...baseLessonQuizQuestions['electronics-lab'],
+    ...mcuPlatformsQuestions,
+    ...pcbElectronicsQuestions,
+  ],
+  'live-demonstrations': [
+    ...baseLessonQuizQuestions['live-demonstrations'],
+    ...fpgaVerilogQuestions,
+  ],
+  'component-encyclopedia': [
+    ...baseLessonQuizQuestions['component-encyclopedia'],
+    ...signalProcessingQuestions,
+  ],
+  'career-roadmap': [
+    ...baseLessonQuizQuestions['career-roadmap'],
+    ...careerProblemSolvingQuestions,
+  ],
 };

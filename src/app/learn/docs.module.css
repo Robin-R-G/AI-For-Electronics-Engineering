@@ -10,7 +10,7 @@
   width: 100%;
   padding: 3rem 4rem 4rem;
   max-width: 920px;
-  margin: 0;
+  margin: 0 auto;
   animation: fadeUp 0.5s var(--ease-snappy) both;
 }
 
