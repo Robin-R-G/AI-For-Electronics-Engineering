@@ -26,7 +26,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({ score, total
     window.print();
   };
 
-  const verificationUrl = `https://robin-r-g.github.io/AI-For-Electronics-Engineering/learn/introduction`;
+  const verificationUrl = `https://ai4electronics.github.io/AI-For-Electronics-Engineering/learn/introduction`;
 
   return (
     <div className={styles.overlay}>
