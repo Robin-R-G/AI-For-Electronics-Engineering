@@ -310,6 +310,7 @@
 @media (max-width: 768px) {
   .overlay { padding: 0; }
   .modal { border-radius: 0; height: 100vh; flex-direction: column; }
+  .layout { flex-direction: column; }
   .sidebar { width: 100%; border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
   .navMenu { flex-direction: row; overflow-x: auto; padding: 1rem; gap: 1rem; }
   .navBtn { white-space: nowrap; }

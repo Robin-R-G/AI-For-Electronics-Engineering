@@ -105,9 +105,9 @@
   top: calc(100% + 8px);
   left: 0;
   width: 600px;
-  background: var(--glass-bg);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
+  background: var(--glass-bg-heavy);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
@@ -223,7 +223,9 @@
   width: min(340px, 85vw);
   height: 100vh;
   z-index: 400;
-  background: var(--color-surface);
+  background: var(--glass-bg-heavy);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
   border-left: 1px solid var(--color-border);
   transform: translateX(100%);
   transition: transform var(--transition-normal);

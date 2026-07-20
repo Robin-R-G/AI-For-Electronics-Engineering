@@ -7,6 +7,7 @@ interface LabDetailPanelProps {
   project: LabProject;
   allProjects: LabProject[];
   onSelectProject: (id: string) => void;
+  onBack: () => void;
 }
 
 type Tab = 'planning' | 'circuit' | 'code' | 'debug' | 'career';
@@ -19,7 +20,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'career', label: 'Career & AI Pack' },
 ];
 
-export const LabDetailPanel = ({ project, allProjects, onSelectProject }: LabDetailPanelProps) => {
+export const LabDetailPanel = ({ project, allProjects, onSelectProject, onBack }: LabDetailPanelProps) => {
   const [activeTab, setActiveTab] = useState<Tab>('planning');
   const [copiedRole, setCopiedRole] = useState<string | null>(null);
   const [copiedCode, setCopiedCode] = useState(false);
@@ -55,11 +56,20 @@ export const LabDetailPanel = ({ project, allProjects, onSelectProject }: LabDet
   return (
     <div className={styles.panel}>
       <header className={styles.header}>
+        <div className={styles.headerTop}>
+          <button className={styles.backBtn} onClick={onBack} aria-label="Back to Projects">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to Projects
+          </button>
+          <span className={`${styles.diff} ${styles[p.difficulty.toLowerCase()]}`}>{p.difficulty}</span>
+        </div>
         <div>
           <span className={styles.category}>{p.category}</span>
           <h2 className={styles.title}>{p.title}</h2>
         </div>
-        <span className={`${styles.diff} ${styles[p.difficulty.toLowerCase()]}`}>{p.difficulty}</span>
       </header>
 
       <nav className={styles.tabs}>

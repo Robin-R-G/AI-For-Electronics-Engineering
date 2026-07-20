@@ -136,12 +136,12 @@
 
 @media (max-width: 768px) {
   .layoutContainer { padding-top: 64px; }
-  .mainContent { padding: 1.5rem 1.25rem; }
+  .mainContent { padding: 1.5rem 1.25rem 120px; }
   .docTitle { font-size: 1.75rem; }
 }
 
 @media (max-width: 480px) {
-  .mainContent { padding: 1.25rem 1rem; }
+  .mainContent { padding: 1.25rem 1rem 120px; }
   .docHeader { margin-bottom: 2rem; padding-bottom: 1.5rem; }
   .docContent { font-size: 1rem; }
   .docContent pre { padding: 1rem; }

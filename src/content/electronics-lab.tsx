@@ -106,24 +106,24 @@ const ElectronicsLabContent = () => {
       />
 
       <div className={styles.layout}>
-        <div className={`${styles.grid} ${viewMode === 'list' ? styles.list : ''}`}>
-          {filtered.map(p => (
-            <ProjectCard
-              key={p.id}
-              project={p}
-              bookmarked={!!bookmarks[p.id]}
-              onToggleBookmark={handleToggleBookmark}
-              onOpenProject={handleOpenProject}
-              onQuickPreview={setPreviewProject}
-              progress={getProgress(p.id)}
-            />
-          ))}
-          {filtered.length === 0 && (
-            <div className={styles.empty}>No projects match your filters.</div>
-          )}
-        </div>
-
-        {selectedProject && (
+        {!selectedProject ? (
+          <div className={`${styles.grid} ${viewMode === 'list' ? styles.list : ''}`}>
+            {filtered.map(p => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                bookmarked={!!bookmarks[p.id]}
+                onToggleBookmark={handleToggleBookmark}
+                onOpenProject={handleOpenProject}
+                onQuickPreview={setPreviewProject}
+                progress={getProgress(p.id)}
+              />
+            ))}
+            {filtered.length === 0 && (
+              <div className={styles.empty}>No projects match your filters.</div>
+            )}
+          </div>
+        ) : (
           <LabDetailPanel
             project={selectedProject}
             allProjects={allProjects}
@@ -131,6 +131,7 @@ const ElectronicsLabContent = () => {
               const p = allProjects.find(pr => pr.id === id);
               if (p) setSelectedProject(p);
             }}
+            onBack={() => setSelectedProject(null)}
           />
         )}
       </div>

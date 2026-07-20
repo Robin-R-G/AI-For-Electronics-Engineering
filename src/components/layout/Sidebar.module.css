@@ -171,9 +171,9 @@
     border-right: 1px solid var(--color-border);
     box-shadow: none;
     padding-top: 72px;
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
+    background: var(--glass-bg-heavy);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    backdrop-filter: blur(20px) saturate(160%);
   }
 
   .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
