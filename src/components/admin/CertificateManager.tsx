@@ -214,11 +214,13 @@ export default function CertificateManager() {
         </button>
       </section>
 
-      <div className={styles.certActions}>
-        <button className={styles.submitBtn} onClick={handleSave}>Save Settings</button>
-        <button className={styles.cancelBtn} onClick={handleReset}>Reset to Defaults</button>
-        {status && <span className={styles.statusMsg}>{status}</span>}
-      </div>
+      <section className={styles.certSection}>
+        <div className={styles.certActions}>
+          <button className={styles.submitBtn} onClick={handleSave}>Save Settings</button>
+          <button className={styles.cancelBtn} onClick={handleReset}>Reset to Defaults</button>
+          {status && <span className={styles.statusMsg}>{status}</span>}
+        </div>
+      </section>
     </div>
   );
 }

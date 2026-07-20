@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 200;
+  z-index: 500;
   background: transparent;
   border-bottom: 1px solid transparent;
   transition: background var(--transition-normal), border-color var(--transition-normal), backdrop-filter var(--transition-normal);
@@ -188,7 +188,7 @@
 }
 
 /* ── Burger (mobile trigger) ──────────── */
-.burger { display: none; }
+.burger { display: none; position: relative; z-index: 400; }
 
 .burgerBtn {
   display: flex;
@@ -218,10 +218,10 @@
 /* ── Drawer (mobile slide-in) ─────────── */
 .drawer {
   position: fixed;
-  top: 0;
+  top: 64px;
   right: 0;
   width: min(340px, 85vw);
-  height: 100vh;
+  height: calc(100vh - 64px);
   z-index: 400;
   background: var(--glass-bg-heavy);
   -webkit-backdrop-filter: blur(20px) saturate(160%);

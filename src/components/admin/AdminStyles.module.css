@@ -462,7 +462,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 920px;
+  max-width: 960px;
 }
 
 .certSection {
@@ -491,8 +491,9 @@
   gap: 1.5rem;
 }
 
+/* Quiz manager: two columns on wide screens */
 @media (min-width: 900px) {
-  .certGrid {
+  .certGrid:has(.certLeftCol) {
     flex-direction: row;
     max-width: none;
   }
@@ -916,6 +917,15 @@
   .formGrid {
     grid-template-columns: 1fr;
   }
+  .certActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .certActions .submitBtn,
+  .certActions .cancelBtn {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 @media (max-width: 900px) {
@@ -927,4 +937,7 @@
 @media (max-width: 480px) {
   .settingItem { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
   .certSection, .analyticBlock, .infoCard, .historyBox { padding: 1rem; }
+  .imgUploadRow { flex-direction: column; }
+  .previewControls { flex-direction: column; }
+  .previewControls .smallBtn { width: 100%; text-align: center; }
 }

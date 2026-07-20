@@ -106,11 +106,13 @@ export default function AdminSettings() {
         </div>
       </section>
 
-      <div className={styles.certActions}>
-        <button className={styles.submitBtn} onClick={handleSaveAll}>Save All Settings</button>
-        <button className={styles.cancelBtn} onClick={handleReset}>Reset to Defaults</button>
-        {status && <span className={styles.statusMsg}>{status}</span>}
-      </div>
+      <section className={styles.certSection}>
+        <div className={styles.certActions}>
+          <button className={styles.submitBtn} onClick={handleSaveAll}>Save All Settings</button>
+          <button className={styles.cancelBtn} onClick={handleReset}>Reset to Defaults</button>
+          {status && <span className={styles.statusMsg}>{status}</span>}
+        </div>
+      </section>
     </div>
   );
 }
