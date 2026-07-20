@@ -234,7 +234,7 @@ const baseQuizQuestions: QuizQuestion[] = [
     ],
     correctAnswer: 'Approach B — centralized processing makes model updates easy and leverages far more compute for better accuracy, with lower per-node hardware cost',
     explanation: 'At 10,000 units, the $125/unit savings of Approach B = $1.25M in hardware alone. Centralized models are trivial to update (no OTA per node), can use more powerful models, and enable fleet-wide retraining when new fault patterns emerge. The trade-off is network reliability — mitigated by buffering data locally and batch-sending. Hybrid approach: local lightweight pre-filtering on ESP32, send anomalies to central server for detailed analysis.',
-    relatedLesson: 'engineering-decisions',
+    relatedLesson: 'electronics-applications',
     tags: ['engineering-decisions', 'system-architecture', 'edge-vs-cloud', 'scalability', 'iot']
   },
   {
@@ -268,7 +268,7 @@ const baseQuizQuestions: QuizQuestion[] = [
     ],
     correctAnswer: 'Deploy a TinyML model on each sensor to extract features and transmit only anomaly scores and fault classifications (bytes/day instead of GB/day)',
     explanation: 'Raw 8kHz streaming at scale is expensive and unnecessary. Edge processing extracts relevant features (FFT peaks, RMS, crest factor, or ML-based anomaly scores) and transmits only results — typically 100-500 bytes/day instead of 1.1GB/day per sensor. This cuts data costs ~99.9% while maintaining detection capability. A $5 MCU with edge ML capability pays for itself in data savings within weeks.',
-    relatedLesson: 'real-world-situations',
+    relatedLesson: 'machine-learning',
     tags: ['real-world-situations', 'edge-computing', 'tinyml', 'iot', 'predictive-maintenance', 'cost-optimization']
   },
   {
@@ -384,7 +384,7 @@ const baseQuizQuestions: QuizQuestion[] = [
     ],
     correctAnswer: 'A single end-to-end model is a black box that makes it impossible to attribute yield loss to specific process steps. Better: decompose the problem into per-step models or use interpretable feature engineering with domain knowledge about which physical parameters affect yield at each step',
     explanation: 'In semiconductor manufacturing, you need to know which process step caused a yield drop — a single monolithic model masks this. Better approaches: (1) per-step statistical process control models using domain-specific features, (2) hierarchical models that predict yield contribution of each step, (3) interpretable methods like gradient-boosted trees with SHAP values for feature importance. The semiconductor industry values interpretability and root-cause analysis over raw predictive power.',
-    relatedLesson: 'industry-oriented',
+    relatedLesson: 'deep-learning',
     tags: ['industry-oriented', 'semiconductor', 'manufacturing', 'interpretability', 'yield-prediction']
   },
   {

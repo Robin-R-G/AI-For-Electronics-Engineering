@@ -54,7 +54,6 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={handleClick}
       {...props}
     >
-      <span className={styles.shimmer} aria-hidden />
       {loading && <span className={styles.spinner} aria-hidden />}
       {icon && !loading && <span className={styles.icon}>{icon}</span>}
       <span className={styles.label}>{children}</span>

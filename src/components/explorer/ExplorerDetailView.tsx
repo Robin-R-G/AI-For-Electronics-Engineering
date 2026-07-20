@@ -57,58 +57,52 @@ export const ExplorerDetailView: React.FC<ExplorerDetailViewProps> = ({ category
               {activeTab === 'theory' && (
                 <div className={styles.panel}>
                   <h3>Theory & Architecture</h3>
-                  <p className={styles.prose}>{category.theory || 'Content coming soon.'}</p>
+                  <p className={styles.prose}>{category.theory}</p>
                 </div>
               )}
 
               {activeTab === 'applications' && (
                 <div className={styles.panel}>
                   <h3>Core Applications</h3>
-                  {category.applications.length > 0 ? (
-                    <ul className={styles.appList}>
-                      {category.applications.map((app, i) => (
-                        <li key={i}><span className={styles.bullet}>⚡</span> {app}</li>
-                      ))}
-                    </ul>
-                  ) : <p className={styles.prose}>Content coming soon.</p>}
+                  <ul className={styles.appList}>
+                    {category.applications.map((app, i) => (
+                      <li key={i}><span className={styles.bullet}>⚡</span> {app}</li>
+                    ))}
+                  </ul>
                 </div>
               )}
 
               {activeTab === 'ai' && (
                 <div className={styles.panel}>
                   <h3>AI Integration</h3>
-                  <p className={styles.prose}>{category.aiUsage || 'Content coming soon.'}</p>
+                  <p className={styles.prose}>{category.aiUsage}</p>
                 </div>
               )}
 
               {activeTab === 'prompts' && (
                 <div className={styles.panel}>
                   <h3>Example Prompts</h3>
-                  {category.promptExamples.length > 0 ? (
-                    <div className={styles.promptsGrid}>
-                      {category.promptExamples.map((prompt, i) => (
-                        <div key={i} className={styles.promptBox}>
-                          <code>{prompt}</code>
-                        </div>
-                      ))}
-                    </div>
-                  ) : <p className={styles.prose}>Content coming soon.</p>}
+                  <div className={styles.promptsGrid}>
+                    {category.promptExamples.map((prompt, i) => (
+                      <div key={i} className={styles.promptBox}>
+                        <code>{prompt}</code>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
               {activeTab === 'projects' && (
                 <div className={styles.panel}>
                   <h3>Real-World Projects</h3>
-                  {category.realProjects.length > 0 ? (
-                    <div className={styles.projectsGrid}>
-                      {category.realProjects.map((project, i) => (
-                        <div key={i} className={styles.projectCard}>
-                          <h4>{project.title}</h4>
-                          <p>{project.description}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : <p className={styles.prose}>Content coming soon.</p>}
+                  <div className={styles.projectsGrid}>
+                    {category.realProjects.map((project, i) => (
+                      <div key={i} className={styles.projectCard}>
+                        <h4>{project.title}</h4>
+                        <p>{project.description}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -116,39 +110,41 @@ export const ExplorerDetailView: React.FC<ExplorerDetailViewProps> = ({ category
                 <div className={styles.panel}>
                   <h3>Datasheets & Repositories</h3>
                   
-                  <h4 className={styles.subHeading}>Datasheets</h4>
-                  {category.datasheets.length > 0 ? (
-                    <ul className={styles.resourceList}>
-                      {category.datasheets.map((ds, i) => (
-                        <li key={i}><a href={ds.url} target="_blank" rel="noreferrer">📄 {ds.name}</a></li>
-                      ))}
-                    </ul>
-                  ) : <p className={styles.prose}>None listed.</p>}
+                  {category.datasheets.length > 0 && (
+                    <>
+                      <h4 className={styles.subHeading}>Datasheets</h4>
+                      <ul className={styles.resourceList}>
+                        {category.datasheets.map((ds, i) => (
+                          <li key={i}><a href={ds.url} target="_blank" rel="noreferrer">📄 {ds.name}</a></li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
 
-                  <h4 className={styles.subHeading}>GitHub Repositories</h4>
-                  {category.githubRepos.length > 0 ? (
-                    <ul className={styles.resourceList}>
-                      {category.githubRepos.map((repo, i) => (
-                        <li key={i}><a href={repo.url} target="_blank" rel="noreferrer">🐙 {repo.name}</a></li>
-                      ))}
-                    </ul>
-                  ) : <p className={styles.prose}>None listed.</p>}
+                  {category.githubRepos.length > 0 && (
+                    <>
+                      <h4 className={styles.subHeading}>GitHub Repositories</h4>
+                      <ul className={styles.resourceList}>
+                        {category.githubRepos.map((repo, i) => (
+                          <li key={i}><a href={repo.url} target="_blank" rel="noreferrer">🐙 {repo.name}</a></li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
                 </div>
               )}
 
               {activeTab === 'roadmap' && (
                 <div className={styles.panel}>
                   <h3>Learning Roadmap</h3>
-                  {category.roadmap.length > 0 ? (
-                    <div className={styles.roadmapSteps}>
-                      {category.roadmap.map((step, i) => (
-                        <div key={i} className={styles.step}>
-                          <div className={styles.stepNum}>{i + 1}</div>
-                          <div className={styles.stepText}>{step}</div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : <p className={styles.prose}>Content coming soon.</p>}
+                  <div className={styles.roadmapSteps}>
+                    {category.roadmap.map((step, i) => (
+                      <div key={i} className={styles.step}>
+                        <div className={styles.stepNum}>{i + 1}</div>
+                        <div className={styles.stepText}>{step}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 

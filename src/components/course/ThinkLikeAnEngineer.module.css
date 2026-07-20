@@ -1,7 +1,7 @@
 .container {
   background: var(--glass-bg);
   border: 1px solid var(--color-border);
-  border-left: 3px solid #f59e0b;
+  border-left: 3px solid var(--color-warning);
   border-radius: var(--radius-xl);
   padding: var(--space-6);
   margin: var(--space-8) 0;
@@ -14,8 +14,8 @@
 .badge {
   display: inline-block;
   padding: var(--space-1) var(--space-3);
-  background: var(--color-surface);
-  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--color-warning);
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -25,7 +25,7 @@
 
 .problemBox {
   padding: var(--space-5);
-  background: var(--color-surface);
+  background: rgba(245, 158, 11, 0.05);
   border-radius: var(--radius-lg);
   margin-bottom: var(--space-5);
 }
@@ -33,7 +33,7 @@
 .problemTitle {
   font-size: 1rem;
   font-weight: 700;
-  color: #f59e0b;
+  color: var(--color-warning);
   margin-bottom: var(--space-3);
 }
 
@@ -52,7 +52,7 @@
 
 .thinkBox {
   padding: var(--space-4);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.02);
   border-radius: var(--radius-md);
   border: 1px dashed var(--color-border);
   margin-bottom: var(--space-5);
@@ -78,7 +78,7 @@
 
 .hintToggle {
   padding: var(--space-2) var(--space-4);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
   color: var(--color-text-secondary);
@@ -117,7 +117,8 @@
 
 .revealBtn {
   padding: var(--space-3) var(--space-6);
-    border: 1px solid rgba(0, 229, 255, 0.3);
+  background: linear-gradient(135deg, rgba(0, 82, 255, 0.2), rgba(0, 229, 255, 0.2));
+  border: 1px solid rgba(0, 229, 255, 0.3);
   border-radius: var(--radius-full);
   color: var(--color-cyan);
   font-size: 0.85rem;
@@ -127,14 +128,15 @@
 }
 
 .revealBtn:hover {
-    transform: translateY(-1px);
+  background: linear-gradient(135deg, rgba(0, 82, 255, 0.3), rgba(0, 229, 255, 0.3));
+  transform: translateY(-1px);
   box-shadow: var(--shadow-glow-cyan);
 }
 
 .explanationBox {
   margin-top: var(--space-4);
   padding: var(--space-5);
-  background: var(--color-surface);
+  background: rgba(0, 229, 255, 0.03);
   border-radius: var(--radius-lg);
   border: 1px solid rgba(0, 229, 255, 0.15);
 }
@@ -168,7 +170,7 @@
 .promptText {
   flex: 1;
   padding: var(--space-3);
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   font-family: var(--font-mono);
@@ -181,7 +183,7 @@
 
 .copyBtn {
   padding: var(--space-2) var(--space-4);
-  background: var(--color-surface);
+  background: rgba(0, 229, 255, 0.1);
   border: 1px solid rgba(0, 229, 255, 0.3);
   border-radius: var(--radius-md);
   color: var(--color-cyan);
@@ -193,11 +195,27 @@
 }
 
 .copyBtn:hover {
-  background: var(--color-surface);
+  background: rgba(0, 229, 255, 0.2);
 }
 
 .copied {
-  background: var(--color-surface);
-  border-color: rgba(0, 255, 163, 0.3);
+  background: rgba(52, 211, 153, 0.15);
+  border-color: rgba(52, 211, 153, 0.3);
   color: var(--color-green);
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-4);
+    margin: var(--space-6) 0;
+  }
+  .problemBox {
+    padding: var(--space-4);
+  }
+  .promptBox {
+    flex-direction: column;
+  }
+  .copyBtn {
+    width: 100%;
+  }
 }

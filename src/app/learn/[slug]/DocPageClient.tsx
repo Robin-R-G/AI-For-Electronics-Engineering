@@ -1,17 +1,12 @@
 'use client';
 
 import React, { useEffect, use } from 'react';
-import { useIsClient } from '@/hooks/useIsClient';
 import { notFound } from 'next/navigation';
 import { docsSections } from '@/lib/docsConfig';
 import { useProgress } from '@/context/ProgressContext';
-import styles from '../docs.module.css';
-import DocNavigation from '@/components/ui/DocNavigation';
-import ChapterHeader from '@/components/course/ChapterHeader';
-import LessonResources from '@/components/course/LessonResources';
-import LessonQuiz from '@/components/course/LessonQuiz';
+import LessonTemplate from '@/components/course/LessonTemplate';
 import MarkdownView from '@/lib/markdown';
-import { getLessonOverride } from '@/lib/lessonContent';
+import { getLessonOverride, subscribeLessons } from '@/lib/lessonContent';
 
 import dynamic from 'next/dynamic';
 
@@ -49,7 +44,9 @@ export default function DocPageClient({ slugPromise }: { slugPromise: Promise<st
     if (section) {
       markAsRead(slug);
     }
-    setOverride(getLessonOverride(slug));
+    const load = () => setOverride(getLessonOverride(slug));
+    load();
+    return subscribeLessons(load);
   }, [slug, section, markAsRead]);
 
   if (!section) {
@@ -59,30 +56,21 @@ export default function DocPageClient({ slugPromise }: { slugPromise: Promise<st
   const Content = ContentComponents[slug];
 
   return (
-    <div>
-      <ChapterHeader
-        title={section.title}
-        readingTime={section.readingTime}
-        difficulty={section.difficulty}
-      />
-
-      <div className={styles.docContent}>
-        {override ? (
-          <MarkdownView markdown={override} />
-        ) : Content ? (
-          <Content />
-        ) : (
-          <p>
-            Welcome to the <strong>{section.title}</strong> module. {section.description}
-          </p>
-        )}
-      </div>
-
-      <LessonResources slug={slug} />
-
-      <LessonQuiz slug={slug} lessonTitle={section.title} />
-
-      <DocNavigation currentSlug={slug} />
-    </div>
+    <LessonTemplate
+      slug={slug}
+      title={section.title}
+      readingTime={section.readingTime}
+      difficulty={section.difficulty}
+    >
+      {override ? (
+        <MarkdownView markdown={override} />
+      ) : Content ? (
+        <Content />
+      ) : (
+        <p>
+          Welcome to the <strong>{section.title}</strong> module. {section.description}
+        </p>
+      )}
+    </LessonTemplate>
   );
 }

@@ -111,11 +111,11 @@
 }
 
 .copyBtn:hover {
-  background: #0044cc;
+  background: var(--color-brand);
 }
 
 .promptBox {
-  background: #0d1117;
+  background: var(--color-dark-slate);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.5rem;
   border-radius: 12px;
@@ -123,7 +123,7 @@
 }
 
 .promptBox code {
-  color: #c9d1d9;
+  color: var(--color-text-secondary);
   font-family: monospace;
   font-size: 1rem;
   line-height: 1.6;
@@ -146,7 +146,7 @@
   background: var(--color-surface);
   padding: 1rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 0, 80, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.1);
 }
 
 .splitSection {
@@ -178,16 +178,16 @@
 }
 
 .instructorNote h4 {
-  color: #ffd700;
+  color: var(--color-warning);
 }
 
 .studentActivity {
   background: var(--color-surface);
-  border-color: rgba(0, 255, 100, 0.2);
+  border-color: rgba(52, 211, 153, 0.2);
 }
 
 .studentActivity h4 {
-  color: #00ff64;
+  color: var(--color-success);
 }
 
 .downloadSection {
@@ -215,5 +215,29 @@
 @media (max-width: 768px) {
   .splitSection {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    gap: 2rem;
+    padding: 0 0.25rem 2rem;
+  }
+  .title {
+    font-size: 1.6rem;
+  }
+  .metaRow {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .promptHeader {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .copyBtn {
+    width: 100%;
+  }
+  .promptBox {
+    padding: 1.1rem;
   }
 }

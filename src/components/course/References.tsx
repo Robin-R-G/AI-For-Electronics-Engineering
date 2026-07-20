@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './References.module.css';
 
-interface Reference {
+export interface Reference {
   title: string;
   type: 'book' | 'documentation' | 'tutorial' | 'paper' | 'video' | 'tool';
   url?: string;

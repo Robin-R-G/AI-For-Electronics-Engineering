@@ -6,6 +6,7 @@ export interface PromptEntry {
   title: string;
   category: string;
   difficulty: PromptDifficulty;
+  estimatedTime: string;
   role: string;
   objective: string;
   background?: string;
@@ -39,6 +40,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'Non-Blocking Blink',
     category: 'Arduino',
     difficulty: 'Beginner',
+    estimatedTime: '5 min',
     role: 'Act as a Senior Embedded Systems Engineer teaching firmware state machines.',
     objective: 'Write an Arduino sketch to blink two LEDs at different frequencies without using the delay() function.',
     background: 'I am learning state machine concepts and want to understand how millis()-based timing works for non-blocking firmware.',
@@ -67,6 +69,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'FreeRTOS Task Allocation',
     category: 'ESP32',
     difficulty: 'Intermediate',
+    estimatedTime: '10 min',
     role: 'Act as a Senior Embedded Systems Engineer specializing in FreeRTOS on ESP32.',
     objective: 'Write an ESP-IDF C code snippet using FreeRTOS with two tasks: Task A reads a DHT22 sensor on core 0, and Task B sends that data via MQTT on core 1.',
     background: 'I am building a sensor gateway using ESP-IDF and need to understand task allocation, queue-based data passing, and dual-core utilization on the ESP32.',
@@ -95,6 +98,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'HAL Timer PWM',
     category: 'STM32',
     difficulty: 'Advanced',
+    estimatedTime: '15 min',
     role: 'Act as a Senior Firmware Engineer with 15 years of experience in motor control and STM32 HAL.',
     objective: 'Explain how to configure an advanced-control timer (TIM1) on an STM32F4 to generate a center-aligned PWM signal with dead-time insertion for a half-bridge motor driver.',
     background: 'I am designing a BLDC motor controller using an STM32F407 and need center-aligned PWM to minimize switching losses and dead-time to prevent shoot-through in the H-bridge.',
@@ -123,6 +127,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'KiCad BOM Script',
     category: 'PCB Design',
     difficulty: 'Advanced',
+    estimatedTime: '15 min',
     role: 'Act as a Professional PCB Design Engineer with expertise in KiCad automation.',
     objective: 'Write a Python script for KiCad 7 pcbnew that iterates through all footprints and generates a CSV Bill of Materials grouping identical components.',
     background: 'I need to automate BOM generation for a production run. The KiCad BOM export does not group identical parts by default, making procurement inefficient.',
@@ -147,6 +152,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'Bode Plot Generation',
     category: 'MATLAB',
     difficulty: 'Beginner',
+    estimatedTime: '5 min',
     role: 'Act as a MATLAB Application Engineer specializing in signal processing and control systems.',
     objective: 'Generate a MATLAB script to plot the Bode diagram of a second-order low-pass filter with a natural frequency of 1kHz and a damping ratio of 0.707.',
     background: 'I am learning analog filter design and need to visualize the frequency response of a standard second-order system before implementing it in hardware.',
@@ -171,6 +177,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'IC Component Alternatives',
     category: 'Research',
     difficulty: 'Intermediate',
+    estimatedTime: '8 min',
     role: 'Act as a Senior Hardware Design Engineer specializing in low-power IoT sensor design.',
     objective: 'Recommend 3 alternative ICs to the INA219 for current sensing in a battery-powered IoT device, with lower quiescent current and I2C communication.',
     background: 'I am designing a battery-powered IoT device that must last 5+ years on a coin cell. The INA219 works but its 1mA quiescent current is too high for my power budget.',
@@ -195,6 +202,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'Engineering Resume Tailoring',
     category: 'Resume',
     difficulty: 'Intermediate',
+    estimatedTime: '10 min',
     role: 'Act as a Senior Technical Recruiter at a robotics/automation company who reviews 200+ embedded systems resumes per week.',
     objective: 'Rewrite my "Experience" bullet points to highlight my C++ and RTOS skills using the STAR method.',
     background: 'I am applying for an Embedded Systems Engineer position at a robotics company. My current resume has generic descriptions that do not stand out.',
@@ -219,6 +227,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'Automated GitHub CI/CD',
     category: 'GitHub',
     difficulty: 'Advanced',
+    estimatedTime: '12 min',
     role: 'Act as a DevOps Engineer specializing in embedded systems CI/CD pipelines.',
     objective: 'Generate a GitHub Actions workflow that compiles an Arduino sketch on push to main and fails on compilation errors.',
     background: 'I want to ensure my firmware compiles cleanly before merging pull requests. Manual compilation is slow and error-prone.',
@@ -248,6 +257,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'Project Showcase Post',
     category: 'LinkedIn',
     difficulty: 'Beginner',
+    estimatedTime: '5 min',
     role: 'Act as a Technical Content Strategist who specializes in engineering career development.',
     objective: 'Write an engaging LinkedIn post to showcase my automated plant watering system project to other engineers.',
     background: 'I just finished building a plant watering system using an ESP32, soil moisture sensor, and water pump. I want to share it on LinkedIn to build my professional network.',
@@ -273,6 +283,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'Lab Report Introduction',
     category: 'Reports',
     difficulty: 'Beginner',
+    estimatedTime: '5 min',
     role: 'Act as a University Physics Professor who has graded thousands of lab reports.',
     objective: 'Write an introduction section for a university lab report about characterizing a BJT transistor.',
     background: 'I am writing a lab report for my Analog Electronics course. The experiment involves measuring the I-V characteristics of a 2N2222 BJT and plotting the output curves.',
@@ -297,6 +308,7 @@ export const promptLibraryData: PromptEntry[] = [
     title: 'Op-Amp Filter Analysis',
     category: 'Circuit Analysis',
     difficulty: 'Intermediate',
+    estimatedTime: '10 min',
     role: 'Act as an Analog Circuit Design Engineer with deep expertise in active filter design.',
     objective: 'Analyze a Sallen-Key low-pass filter circuit using an op-amp. Derive the transfer function H(s) in terms of R1, R2, C1, and C2.',
     background: 'I am designing a 2nd-order Sallen-Key low-pass filter for anti-aliasing before ADC sampling. I need to understand the transfer function to select component values for a 1kHz cutoff.',

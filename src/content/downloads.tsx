@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useMemo, useSyncExternalStore } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { downloadsData, downloadCategories, DownloadItem } from '@/data/downloadsData';
 import { StoredFile, getFiles, subscribeStorage, fileTypeLabel, formatBytes } from '@/lib/storage';
 import { docsSections } from '@/lib/docsConfig';
@@ -7,20 +7,32 @@ import { getSettings } from '@/lib/settings';
 import { renderCertificate } from '@/lib/certificate';
 import styles from './downloads.module.css';
 
-const getCategoryColor = (category: DownloadItem['category']) => {
+const getCategoryColor = (category: string) => {
   switch (category) {
     case 'Document': return styles.catDocument;
     case 'Code': return styles.catCode;
     case 'Template': return styles.catTemplate;
     case 'Presentation': return styles.catPresentation;
+    default: return '';
   }
 };
 
-const getTypeColor = (type: string) => {
-  if (type.includes('PDF')) return styles.typePdf;
-  if (type.includes('ZIP')) return styles.typeZip;
-  if (type.includes('PPTX')) return styles.typePptx;
-  return styles.typePdf;
+const getFileIcon = (item: DownloadItem) => {
+  if (item.id === 'source-code') return '💻';
+  if (item.id === 'certificate-template') return '🎖️';
+  if (item.fileType.includes('PPTX')) return '📊';
+  if (item.fileType.includes('ZIP')) return '📦';
+  return '📄';
+};
+
+const getStoredFileIcon = (r: StoredFile) => {
+  const ext = r.fileName.split('.').pop()?.toLowerCase();
+  if (ext === 'pdf') return '📄';
+  if (ext === 'zip') return '📦';
+  if (ext === 'pptx' || ext === 'ppt') return '📊';
+  if (ext === 'doc' || ext === 'docx') return '📝';
+  if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '')) return '🖼️';
+  return '📄';
 };
 
 function wrapText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number): number {
@@ -45,21 +57,16 @@ function generateWorkshopNotesImage(): HTMLCanvasElement {
   const W = 1200, H = 1600;
   const c = document.createElement('canvas'); c.width = W; c.height = H;
   const ctx = c.getContext('2d')!;
-  // background
   ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
-  // accent bar
   const grad = ctx.createLinearGradient(0, 0, W, 0);
   grad.addColorStop(0, '#00e5ff'); grad.addColorStop(1, '#0055ff');
   ctx.fillStyle = grad; ctx.fillRect(0, 0, W, 8);
-  // header
   ctx.fillStyle = '#00e5ff'; ctx.font = 'bold 42px sans-serif';
   ctx.fillText('AI for Electronics Engineers Workshop', 60, 80);
   ctx.fillStyle = '#8b949e'; ctx.font = '22px sans-serif';
   ctx.fillText('Workshop Notes  |  v2.1  |  July 18, 2026', 60, 115);
-  // divider
   ctx.strokeStyle = '#21262d'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(60, 140); ctx.lineTo(W - 60, 140); ctx.stroke();
-  // sections
   const sections = [
     { num: '01', title: 'Introduction to AI for Electronics Engineers', desc: 'Overview of AI applications in hardware design, embedded systems, and manufacturing.' },
     { num: '02', title: 'AI Fundamentals', desc: 'Cloud vs Edge computing, model quantization, inference optimization for resource-constrained devices.' },
@@ -75,20 +82,16 @@ function generateWorkshopNotesImage(): HTMLCanvasElement {
   ];
   let y = 190;
   for (const s of sections) {
-    // number badge
     ctx.fillStyle = 'rgba(0,229,255,0.12)';
     ctx.beginPath(); ctx.roundRect(60, y - 5, 55, 35, 6); ctx.fill();
     ctx.fillStyle = '#00e5ff'; ctx.font = 'bold 18px monospace';
     ctx.fillText(s.num, 72, y + 20);
-    // title
     ctx.fillStyle = '#e6edf3'; ctx.font = 'bold 24px sans-serif';
     ctx.fillText(s.title, 130, y + 20);
-    // desc
     ctx.fillStyle = '#8b949e'; ctx.font = '18px sans-serif';
     y = wrapText(ctx, s.desc, 130, y + 48, W - 200, 26) + 20;
     y += 20;
   }
-  // footer
   ctx.fillStyle = '#21262d'; ctx.fillRect(0, H - 70, W, 70);
   ctx.fillStyle = '#8b949e'; ctx.font = '16px sans-serif';
   ctx.fillText('Designed by Robin R G  |  AI for Electronics Engineers Workshop', 60, H - 30);
@@ -232,7 +235,7 @@ function generateSourceCodeImage(): HTMLCanvasElement {
     { name: 'esp32_deep_sleep.ino', desc: 'ESP32 deep sleep with wake-on-motion', lang: 'C++' },
     { name: 'stm32_pid_controller.c', desc: 'STM32 PID motor controller implementation', lang: 'C' },
     { name: 'i2c_scanner.py', desc: 'I2C bus scanner and device detector', lang: 'Python' },
-    { name: 'tinym Gesture_model.tflite', desc: 'Pre-trained gesture recognition model', lang: 'TFLite' },
+    { name: 'tinyml_gesture_model.tflite', desc: 'Pre-trained gesture recognition model', lang: 'TFLite' },
   ];
   let y = 180;
   for (const f of files) {
@@ -357,8 +360,11 @@ const DownloadsContent = () => {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [certName, setCertName] = useState('');
   const [showCertModal, setShowCertModal] = useState(false);
-  const [liveResources, setLiveResources] = React.useState<StoredFile[]>([]);
-  React.useEffect(() => {
+  const [previewItem, setPreviewItem] = useState<DisplayItem | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [liveResources, setLiveResources] = useState<StoredFile[]>([]);
+
+  useEffect(() => {
     setLiveResources(getFiles());
     return subscribeStorage(() => setLiveResources(getFiles()));
   }, []);
@@ -424,6 +430,45 @@ const DownloadsContent = () => {
     }
   };
 
+  const canPreview = (item: DisplayItem) => {
+    if (item.kind === 'seed') return item.item.id === 'certificate-template' || !!imageGenerators[item.item.id];
+    if (item.kind === 'resource') {
+      const ext = item.item.fileName.split('.').pop()?.toLowerCase();
+      return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf'].includes(ext || '') || !!item.item.thumbnail;
+    }
+    return false;
+  };
+
+  const handlePreview = useCallback(async (item: DisplayItem) => {
+    setPreviewItem(item);
+
+    if (item.kind === 'seed') {
+      if (item.item.id === 'certificate-template') {
+        setPreviewUrl(null);
+        const canvas = document.createElement('canvas');
+        await renderCertificate(canvas, getSettings(), 'Preview Name');
+        setPreviewUrl(canvas.toDataURL('image/png'));
+      } else if (imageGenerators[item.item.id]) {
+        const canvas = imageGenerators[item.item.id]();
+        setPreviewUrl(canvas.toDataURL('image/png'));
+      }
+    } else if (item.kind === 'resource') {
+      const ext = item.item.fileName.split('.').pop()?.toLowerCase();
+      if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '')) {
+        setPreviewUrl(item.item.dataUrl);
+      } else if (item.item.thumbnail) {
+        setPreviewUrl(item.item.thumbnail);
+      } else {
+        setPreviewUrl(null);
+      }
+    }
+  }, []);
+
+  const closePreview = useCallback(() => {
+    setPreviewItem(null);
+    setPreviewUrl(null);
+  }, []);
+
   return (
     <div className={styles.container}>
       <p className={styles.intro}>
@@ -445,115 +490,92 @@ const DownloadsContent = () => {
 
       <div className={styles.grid}>
         {filtered.map((entry, i) => {
-          if (entry.kind === 'seed') {
-            const item = entry.item;
-            return (
-              <div
-                key={item.id}
-                className={styles.card}
-                style={{ animationDelay: `${i * 0.07}s` }}
-              >
-                <div className={styles.cardHeader}>
-                  <span className={styles.itemIcon}>{item.icon}</span>
-                  <span className={`${styles.categoryBadge} ${getCategoryColor(item.category)}`}>
-                    {item.category}
-                  </span>
-                </div>
+          const isSeed = entry.kind === 'seed';
+          const item = isSeed ? entry.item : null;
+          const resource = !isSeed ? entry.item : null;
+          const title = item?.title ?? resource?.originalName ?? '';
+          const desc = item?.description ?? resource?.description ?? '';
+          const version = item?.version ?? resource?.version ?? '';
+          const fileSize = item?.fileSize ?? (resource ? formatBytes(resource.size) : '');
+          const updatedAt = item?.updatedAt ?? (resource ? new Date(resource.uploadedAt).toLocaleDateString() : '');
+          const category = item?.category ?? resource?.category ?? '';
+          const fileType = item?.fileType ?? (resource ? fileTypeLabel(resource) : '');
+          const icon = isSeed ? getFileIcon(item!) : getStoredFileIcon(resource!);
+          const id = isSeed ? item!.id : resource!.id;
 
-                <div className={styles.cardBody}>
-                  <h3 className={styles.itemTitle}>{item.title}</h3>
-                  <p className={styles.itemDesc}>{item.description}</p>
-                </div>
-
-                <div className={styles.cardMeta}>
-                  <div className={styles.metaRow}>
-                    <span className={`${styles.fileTypeBadge} ${getTypeColor(item.fileType)}`}>
-                      {item.fileType}
-                    </span>
-                    <span className={styles.metaItem}>📦 {item.fileSize}</span>
-                  </div>
-                  <div className={styles.metaRow}>
-                    <span className={styles.metaItem}>🔖 {item.version}</span>
-                    <span className={styles.metaItem}>🗓 {item.updatedAt}</span>
-                  </div>
-                </div>
-
-                <button
-                  className={`${styles.downloadBtn} ${downloadingId === item.id ? styles.downloading : ''}`}
-                  onClick={() => handleDownload(item)}
-                  disabled={downloadingId === item.id}
-                >
-                  {downloadingId === item.id ? (
-                    <>
-                      <span className={styles.spinner}></span>
-                      Generating…
-                    </>
-                  ) : (
-                    <>⬇ Download {item.fileType.split(' ')[0]}</>
-                  )}
-                </button>
-              </div>
-            );
-          }
-
-          const r = entry.item;
           return (
             <div
-              key={r.id}
+              key={id}
               className={styles.card}
               style={{ animationDelay: `${i * 0.07}s` }}
             >
-              {r.thumbnail ? (
+              {!isSeed && resource!.thumbnail ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={r.thumbnail} alt={r.originalName} className={styles.thumbImg} />
+                <img src={resource!.thumbnail} alt={title} className={styles.thumbImg} />
               ) : (
                 <div className={styles.cardHeader}>
-                  <span className={styles.itemIcon}>📄</span>
-                  <span className={`${styles.categoryBadge} ${getCategoryColor(r.category as DownloadItem['category'])}`}>
-                    {r.category}
+                  <div className={styles.iconWrap}>
+                    <span className={styles.itemIcon}>{icon}</span>
+                  </div>
+                  <span className={`${styles.categoryBadge} ${getCategoryColor(category)}`}>
+                    {category}
                   </span>
                 </div>
               )}
 
               <div className={styles.cardBody}>
-                <h3 className={styles.itemTitle}>{r.originalName}</h3>
-                <p className={styles.itemDesc}>{r.description}</p>
-                {r.tags.length > 0 && (
+                <h3 className={styles.itemTitle}>{title}</h3>
+                <p className={styles.itemDesc}>{desc}</p>
+                {!isSeed && resource!.tags && resource!.tags.length > 0 && (
                   <div className={styles.tagRow}>
-                    {r.tags.map(t => <span key={t} className={styles.tag}>#{t}</span>)}
+                    {resource!.tags.map(t => <span key={t} className={styles.tag}>#{t}</span>)}
                   </div>
                 )}
-                {r.lessonSlug && (
+                {!isSeed && resource!.lessonSlug && (
                   <a
                     className={styles.lessonLink}
-                    href={`/AI-For-Electronics-Engineering/learn/${r.lessonSlug}`}
+                    href={`/learn/${resource!.lessonSlug}`}
                   >
-                    📎 {lessonTitle(r.lessonSlug)}
+                    📎 {lessonTitle(resource!.lessonSlug)}
                   </a>
                 )}
               </div>
 
               <div className={styles.cardMeta}>
                 <div className={styles.metaRow}>
-                  <span className={`${styles.fileTypeBadge} ${getTypeColor(fileTypeLabel(r))}`}>
-                    {fileTypeLabel(r)}
-                  </span>
-                  <span className={styles.metaItem}>📦 {formatBytes(r.size)}</span>
+                  <span className={styles.fileTypeBadge}>{fileType}</span>
+                  <span className={styles.metaItem}>{fileSize}</span>
                 </div>
                 <div className={styles.metaRow}>
-                  <span className={styles.metaItem}>🔖 {r.version}</span>
-                  <span className={styles.metaItem}>
-                    🗓 {new Date(r.uploadedAt).toLocaleDateString()}
-                  </span>
+                  <span className={styles.metaItem}>{version}</span>
+                  <span className={styles.metaItem}>{updatedAt}</span>
                 </div>
               </div>
 
-              <button
-                className={styles.downloadBtn}
-                onClick={() => downloadResource(r)}
-              >
-                ⬇ Download {fileTypeLabel(r)}
-              </button>
+              <div className={styles.cardActions}>
+                <button
+                  className={`${styles.downloadBtn} ${downloadingId === id ? styles.downloading : ''}`}
+                  onClick={() => isSeed ? handleDownload(item!) : downloadResource(resource!)}
+                  disabled={downloadingId === id}
+                >
+                  {downloadingId === id ? (
+                    <>
+                      <span className={styles.spinner}></span>
+                      Generating…
+                    </>
+                  ) : (
+                    <>⬇ Download {fileType.split(' ')[0]}</>
+                  )}
+                </button>
+                {canPreview(entry) && (
+                  <button
+                    className={styles.previewBtn}
+                    onClick={() => handlePreview(entry)}
+                  >
+                    👁 Preview
+                  </button>
+                )}
+              </div>
             </div>
           );
         })}
@@ -576,6 +598,42 @@ const DownloadsContent = () => {
             <div className={styles.modalActions}>
               <button className={styles.modalCancel} onClick={() => setShowCertModal(false)}>Cancel</button>
               <button className={styles.modalSubmit} onClick={handleCertSubmit}>Download Certificate</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {previewItem && (
+        <div className={styles.previewOverlay} onClick={closePreview}>
+          <div className={styles.previewModal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.previewHeader}>
+              <h3 className={styles.previewTitle}>
+                {previewItem.kind === 'seed' ? previewItem.item.title : previewItem.item.originalName}
+              </h3>
+              <button className={styles.previewClose} onClick={closePreview}>✕</button>
+            </div>
+            <div className={styles.previewBody}>
+              {previewUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={previewUrl} alt="Preview" className={styles.previewImage} />
+              ) : (
+                <div className={styles.previewFallback}>
+                  <span className={styles.previewFallbackIcon}>📄</span>
+                  <p>Preview not available for this file type.</p>
+                </div>
+              )}
+            </div>
+            <div className={styles.previewFooter}>
+              <button
+                className={styles.previewDownloadBtn}
+                onClick={() => {
+                  if (previewItem.kind === 'seed') handleDownload(previewItem.item);
+                  else downloadResource(previewItem.item);
+                  closePreview();
+                }}
+              >
+                ⬇ Download
+              </button>
             </div>
           </div>
         </div>

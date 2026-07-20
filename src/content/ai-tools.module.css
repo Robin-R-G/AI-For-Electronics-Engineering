@@ -18,7 +18,7 @@
 
 .toggleGroup {
   display: flex;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   padding: 4px;
 }
@@ -40,7 +40,7 @@
 }
 
 .toggleBtn.active {
-  background: var(--color-surface);
+  background: rgba(0, 229, 255, 0.15);
   color: var(--color-cyan);
 }
 
@@ -53,5 +53,27 @@
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .toggleGroup {
+    width: 100%;
+    justify-content: center;
+  }
+  .intro {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1600px;
+    margin-inline: auto;
   }
 }

@@ -4,7 +4,8 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(12px);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -14,7 +15,7 @@
 }
 
 .modal {
-  background: var(--color-surface);
+  background: rgba(11, 15, 25, 0.95);
   width: 100%;
   max-width: 1200px;
   height: 90vh;
@@ -30,7 +31,7 @@
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   color: white;
   width: 40px;
@@ -46,7 +47,7 @@
 }
 
 .closeBtn:hover {
-  background: var(--color-surface);
+  background: rgba(248, 113, 113, 0.8);
   transform: scale(1.1);
 }
 
@@ -58,7 +59,7 @@
 
 .sidebar {
   width: 280px;
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.3);
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
@@ -107,12 +108,12 @@
 }
 
 .navBtn:hover {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--color-white);
 }
 
 .navBtn.active {
-  background: var(--color-surface);
+  background: rgba(0, 229, 255, 0.1);
   border-color: rgba(0, 229, 255, 0.3);
   color: var(--color-cyan);
 }
@@ -162,7 +163,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.02);
   padding: 1rem;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -179,7 +180,7 @@
 }
 
 .promptBox {
-  background: #0d1117;
+  background: var(--color-dark-slate);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.5rem;
   border-radius: 12px;
@@ -187,7 +188,7 @@
 }
 
 .promptBox code {
-  color: #c9d1d9;
+  color: var(--color-text-secondary);
   font-family: monospace;
   font-size: 1rem;
   line-height: 1.5;
@@ -200,7 +201,8 @@
 }
 
 .projectCard {
-    border: 1px solid rgba(0, 82, 255, 0.3);
+  background: linear-gradient(135deg, rgba(11, 15, 25, 0.8), rgba(0, 82, 255, 0.1));
+  border: 1px solid rgba(0, 82, 255, 0.3);
   padding: 2rem;
   border-radius: 16px;
 }
@@ -240,12 +242,12 @@
   gap: 0.5rem;
   padding: 0.75rem;
   border-radius: 8px;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.02);
   transition: all 0.2s;
 }
 
 .resourceList a:hover {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .roadmapSteps {
@@ -262,7 +264,7 @@
   bottom: 0;
   left: 20px;
   width: 2px;
-  background: var(--color-surface);
+  background: rgba(0, 229, 255, 0.3);
 }
 
 .step {
@@ -289,7 +291,7 @@
 .stepText {
   color: var(--color-white);
   font-size: 1.1rem;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.03);
   padding: 1rem 1.5rem;
   border-radius: 12px;
   flex: 1;
@@ -314,4 +316,28 @@
   .header { display: none; }
   .scrollContainer { padding: 2rem 1.5rem; }
   .projectsGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .scrollContainer {
+    padding: 1.5rem 1.25rem;
+  }
+  .panel h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .prose {
+    font-size: 1rem;
+  }
+  .promptBox,
+  .projectCard {
+    padding: 1.25rem;
+  }
+  .step {
+    gap: 1rem;
+  }
+  .stepText {
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+  }
 }

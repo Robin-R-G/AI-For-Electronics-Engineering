@@ -14,7 +14,7 @@
 .badge {
   display: inline-block;
   padding: var(--space-1) var(--space-3);
-  background: var(--color-surface);
+  background: rgba(124, 58, 237, 0.15);
   color: var(--color-purple);
   font-size: 0.7rem;
   font-weight: 700;
@@ -30,7 +30,7 @@
 }
 
 .promptBox {
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -42,7 +42,7 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--space-3) var(--space-4);
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.03);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -56,7 +56,7 @@
 
 .copyBtn {
   padding: var(--space-1) var(--space-3);
-  background: var(--color-surface);
+  background: rgba(0, 229, 255, 0.1);
   border: 1px solid rgba(0, 229, 255, 0.3);
   border-radius: var(--radius-full);
   color: var(--color-cyan);
@@ -67,12 +67,12 @@
 }
 
 .copyBtn:hover {
-  background: var(--color-surface);
+  background: rgba(0, 229, 255, 0.2);
 }
 
 .copied {
-  background: var(--color-surface);
-  border-color: rgba(0, 255, 163, 0.3);
+  background: rgba(52, 211, 153, 0.15);
+  border-color: rgba(52, 211, 153, 0.3);
   color: var(--color-green);
 }
 
@@ -144,4 +144,21 @@
   height: 6px;
   border-radius: 50%;
   background: var(--color-purple);
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-4);
+    margin: var(--space-5) 0;
+  }
+  .title {
+    font-size: 1rem;
+  }
+  .promptHeader {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .copyBtn {
+    width: 100%;
+  }
 }

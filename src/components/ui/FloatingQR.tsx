@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { QRCodeSVG, QRCodeCanvas } from 'qrcode.react';
 import styles from './FloatingQR.module.css';
 
@@ -8,8 +8,11 @@ export const FloatingQR = () => {
   const [copied, setCopied] = useState(false);
   const [shared, setShared] = useState(false);
   const qrContainerRef = useRef<HTMLDivElement | null>(null);
+  const [workshopUrl, setWorkshopUrl] = useState('');
 
-  const workshopUrl = window.location.origin + '/AI-For-Electronics-Engineering/';
+  useEffect(() => {
+    setWorkshopUrl(window.location.href);
+  }, []);
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard.writeText(workshopUrl);

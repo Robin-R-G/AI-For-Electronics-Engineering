@@ -4,32 +4,40 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(16px);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 1rem;
   animation: fadeIn 0.3s ease-out;
 }
 
 .modal {
-  background: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
+  background: rgba(11, 15, 25, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
   width: 100%;
-  max-width: 900px;
-  padding: 3rem;
+  max-width: 960px;
+  max-height: 95vh;
+  padding: 2rem;
   position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .closeBtn {
   position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  background: var(--color-surface);
-  border: none;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: white;
   width: 36px;
   height: 36px;
@@ -40,19 +48,22 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
+  z-index: 10;
 }
 
 .closeBtn:hover {
-  background: var(--color-surface);
+  background: rgba(248, 113, 113, 0.7);
+  border-color: rgba(248, 113, 113, 0.5);
 }
 
-/* Setup View */
+/* ── Setup View ──────────────────────────────────────────────── */
 .setupView {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
+  padding: 2rem 0;
 }
 
 .setupView h2 {
@@ -63,18 +74,19 @@
 
 .setupView p {
   color: var(--color-text-secondary);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   margin: 0;
+  max-width: 420px;
 }
 
 .nameInput {
-  background: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: white;
-  padding: 1rem 1.5rem;
+  padding: 0.9rem 1.4rem;
   border-radius: 12px;
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
   font-size: 1.1rem;
   text-align: center;
   transition: border-color 0.2s;
@@ -83,74 +95,151 @@
 .nameInput:focus {
   outline: none;
   border-color: var(--color-cyan);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
 }
 
 .generateBtn {
   background: var(--color-cyan);
   color: var(--color-dark-slate);
   border: none;
-  padding: 1rem 2.5rem;
+  padding: 0.9rem 2.5rem;
   border-radius: 12px;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .generateBtn:hover:not(:disabled) {
-  background: #00b4cc;
+  background: var(--color-cyan);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 211, 238, 0.25);
 }
 
 .generateBtn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-/* Certificate Layout */
+/* ── Certificate View ────────────────────────────────────────── */
 .certificateView {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
-.certificate {
-  background: #111625;
-  color: #c9d1d9;
+/* ── Zoom Bar ────────────────────────────────────────────────── */
+.zoomBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.35rem 0.6rem;
+  flex-shrink: 0;
+}
+
+.zoomBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--color-text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.zoomBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.zoomBtn:last-child {
+  width: auto;
+  padding: 0 0.6rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+.zoomLevel {
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  min-width: 42px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Preview Container ───────────────────────────────────────── */
+.previewContainer {
+  flex: 1;
+  min-height: 0;
   width: 100%;
-  aspect-ratio: 1.414 / 1; /* Standard A4 landscape ratio */
+  overflow: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0.5rem 0;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* ── Certificate ─────────────────────────────────────────────── */
+.certificate {
+  background: var(--color-surface-2);
+  color: var(--color-text-secondary);
+  width: 100%;
+  max-width: 820px;
+  aspect-ratio: 1.414 / 1;
   position: relative;
-  padding: 2.5rem;
-  box-sizing: border-box;
+  flex-shrink: 0;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
 }
 
 .borderOuter {
-  border: 4px solid var(--color-cyan);
+  border: 3px solid var(--color-cyan);
   height: 100%;
-  padding: 6px;
+  padding: 5px;
+  border-radius: 3px;
 }
 
 .borderInner {
-  border: 2px solid rgba(0, 229, 255, 0.3);
+  border: 1.5px solid rgba(0, 229, 255, 0.25);
   height: 100%;
   position: relative;
-  padding: 3rem;
+  padding: 2rem 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  overflow: hidden;
 }
 
 .watermark {
   position: absolute;
-  font-size: 8rem;
+  font-size: 7rem;
   font-weight: 900;
   color: rgba(255, 255, 255, 0.02);
   z-index: 1;
   pointer-events: none;
   letter-spacing: 0.1em;
+  user-select: none;
 }
 
 .certHeader {
@@ -158,62 +247,67 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
 .badgeIcon {
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 .certHeader h3 {
   color: var(--color-cyan);
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   letter-spacing: 0.2em;
 }
 
 .workshopTitle {
   z-index: 2;
-  color: var(--color-text-tertiary);
-  font-size: 0.85rem;
-  margin: 0.25rem 0 0 0;
-  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  margin: 0.15rem 0 0 0;
+  letter-spacing: 0.04em;
 }
 
 .subText {
   z-index: 2;
   font-style: italic;
   color: var(--color-text-secondary);
-  margin: 1.5rem 0 0.5rem;
-  font-size: 1rem;
+  margin: 1rem 0 0.35rem;
+  font-size: 0.9rem;
 }
 
 .recipientName {
   z-index: 2;
   color: var(--color-white);
-  font-size: 2.75rem;
-  margin: 0 0 1rem 0;
+  font-size: 2.25rem;
+  margin: 0 0 0.75rem 0;
   font-family: 'Times New Roman', Times, serif;
+  line-height: 1.2;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.dividerLine {
+  z-index: 2;
+  width: 55%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
+  margin: 0 0 0.75rem 0;
 }
 
 .certBody {
   z-index: 2;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  max-width: 600px;
-  margin: 0 0 2.5rem 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  max-width: 540px;
+  margin: 0 0 1.5rem 0;
   color: var(--color-text-secondary);
 }
 
 .certBody strong {
   color: var(--color-cyan);
-}
-
-.dividerLine {
-  z-index: 2;
-  width: 60%;
-  height: 1px;
-    margin: 0 0 1rem 0;
 }
 
 .detailsRow {
@@ -228,45 +322,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 0.5rem;
-  min-width: 150px;
+  gap: 0.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.4rem;
+  min-width: 120px;
 }
 
 .detailTitle {
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   letter-spacing: 0.1em;
   color: var(--color-text-secondary);
 }
 
 .detailValue {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--color-white);
   font-weight: 500;
-}
-
-.stampBox {
-  position: absolute;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 2;
-}
-
-.stamp {
-  border: 3px double var(--color-cyan);
-  color: var(--color-cyan);
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.65rem;
-  font-weight: bold;
-  transform: rotate(-15deg);
-  opacity: 0.7;
 }
 
 .bottomRow {
@@ -282,72 +353,125 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.2rem;
 }
 
 .qrLabel {
-  font-size: 0.6rem;
-  color: var(--color-text-muted);
-  letter-spacing: 0.05em;
+  font-size: 0.55rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.stampBox {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 2;
+}
+
+.stamp {
+  border: 2.5px double var(--color-cyan);
+  color: var(--color-cyan);
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-weight: bold;
+  transform: rotate(-15deg);
+  opacity: 0.6;
+  line-height: 1.3;
 }
 
 .certFooter {
   z-index: 2;
   width: 100%;
   text-align: center;
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  margin-top: 0.5rem;
 }
 
 .certFooter p {
-  font-size: 0.65rem;
-  color: var(--color-text-muted);
+  font-size: 0.6rem;
+  color: var(--color-text-secondary);
   margin: 0;
+  opacity: 0.6;
 }
 
 .certFooter strong {
   color: var(--color-cyan);
 }
 
+/* ── Actions ─────────────────────────────────────────────────── */
 .actions {
   display: flex;
-  gap: 1rem;
+  gap: 0.6rem;
   width: 100%;
   justify-content: center;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  padding-top: 0.5rem;
+}
+
+.downloadBtn {
+  background: var(--color-cyan);
+  color: var(--color-dark-slate);
+  border: none;
+  padding: 0.65rem 1.4rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.downloadBtn:hover:not(:disabled) {
+  background: var(--color-cyan);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.2);
+}
+
+.downloadBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .printBtn {
   background: var(--color-electric-blue);
   color: white;
   border: none;
-  padding: 0.8rem 2rem;
+  padding: 0.65rem 1.4rem;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .printBtn:hover {
-  background: #0044cc;
+  background: var(--color-brand);
+  transform: translateY(-1px);
 }
 
 .editBtn {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: var(--color-text-secondary);
-  padding: 0.8rem 2rem;
+  padding: 0.65rem 1.4rem;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .editBtn:hover {
   color: white;
-  border-color: white;
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 @keyframes fadeIn {
@@ -355,12 +479,227 @@
   to { opacity: 1; }
 }
 
-/* Print Optimization CSS */
+/* ── Desktop ─────────────────────────────────────────────────── */
+@media (min-width: 769px) {
+  .modal {
+    padding: 2.5rem;
+  }
+
+  .certificate {
+    max-width: 820px;
+  }
+
+  .borderInner {
+    padding: 2.5rem 3rem;
+  }
+
+  .recipientName {
+    font-size: 2.5rem;
+  }
+
+  .certBody {
+    font-size: 0.9rem;
+  }
+}
+
+/* ── Tablet ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 0.5rem;
+  }
+
+  .modal {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 12px;
+    padding: 1.25rem;
+    gap: 0;
+  }
+
+  .certificate {
+    max-width: 100%;
+  }
+
+  .borderInner {
+    padding: 1.5rem;
+  }
+
+  .badgeIcon {
+    font-size: 1.5rem;
+  }
+
+  .certHeader h3 {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+
+  .workshopTitle {
+    font-size: 0.7rem;
+  }
+
+  .subText {
+    font-size: 0.8rem;
+    margin: 0.75rem 0 0.25rem;
+  }
+
+  .recipientName {
+    font-size: 1.75rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .certBody {
+    font-size: 0.75rem;
+    max-width: 100%;
+    margin: 0 0 1rem 0;
+  }
+
+  .detailBox {
+    min-width: 90px;
+  }
+
+  .detailTitle {
+    font-size: 0.5rem;
+  }
+
+  .detailValue {
+    font-size: 0.65rem;
+  }
+
+  .stamp {
+    width: 55px;
+    height: 55px;
+    font-size: 0.45rem;
+  }
+
+  .stampBox {
+    position: static;
+  }
+
+  .qrBox svg {
+    width: 50px;
+    height: 50px;
+  }
+
+  .qrLabel {
+    font-size: 0.45rem;
+  }
+
+  .watermark {
+    font-size: 4rem;
+  }
+
+  .actions {
+    gap: 0.4rem;
+  }
+
+  .downloadBtn,
+  .printBtn,
+  .editBtn {
+    padding: 0.55rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ── Small Mobile ────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .modal {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .setupView h2 {
+    font-size: 1.5rem;
+  }
+
+  .setupView p {
+    font-size: 0.9rem;
+  }
+
+  .nameInput {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .generateBtn {
+    padding: 0.75rem 2rem;
+    font-size: 0.95rem;
+  }
+
+  .zoomBar {
+    padding: 0.25rem 0.4rem;
+  }
+
+  .zoomBtn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+  }
+
+  .zoomLevel {
+    font-size: 0.7rem;
+    min-width: 36px;
+  }
+
+  .borderInner {
+    padding: 1rem;
+  }
+
+  .certHeader h3 {
+    font-size: 0.6rem;
+  }
+
+  .recipientName {
+    font-size: 1.35rem;
+  }
+
+  .certBody {
+    font-size: 0.65rem;
+    line-height: 1.4;
+  }
+
+  .detailsRow {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .detailBox {
+    min-width: 0;
+    width: 100%;
+    flex-direction: row;
+    gap: 0.5rem;
+    border-top: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0;
+    padding-left: 0.75rem;
+  }
+
+  .bottomRow {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .downloadBtn,
+  .printBtn,
+  .editBtn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ── Print ───────────────────────────────────────────────────── */
 @media print {
   body * {
     visibility: hidden;
   }
-  #certificate-print-area, #certificate-print-area * {
+  #certificate-print-area,
+  #certificate-print-area * {
     visibility: visible;
   }
   #certificate-print-area {
@@ -368,47 +707,61 @@
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
+    height: auto;
     margin: 0;
     padding: 0;
     box-shadow: none;
+    transform: none !important;
+    zoom: 1 !important;
     background: white !important;
     color: black !important;
-    border: none !important;
+    border-radius: 0;
+    max-width: none;
+    aspect-ratio: 1.414 / 1;
   }
-  .borderOuter {
-    border-color: black !important;
+  #certificate-print-area .borderOuter {
+    border-color: #1a1a2e !important;
   }
-  .borderInner {
-    border-color: rgba(0, 0, 0, 0.2) !important;
+  #certificate-print-area .borderInner {
+    border-color: rgba(26, 26, 46, 0.2) !important;
   }
-  .certHeader h3, .recipientName, .certBody strong {
-    color: black !important;
+  #certificate-print-area .certHeader h3,
+  #certificate-print-area .recipientName,
+  #certificate-print-area .certBody strong {
+    color: #1a1a2e !important;
   }
-  .detailValue, .stamp {
-    color: black !important;
-    border-color: black !important;
+  #certificate-print-area .detailValue,
+  #certificate-print-area .stamp {
+    color: #1a1a2e !important;
+    border-color: #1a1a2e !important;
   }
-  .detailBox {
-    border-top-color: rgba(0, 0, 0, 0.2) !important;
+  #certificate-print-area .detailBox {
+    border-top-color: rgba(26, 26, 46, 0.15) !important;
   }
-  .dividerLine {
-    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.2), transparent) !important;
+  #certificate-print-area .dividerLine {
+    background: linear-gradient(90deg, transparent, rgba(26, 26, 46, 0.2), transparent) !important;
   }
-  .workshopTitle {
-    color: rgba(0, 0, 0, 0.5) !important;
+  #certificate-print-area .workshopTitle {
+    color: rgba(26, 26, 46, 0.5) !important;
   }
-  .certFooter p {
-    color: rgba(0, 0, 0, 0.4) !important;
+  #certificate-print-area .certFooter p {
+    color: rgba(26, 26, 46, 0.4) !important;
   }
-  .certFooter strong {
-    color: black !important;
+  #certificate-print-area .certFooter strong {
+    color: #1a1a2e !important;
   }
-  .qrBox svg {
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
+  #certificate-print-area .watermark {
+    color: rgba(0, 0, 0, 0.03) !important;
   }
-  .qrLabel {
-    color: rgba(0, 0, 0, 0.4) !important;
+  #certificate-print-area .qrBox svg {
+    border: 1px solid rgba(26, 26, 46, 0.15);
+    border-radius: 3px;
+  }
+  #certificate-print-area .qrLabel {
+    color: rgba(26, 26, 46, 0.4) !important;
+  }
+  @page {
+    size: landscape;
+    margin: 0;
   }
 }

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { badges } from '@/data/badges';
+import { docsSections } from '@/lib/docsConfig';
 import { useProgress } from '@/context/ProgressContext';
 
 const BadgesContent = () => {
@@ -19,7 +20,7 @@ const BadgesContent = () => {
     if (readSlugs.length >= 3 && !earned.has('fundamentals-master')) earnBadge('fundamentals-master');
     if (readSlugs.length >= 6 && !earned.has('deep-diver')) earnBadge('deep-diver');
     if (readSlugs.length >= 9 && !earned.has('tool-user')) earnBadge('tool-user');
-    if (readSlugs.length >= 19 && !earned.has('full-graduate')) earnBadge('full-graduate');
+    if (readSlugs.length >= docsSections.length && !earned.has('full-graduate')) earnBadge('full-graduate');
 
     const quizScore = quizScores['main'] || 0;
     if (quizScore >= 100 && !earned.has('quiz-ace')) earnBadge('quiz-ace');
@@ -47,7 +48,7 @@ const BadgesContent = () => {
         {[
           { label: 'Badges Earned', value: `${earnedCount}/${totalBadges}`, icon: '🏆' },
           { label: 'Total Points', value: totalPoints.toString(), icon: '⭐' },
-          { label: 'Modules Read', value: `${readSlugs.length}/19`, icon: '📚' },
+          { label: 'Modules Read', value: `${readSlugs.length}/${docsSections.length}`, icon: '📚' },
           { label: 'Prompts Copied', value: promptsCopied.toString(), icon: '✍️' },
         ].map(stat => (
           <div key={stat.label} style={{
@@ -125,7 +126,7 @@ const BadgesContent = () => {
                     borderRadius: '9999px',
                     fontSize: '0.65rem',
                     fontWeight: 700,
-                    color: '#00ffa3',
+                    color: 'var(--color-success)',
                   }}>
                     EARNED
                   </span>

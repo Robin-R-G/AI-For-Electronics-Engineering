@@ -29,9 +29,10 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: var(--color-surface);
-  border: 1px solid rgba(0, 229, 255, 0.2);
+  background: linear-gradient(135deg, var(--color-brand-subtle), var(--color-accent-subtle));
+  border: 1px solid rgba(91, 141, 239, 0.25);
   color: var(--color-cyan);
+  box-shadow: 0 8px 24px -8px rgba(91, 91, 214, 0.2);
   margin-bottom: 1rem;
 }
 
@@ -61,7 +62,7 @@
   background: var(--color-surface);
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: var(--radius-md);
-  color: #ef4444;
+  color: var(--color-error);
   font-size: 0.85rem;
   font-weight: 500;
 }
@@ -71,7 +72,7 @@
   background: var(--color-surface);
   border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: var(--radius-md);
-  color: #f59e0b;
+  color: var(--color-warning);
   font-size: 0.85rem;
   font-weight: 600;
   text-align: center;
@@ -177,4 +178,19 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 1rem;
+  }
+  .loginCard {
+    padding: 1.5rem 1.25rem;
+  }
+  .header {
+    margin-bottom: 1.5rem;
+  }
+  .header h1 {
+    font-size: 1.3rem;
+  }
 }

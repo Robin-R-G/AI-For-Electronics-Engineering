@@ -1,8 +1,11 @@
 .footer {
   position: relative;
   margin-top: var(--space-24);
-  border-top: 1px solid var(--color-border);
-  background: var(--glass-bg-heavy);
+  border-top: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
 }
 
 .container {
@@ -24,7 +27,21 @@
 }
 
 .logoIcon {
-  font-size: 1.5rem;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--color-brand);
+}
+.logoIcon::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 2px solid #fff;
+  /* chip / IC outline */
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
 }
 
 .logoText {
@@ -58,7 +75,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-muted);
   margin-bottom: var(--space-1);
 }
 
@@ -70,7 +87,7 @@
 }
 
 .linkGroup a:hover {
-  color: var(--color-cyan);
+  color: var(--color-accent);
 }
 
 .divider {
@@ -93,12 +110,12 @@
 }
 
 .copyright strong {
-  color: var(--color-cyan);
+  color: var(--color-text-primary);
   font-weight: 600;
 }
 
 .heart {
-  color: #ef4444;
+  color: var(--color-error);
   font-size: 1rem;
 }
 
@@ -111,19 +128,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: var(--color-surface-2);
   border: 1px solid var(--color-border);
   color: var(--color-text-secondary);
-  transition: all var(--transition-fast);
+  transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
 .socialLink:hover {
-  background: var(--color-surface);
-  border-color: rgba(0, 229, 255, 0.3);
-  color: var(--color-cyan);
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+  color: var(--color-accent);
   transform: translateY(-2px);
 }
 
@@ -147,22 +164,25 @@
   height: 44px;
   border-radius: var(--radius-full);
   background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--color-border);
-  color: var(--color-cyan);
+  color: var(--color-accent);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
   animation: fadeIn 0.3s ease;
   z-index: 50;
+  box-shadow: var(--shadow-sm);
 }
 
 .backToTop:hover {
-  background: var(--color-surface);
-  border-color: rgba(0, 229, 255, 0.4);
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent);
   transform: translateY(-3px);
-  box-shadow: var(--shadow-glow-cyan);
+  box-shadow: 0 8px 24px -6px var(--color-accent-glow);
 }
 
 @media (max-width: 768px) {
@@ -170,12 +190,10 @@
     grid-template-columns: 1fr;
     gap: var(--space-8);
   }
-
   .links {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-6);
   }
-
   .bottom {
     flex-direction: column;
     align-items: flex-start;
@@ -184,11 +202,6 @@
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding: var(--space-12) var(--space-4) var(--space-6);
-  }
-
-  .links {
-    grid-template-columns: 1fr;
-  }
+  .container { padding: var(--space-12) var(--space-4) var(--space-6); }
+  .links { grid-template-columns: 1fr; }
 }

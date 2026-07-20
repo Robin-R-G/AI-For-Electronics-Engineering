@@ -20,8 +20,8 @@ interface HandsOnActivityProps {
 
 const difficultyColors: Record<string, string> = {
   Beginner: 'var(--color-green)',
-  Intermediate: '#f59e0b',
-  Advanced: '#ef4444',
+  Intermediate: 'var(--color-warning)',
+  Advanced: 'var(--color-error)',
 };
 
 const HandsOnActivity: React.FC<HandsOnActivityProps> = ({

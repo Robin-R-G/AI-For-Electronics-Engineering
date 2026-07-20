@@ -118,7 +118,7 @@ const ProjectBuilderContent = () => {
               borderRadius: '12px',
               border: `1px solid ${selectedDomain.id === d.id ? 'rgba(0,229,255,0.5)' : 'rgba(255,255,255,0.1)'}`,
               background: selectedDomain.id === d.id ? 'rgba(0,229,255,0.1)' : 'rgba(255,255,255,0.03)',
-              color: selectedDomain.id === d.id ? '#00e5ff' : 'rgba(200,210,235,0.75)',
+              color: selectedDomain.id === d.id ? 'var(--color-cyan)' : 'rgba(200,210,235,0.75)',
               cursor: 'pointer',
               fontSize: '0.85rem',
               fontWeight: 600,
@@ -132,7 +132,7 @@ const ProjectBuilderContent = () => {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '250px 1fr', gap: '1.5rem' }}>
+      <div className="split-260">
         {/* Project list sidebar */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {selectedDomain.projects.map((proj, i) => (
@@ -153,8 +153,8 @@ const ProjectBuilderContent = () => {
               </p>
               <span style={{
                 fontSize: '0.7rem',
-                color: proj.difficulty === 'Beginner' ? '#00ffa3' :
-                  proj.difficulty === 'Intermediate' ? '#f59e0b' : '#ef4444',
+                color: proj.difficulty === 'Beginner' ? 'var(--color-success)' :
+                  proj.difficulty === 'Intermediate' ? 'var(--color-warning)' : 'var(--color-error)',
               }}>
                 {proj.difficulty}
               </span>
@@ -173,8 +173,8 @@ const ProjectBuilderContent = () => {
             fontWeight: 700,
             background: selectedProject.difficulty === 'Beginner' ? 'rgba(0,255,163,0.15)' :
               selectedProject.difficulty === 'Intermediate' ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)',
-            color: selectedProject.difficulty === 'Beginner' ? '#00ffa3' :
-              selectedProject.difficulty === 'Intermediate' ? '#f59e0b' : '#ef4444',
+            color: selectedProject.difficulty === 'Beginner' ? 'var(--color-success)' :
+              selectedProject.difficulty === 'Intermediate' ? 'var(--color-warning)' : 'var(--color-error)',
             marginBottom: '1.5rem',
           }}>
             {selectedProject.difficulty}
@@ -191,7 +191,7 @@ const ProjectBuilderContent = () => {
                 border: '1px solid rgba(124,58,237,0.2)',
                 borderRadius: '9999px',
                 fontSize: '0.8rem',
-                color: '#7c3aed',
+                color: 'var(--color-violet)',
               }}>
                 {comp}
               </span>
@@ -244,7 +244,7 @@ const ProjectBuilderContent = () => {
                     background: copiedPrompt === i ? 'rgba(0,255,163,0.15)' : 'rgba(0,229,255,0.1)',
                     border: `1px solid ${copiedPrompt === i ? 'rgba(0,255,163,0.3)' : 'rgba(0,229,255,0.3)'}`,
                     borderRadius: '9999px',
-                    color: copiedPrompt === i ? '#00ffa3' : '#00e5ff',
+                    color: copiedPrompt === i ? 'var(--color-success)' : 'var(--color-cyan)',
                     fontSize: '0.75rem',
                     fontWeight: 600,
                     cursor: 'pointer',

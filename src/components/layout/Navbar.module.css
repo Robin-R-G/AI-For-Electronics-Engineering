@@ -4,79 +4,324 @@
   left: 0;
   width: 100%;
   z-index: 200;
-  background: var(--color-background);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background var(--transition-normal), border-color var(--transition-normal), backdrop-filter var(--transition-normal);
+}
+
+.scrolled {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--color-border);
-  transition: all var(--transition-fast);
 }
 
 .container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 12px var(--space-8);
+  padding: 14px var(--space-8);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-4);
 }
 
 /* ── Logo ─────────────────────────────── */
-.logo a {
+.logo {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
   transition: opacity var(--transition-fast);
 }
-.logo a:hover { opacity: 0.8; }
+.logo:hover { opacity: 0.85; }
 
-.logoIcon {
-  width: 24px;
-  height: 24px;
-  background: var(--color-text-primary);
-  border-radius: 6px;
+.logoMark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  color: #fff;
+  background: var(--color-brand);
   flex-shrink: 0;
 }
 
 .logoText {
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: 1.02rem;
   letter-spacing: -0.02em;
   color: var(--color-text-primary);
 }
+.logoAccent { color: var(--color-brand); }
 
-/* ── Nav Links ────────────────────────── */
+/* ── Nav Links (Desktop) ──────────────── */
 .navLinks {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-1);
+  position: relative;
 }
 
 .link {
   position: relative;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 500;
   color: var(--color-text-secondary);
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  font-family: var(--font-sans);
+  cursor: pointer;
   transition: color var(--transition-fast), background var(--transition-fast);
-}
-
-.link:hover {
-  color: var(--color-text-primary);
-  background: var(--color-surface-hover);
-}
-
-/* ── Actions ──────────────────────────── */
-.actions {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 4px;
 }
 
-.navBtn {
-  font-size: 0.875rem;
+.link:hover { color: var(--color-text-primary); background: var(--color-surface-hover); }
+
+.linkActive {
+  color: var(--color-text-primary);
 }
 
-/* ── Mobile ───────────────────────────── */
-@media (max-width: 768px) {
+.linkActive::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-brand);
+}
+
+.chevron { transition: transform var(--transition-fast); }
+.chevronUp { transform: rotate(180deg); }
+
+/* ── Mega Menu ──────────────────────────── */
+.mega {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 600px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-5);
+  animation: megaIn 0.2s var(--ease-snappy) both;
+  z-index: 300;
+}
+
+@keyframes megaIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.megaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.megaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.megaGroupTitle {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.megaLink {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.megaLink:hover { background: var(--color-surface-hover); }
+
+.megaLinkTitle {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.megaLinkMeta {
+  font-size: 0.65rem;
+  color: var(--color-text-tertiary);
+}
+
+.megaLinkActive .megaLinkTitle { color: var(--color-brand-hover); }
+
+/* ── CTA ───────────────────────────────── */
+.cta {
+  margin-left: var(--space-2);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-background);
+  background: var(--color-text-primary);
+  padding: 9px 18px;
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+.cta:hover {
+  transform: translateY(-1px);
+  background: var(--color-brand-hover);
+  box-shadow: var(--shadow-md);
+  color: #fff;
+}
+
+/* ── Burger (mobile trigger) ──────────── */
+.burger { display: none; }
+
+.burgerBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  cursor: pointer;
+}
+
+.burgerBar {
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-text-primary);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+.burgerTop { transform: translateY(7px) rotate(45deg); }
+.burgerMid { opacity: 0; }
+.burgerBot { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Drawer (mobile slide-in) ─────────── */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(340px, 85vw);
+  height: 100vh;
+  z-index: 400;
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  transform: translateX(100%);
+  transition: transform var(--transition-normal);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawerOpen {
+  transform: translateX(0);
+  box-shadow: -16px 0 48px -12px rgba(0,0,0,0.5);
+}
+
+.drawerBody {
+  padding: var(--space-16) var(--space-6) var(--space-8);
+  flex: 1;
+}
+
+.drawerNav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.drawerGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.drawerGroupTitle {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-2);
+}
+
+.drawerLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.drawerLink:hover { background: var(--color-surface-hover); color: var(--color-text-primary); }
+
+.drawerLinkActive {
+  background: var(--color-brand-subtle);
+  color: var(--color-brand-hover);
+}
+
+.drawerLinkMeta {
+  font-size: 0.7rem;
+  color: var(--color-text-tertiary);
+}
+
+.drawerCta {
+  margin-top: var(--space-3);
+  text-align: center;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-brand);
+  padding: 13px;
+  border-radius: var(--radius-md);
+}
+
+/* ── Backdrop ─────────────────────────── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 350;
+  background: rgba(7, 7, 16, 0.65);
+  animation: fadeBack 0.2s ease-out both;
+}
+
+@keyframes fadeBack { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── Responsive ───────────────────────── */
+@media (max-width: 860px) {
   .navLinks { display: none; }
+  .burger { display: flex; }
   .container { padding: 12px var(--space-4); }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 10px var(--space-4); gap: var(--space-2); }
+  .logoText { font-size: 0.92rem; }
+  .logo { gap: var(--space-2); }
+  .burgerBtn { width: 40px; height: 40px; }
+}
+
+@media (max-width: 360px) {
+  .logoText { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }

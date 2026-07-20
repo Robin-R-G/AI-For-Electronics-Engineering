@@ -1,15 +1,15 @@
 .layoutContainer {
   display: flex;
   min-height: 100vh;
-  padding-top: 70px;
+  padding-top: 72px;
 }
 
 .mainContent {
   flex: 1;
   min-width: 0;
   width: 100%;
-  padding: 3rem 4rem 4rem;
-  max-width: 920px;
+  padding: 3rem 4rem 5rem;
+  max-width: 900px;
   margin: 0 auto;
   animation: fadeUp 0.5s var(--ease-snappy) both;
 }
@@ -29,18 +29,19 @@
   left: 0;
   width: 80px;
   height: 2px;
-  background: var(--gradient-primary);
+  background: linear-gradient(90deg, var(--color-brand), var(--color-accent));
   border-radius: 2px;
 }
 
 .docTitle {
   font-size: clamp(2rem, 4vw, 2.75rem);
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--color-white) 0%, rgba(200,220,255,0.8) 50%, var(--color-cyan) 100%);
+  margin-bottom: 1.25rem;
+  background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-brand-hover) 50%, var(--color-accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1.15;
+  text-wrap: balance;
 }
 
 /* ── Doc Body ────────────────────────────────── */
@@ -81,19 +82,19 @@
 }
 
 .docContent code {
-  background: var(--color-surface);
-  border: 1px solid rgba(0,229,255,0.12);
+  background: var(--color-surface-2);
+  border: 1px solid rgba(34, 211, 238, 0.15);
   padding: 0.15em 0.4em;
   border-radius: 4px;
   font-family: var(--font-mono);
   font-size: 0.88em;
-  color: var(--color-cyan);
+  color: var(--color-accent);
 }
 
 .docContent pre {
-  background: #0d1117;
+  background: #0D0D17;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
   overflow-x: auto;
   margin-bottom: 1.5rem;
@@ -103,13 +104,13 @@
   background: none;
   border: none;
   padding: 0;
-  color: #c9d1d9;
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
 }
 
 .docContent blockquote {
-  border-left: 3px solid var(--color-cyan);
-  padding: 0.5rem 1.25rem;
+  border-left: 3px solid var(--color-accent);
+  padding: 0.75rem 1.25rem;
   margin: 1.5rem 0;
   background: var(--color-surface);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
@@ -121,7 +122,7 @@
 .placeholder {
   padding: 2.5rem;
   background: var(--color-surface);
-  border: 1px dashed rgba(0, 229, 255, 0.18);
+  border: 1px dashed rgba(34, 211, 238, 0.2);
   border-radius: var(--radius-xl);
   margin: 2rem 0;
   text-align: center;
@@ -130,12 +131,20 @@
 
 /* ── Responsive ──────────────────────────────── */
 @media (max-width: 1024px) {
-  .mainContent { padding: 2.5rem 2.5rem; }
+  .mainContent { padding: 2.5rem 2rem; }
 }
 
 @media (max-width: 768px) {
-  .mainContent { padding: 2rem 1.25rem; }
+  .layoutContainer { padding-top: 64px; }
+  .mainContent { padding: 1.5rem 1.25rem; }
   .docTitle { font-size: 1.75rem; }
+}
+
+@media (max-width: 480px) {
+  .mainContent { padding: 1.25rem 1rem; }
+  .docHeader { margin-bottom: 2rem; padding-bottom: 1.5rem; }
+  .docContent { font-size: 1rem; }
+  .docContent pre { padding: 1rem; }
 }
 
 @keyframes fadeUp {

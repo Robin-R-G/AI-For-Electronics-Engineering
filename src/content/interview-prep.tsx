@@ -21,9 +21,9 @@ const InterviewPrepContent = () => {
   }, [selectedCategory, selectedDifficulty]);
 
   const difficultyColors: Record<string, string> = {
-    Easy: '#00ffa3',
-    Medium: '#f59e0b',
-    Hard: '#ef4444',
+    Easy: 'var(--color-success)',
+    Medium: 'var(--color-warning)',
+    Hard: 'var(--color-error)',
   };
 
   return (
@@ -44,7 +44,7 @@ const InterviewPrepContent = () => {
               borderRadius: '9999px',
               border: `1px solid ${selectedCategory === cat ? 'rgba(0,229,255,0.5)' : 'rgba(255,255,255,0.1)'}`,
               background: selectedCategory === cat ? 'rgba(0,229,255,0.1)' : 'rgba(255,255,255,0.03)',
-              color: selectedCategory === cat ? '#00e5ff' : 'rgba(200,210,235,0.75)',
+              color: selectedCategory === cat ? 'var(--color-cyan)' : 'rgba(200,210,235,0.75)',
               cursor: 'pointer',
               fontSize: '0.8rem',
               fontWeight: 600,
@@ -65,7 +65,7 @@ const InterviewPrepContent = () => {
               borderRadius: '9999px',
               border: `1px solid ${selectedDifficulty === diff ? 'rgba(0,229,255,0.5)' : 'rgba(255,255,255,0.1)'}`,
               background: selectedDifficulty === diff ? 'rgba(0,229,255,0.1)' : 'transparent',
-              color: selectedDifficulty === diff ? '#00e5ff' : 'rgba(160,175,210,0.5)',
+              color: selectedDifficulty === diff ? 'var(--color-cyan)' : 'rgba(160,175,210,0.5)',
               cursor: 'pointer',
               fontSize: '0.75rem',
               fontWeight: 600,
@@ -140,7 +140,7 @@ const InterviewPrepContent = () => {
                       background: 'linear-gradient(135deg, rgba(0,82,255,0.2), rgba(0,229,255,0.2))',
                       border: '1px solid rgba(0,229,255,0.3)',
                       borderRadius: '9999px',
-                      color: '#00e5ff',
+                      color: 'var(--color-cyan)',
                       fontSize: '0.85rem',
                       fontWeight: 600,
                       cursor: 'pointer',
@@ -166,9 +166,9 @@ const InterviewPrepContent = () => {
                         padding: '0.75rem 1rem',
                         background: 'rgba(245,158,11,0.05)',
                         borderRadius: '8px',
-                        borderLeft: '3px solid #f59e0b',
+                        borderLeft: '3px solid var(--color-warning)',
                       }}>
-                        <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#f59e0b', marginBottom: '0.25rem' }}>
+                        <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-warning)', marginBottom: '0.25rem' }}>
                           Follow-up question:
                         </p>
                         <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>

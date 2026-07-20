@@ -130,7 +130,7 @@
   background: var(--color-surface);
   border: 1px solid rgba(239, 68, 68, 0.15);
   border-radius: var(--radius-md);
-  color: #ef4444;
+  color: var(--color-error);
   font-size: 0.8rem;
   font-weight: 600;
   font-family: var(--font-sans);
@@ -361,9 +361,9 @@
   font-weight: 700;
 }
 
-.beginner { background: var(--color-surface); color: #00ffa3; }
-.intermediate { background: var(--color-surface); color: #f59e0b; }
-.advanced { background: var(--color-surface); color: #ef4444; }
+.beginner { background: var(--color-surface); color: var(--color-success); }
+.intermediate { background: var(--color-surface); color: var(--color-warning); }
+.advanced { background: var(--color-surface); color: var(--color-error); }
 
 .statusBadge {
   display: inline-block;
@@ -372,7 +372,7 @@
   font-size: 0.7rem;
   font-weight: 700;
   background: var(--color-surface);
-  color: #00ffa3;
+  color: var(--color-success);
 }
 
 /* ── Info Cards ───────────────────────────── */
@@ -456,11 +456,11 @@
 .secureBadge {
   padding: 0.2rem 0.6rem;
   background: var(--color-surface);
-  border: 1px solid rgba(0, 255, 163, 0.2);
+  border: 1px solid rgba(52, 211, 153, 0.2);
   border-radius: var(--radius-full);
   font-size: 0.7rem;
   font-weight: 700;
-  color: #00ffa3;
+  color: var(--color-success);
 }
 
 /* ── Loading ──────────────────────────────── */
@@ -547,7 +547,7 @@
   background: linear-gradient(135deg, var(--color-electric-blue), var(--color-cyan));
   border: none;
   border-radius: var(--radius-md);
-  color: #04121a;
+  color: var(--color-text-primary);
   font-size: 0.9rem;
   font-weight: 700;
   font-family: var(--font-sans);
@@ -565,7 +565,7 @@
   background: var(--color-surface);
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: var(--radius-md);
-  color: #ff6b6b;
+  color: var(--color-error);
   font-size: 0.85rem;
 }
 
@@ -576,13 +576,13 @@
 
 .privateBadge {
   background: rgba(245, 158, 11, 0.1) !important;
-  color: #f59e0b !important;
+  color: var(--color-warning) !important;
 }
 
 .delLink {
   background: none;
   border: none;
-  color: #ef4444;
+  color: var(--color-error);
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
@@ -591,7 +591,7 @@
 .delBtn {
   background: var(--color-surface);
   border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
+  color: var(--color-error);
   border-radius: var(--radius-sm);
   padding: 0.25rem 0.6rem;
   font-size: 0.75rem;
@@ -630,6 +630,16 @@
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* Small phones: single-column stats, trimmed chrome. */
+@media (max-width: 480px) {
+  .topBar { padding: 1rem; }
+  .content { padding: 0.75rem; }
+  .statsGrid { grid-template-columns: 1fr; }
+  .settingItem { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .certSection, .analyticBlock, .infoCard, .historyBox { padding: 1rem; }
+  .pageTitle { font-size: 1.25rem; }
 }
 
 /* ── Certificate Manager ───────────────────── */
@@ -1007,12 +1017,12 @@
 
 .overrideTag {
   background: var(--color-surface);
-  color: #f59e0b;
+  color: var(--color-warning);
 }
 
 .defaultTag {
   background: var(--color-surface);
-  color: #00ffa3;
+  color: var(--color-success);
 }
 
 .mediaPicker {
@@ -1073,4 +1083,9 @@
   .editorGrid {
     grid-template-columns: 1fr;
   }
+}
+
+/* 4K / ultra-wide: cap content width so it doesn't stretch. */
+@media (min-width: 1920px) {
+  .content { max-width: 1600px; margin-inline: auto; padding: 2.5rem 3rem; }
 }

@@ -210,9 +210,9 @@
 .actionBtn:hover::before { opacity: 1; }
 
 .actionDone {
-  background: rgba(0, 255, 100, 0.08) !important;
-  border-color: rgba(0, 255, 100, 0.3) !important;
-  color: #00ff64 !important;
+  background: rgba(52, 211, 153, 0.08) !important;
+  border-color: rgba(52, 211, 153, 0.3) !important;
+  color: var(--color-success) !important;
 }
 
 @keyframes fadeIn {
@@ -221,15 +221,20 @@
 }
 
 /* ── Mobile adjustments ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .floatingBtn { bottom: calc(60px + 1rem); }
+  .panel { bottom: calc(60px + 2rem + 56px + 16px); }
+}
+
 @media (max-width: 400px) {
   .panel {
     right: 1rem;
     left: 1rem;
     width: auto;
-    bottom: calc(1rem + 56px + 16px);
+    bottom: calc(60px + 1rem + 56px + 16px);
   }
   .floatingBtn {
-    bottom: 1rem;
+    bottom: calc(60px + 0.75rem);
     right: 1rem;
   }
 }

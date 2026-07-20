@@ -10,6 +10,7 @@ type ProgressData = {
   labsCompleted: string[];
   questionsViewed: number;
   earnedBadges: string[];
+  bookmarks: string[];
 };
 
 type ProgressContextType = {
@@ -26,6 +27,9 @@ type ProgressContextType = {
   completeLab: (labId: string) => void;
   questionsViewed: number;
   incrementQuestionsViewed: () => void;
+  bookmarks: string[];
+  toggleBookmark: (slug: string) => void;
+  isBookmarked: (slug: string) => boolean;
 };
 
 const ProgressContext = createContext<ProgressContextType>({
@@ -42,6 +46,9 @@ const ProgressContext = createContext<ProgressContextType>({
   completeLab: () => {},
   questionsViewed: 0,
   incrementQuestionsViewed: () => {},
+  bookmarks: [],
+  toggleBookmark: () => {},
+  isBookmarked: () => false,
 });
 
 const STORAGE_KEY = 'ai-workshop-progress';
@@ -52,6 +59,7 @@ const EMPTY: ProgressData = {
   labsCompleted: [],
   questionsViewed: 0,
   earnedBadges: [],
+  bookmarks: [],
 };
 
 type Listener = () => void;
@@ -71,6 +79,7 @@ function init() {
           labsCompleted: (JSON.parse(raw) as Partial<ProgressData>).labsCompleted || [],
           questionsViewed: (JSON.parse(raw) as Partial<ProgressData>).questionsViewed || 0,
           earnedBadges: (JSON.parse(raw) as Partial<ProgressData>).earnedBadges || [],
+          bookmarks: (JSON.parse(raw) as Partial<ProgressData>).bookmarks || [],
         }
       : EMPTY;
   } catch {
@@ -143,6 +152,16 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     setStore({ questionsViewed: data.questionsViewed + 1 });
   }, [data.questionsViewed]);
 
+  const toggleBookmark = useCallback((slug: string) => {
+    setStore({
+      bookmarks: data.bookmarks.includes(slug)
+        ? data.bookmarks.filter((b) => b !== slug)
+        : [...data.bookmarks, slug],
+    });
+  }, [data.bookmarks]);
+
+  const isBookmarked = useCallback((slug: string) => data.bookmarks.includes(slug), [data.bookmarks]);
+
   const totalPoints = data.earnedBadges.reduce((sum, badgeId) => {
     const badge = badges.find((b) => b.id === badgeId);
     return sum + (badge?.points || 0);
@@ -163,6 +182,9 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       completeLab,
       questionsViewed: data.questionsViewed,
       incrementQuestionsViewed,
+      bookmarks: data.bookmarks,
+      toggleBookmark,
+      isBookmarked,
     }}>
       {children}
     </ProgressContext.Provider>

@@ -21,7 +21,7 @@ export const downloadsData: DownloadItem[] = [
     fileSize: '4.2 MB',
     version: 'v2.1',
     updatedAt: 'July 18, 2026',
-    downloadUrl: '#',
+    downloadUrl: '/downloads/workshop-notes.pdf',
     icon: '📓'
   },
   {
@@ -33,7 +33,7 @@ export const downloadsData: DownloadItem[] = [
     fileSize: '2.8 MB',
     version: 'v1.4',
     updatedAt: 'July 15, 2026',
-    downloadUrl: '#',
+    downloadUrl: '/downloads/prompt-book.pdf',
     icon: '📖'
   },
   {
@@ -45,7 +45,7 @@ export const downloadsData: DownloadItem[] = [
     fileSize: '890 KB',
     version: 'v3.0',
     updatedAt: 'July 18, 2026',
-    downloadUrl: '#',
+    downloadUrl: '/downloads/cheat-sheet.pdf',
     icon: '📋'
   },
   {
@@ -57,7 +57,7 @@ export const downloadsData: DownloadItem[] = [
     fileSize: '1.5 MB',
     version: 'v1.0',
     updatedAt: 'July 10, 2026',
-    downloadUrl: '#',
+    downloadUrl: '/downloads/project-list.pdf',
     icon: '🚀'
   },
   {
@@ -69,7 +69,7 @@ export const downloadsData: DownloadItem[] = [
     fileSize: '3.1 MB',
     version: 'v1.2',
     updatedAt: 'July 5, 2026',
-    downloadUrl: '#',
+    downloadUrl: '/downloads/certificate-template.pdf',
     icon: '🎖️'
   },
   {
@@ -81,7 +81,7 @@ export const downloadsData: DownloadItem[] = [
     fileSize: '8.7 MB',
     version: 'v2.0',
     updatedAt: 'July 17, 2026',
-    downloadUrl: '#',
+    downloadUrl: '/downloads/source-code.zip',
     icon: '💻'
   },
   {
@@ -93,7 +93,7 @@ export const downloadsData: DownloadItem[] = [
     fileSize: '22.4 MB',
     version: 'v4.1',
     updatedAt: 'July 18, 2026',
-    downloadUrl: '#',
+    downloadUrl: '/downloads/presentation-pdf.pdf',
     icon: '📊'
   },
   {
@@ -105,7 +105,7 @@ export const downloadsData: DownloadItem[] = [
     fileSize: '620 KB',
     version: 'v1.1',
     updatedAt: 'July 12, 2026',
-    downloadUrl: '#',
+    downloadUrl: '/downloads/resources-pdf.pdf',
     icon: '📚'
   }
 ];

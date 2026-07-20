@@ -35,6 +35,7 @@ const ComponentEncyclopediaContent = () => {
         <input
           type="text"
           placeholder="Search components..."
+          aria-label="Search components"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{
@@ -61,7 +62,7 @@ const ComponentEncyclopediaContent = () => {
               borderRadius: '9999px',
               border: `1px solid ${selectedCategory === cat ? 'rgba(0,229,255,0.5)' : 'rgba(255,255,255,0.1)'}`,
               background: selectedCategory === cat ? 'rgba(0,229,255,0.1)' : 'rgba(255,255,255,0.03)',
-              color: selectedCategory === cat ? '#00e5ff' : 'rgba(200,210,235,0.75)',
+              color: selectedCategory === cat ? 'var(--color-cyan)' : 'rgba(200,210,235,0.75)',
               cursor: 'pointer',
               fontSize: '0.8rem',
               fontWeight: 600,
@@ -106,7 +107,7 @@ const ComponentEncyclopediaContent = () => {
                 background: 'rgba(0,229,255,0.1)',
                 border: '1px solid rgba(0,229,255,0.3)',
                 borderRadius: '9999px',
-                color: '#00e5ff',
+                color: 'var(--color-cyan)',
                 fontSize: '0.8rem',
                 fontWeight: 600,
                 textDecoration: 'none',
@@ -125,14 +126,7 @@ const ComponentEncyclopediaContent = () => {
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
             {selectedComponent.pinout.map(pin => (
-              <div key={pin.number} style={{
-                display: 'grid',
-                gridTemplateColumns: '50px 1fr 100px',
-                gap: '1rem',
-                padding: '0.5rem 0.75rem',
-                borderRadius: '8px',
-                fontSize: '0.85rem',
-              }}>
+              <div key={pin.number} className="pinout-row">
                 <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-text-muted)' }}>Pin {pin.number}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--color-text-primary)' }}>{pin.name}</span>
                 <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>{pin.description}</span>
@@ -185,7 +179,7 @@ const ComponentEncyclopediaContent = () => {
                 padding: '0.5rem 0.75rem',
                 background: 'rgba(239,68,68,0.05)',
                 borderRadius: '8px',
-                borderLeft: '3px solid #ef4444',
+                borderLeft: '3px solid var(--color-error)',
                 fontSize: '0.85rem',
                 color: 'var(--color-text-secondary)',
               }}>
@@ -242,7 +236,7 @@ const ComponentEncyclopediaContent = () => {
                   background: 'rgba(124,58,237,0.1)',
                   borderRadius: '9999px',
                   fontSize: '0.7rem',
-                  color: '#7c3aed',
+                  color: 'var(--color-violet)',
                 }}>
                   {comp.category}
                 </span>

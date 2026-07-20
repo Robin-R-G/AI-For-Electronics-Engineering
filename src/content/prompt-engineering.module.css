@@ -22,7 +22,7 @@
 .noResults {
   text-align: center;
   padding: 4rem;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.02);
   border: 1px dashed rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   color: var(--color-text-secondary);

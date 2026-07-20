@@ -18,3 +18,16 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 480px) {
+  .intro {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1600px;
+    margin-inline: auto;
+  }
+}

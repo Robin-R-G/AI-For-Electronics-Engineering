@@ -1,12 +1,21 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import 'katex/dist/katex.min.css';
 import { getFile } from './storage';
 import styles from './markdown.module.css';
+
+// ponytail: lazy-load KaTeX (~300KB) — only needed for lessons with math expressions.
+let _rehypeKatex: ((options?: Record<string, unknown>) => import('unified').Plugin) | null = null;
+
+async function loadKatex() {
+  if (_rehypeKatex) return _rehypeKatex;
+  const katexMod = await import('rehype-katex');
+  await import('katex/dist/katex.min.css');
+  _rehypeKatex = katexMod.default as ((options?: Record<string, unknown>) => import('unified').Plugin);
+  return _rehypeKatex;
+}
 
 const VIDEO_EXT = ['mp4', 'webm', 'ogg', 'mov'];
 
@@ -141,12 +150,25 @@ function CodeBlock({ code, lang }: { code: string; lang: string }) {
   );
 }
 
+const MATH_RE = /\$\$[\s\S]+?\$\$|\\\([\s\S]+?\\\)|\\\[[\s\S]+?\\\]/;
+
 export default function MarkdownView({ markdown }: { markdown: string }) {
+  const hasMath = useMemo(() => MATH_RE.test(markdown), [markdown]);
+  const [rehypePlugin, setRehypePlugin] = useState<((options?: Record<string, unknown>) => import('unified').Plugin) | null>(null);
+
+  useMemo(() => {
+    if (hasMath && !rehypePlugin) {
+      loadKatex().then(setRehypePlugin);
+    }
+  }, [hasMath, rehypePlugin]);
+
+  const rehypePlugins = rehypePlugin ? [rehypePlugin] : [];
+
   return (
     <div className={styles.md}>
       <Markdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex]}
+        rehypePlugins={rehypePlugins}
         components={{
           pre: ({ children }) => <>{children}</>,
           code({ className, children }) {
@@ -170,8 +192,15 @@ export default function MarkdownView({ markdown }: { markdown: string }) {
             return <img className={styles.media} src={resolved} alt={String(alt ?? '')} />;
           },
           a({ href, children }) {
+            const url = String(href ?? '#');
+            const isExternal = /^(https?:)?\/\//i.test(url) || url.startsWith('mailto:');
             return (
-              <a href={String(href ?? '#')} target="_blank" rel="noreferrer">
+              <a
+                href={url}
+                {...(isExternal
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+              >
                 {children}
               </a>
             );

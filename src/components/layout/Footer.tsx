@@ -35,24 +35,24 @@ const Footer = () => {
           <div className={styles.links}>
             <div className={styles.linkGroup}>
               <h4>Workshop</h4>
-              <Link href="/learn/introduction">Introduction</Link>
-              <Link href="/learn/ai-fundamentals">AI Fundamentals</Link>
-              <Link href="/learn/machine-learning">Machine Learning</Link>
-              <Link href="/learn/deep-learning">Deep Learning</Link>
+              <Link href="/learn/introduction" prefetch={false}>Introduction</Link>
+              <Link href="/learn/ai-fundamentals" prefetch={false}>AI Fundamentals</Link>
+              <Link href="/learn/machine-learning" prefetch={false}>Machine Learning</Link>
+              <Link href="/learn/deep-learning" prefetch={false}>Deep Learning</Link>
             </div>
             <div className={styles.linkGroup}>
               <h4>Advanced</h4>
-              <Link href="/learn/generative-ai">Generative AI</Link>
-              <Link href="/learn/llms">Large Language Models</Link>
-              <Link href="/learn/electronics-applications">Electronics Applications</Link>
-              <Link href="/learn/prompt-engineering">Prompt Engineering</Link>
+              <Link href="/learn/generative-ai" prefetch={false}>Generative AI</Link>
+              <Link href="/learn/llms" prefetch={false}>Large Language Models</Link>
+              <Link href="/learn/electronics-applications" prefetch={false}>Electronics Applications</Link>
+              <Link href="/learn/prompt-engineering" prefetch={false}>Prompt Engineering</Link>
             </div>
             <div className={styles.linkGroup}>
               <h4>Resources</h4>
-              <Link href="/learn/quiz">Take the Quiz</Link>
-              <Link href="/learn/downloads">Downloads</Link>
-              <Link href="/learn/resources">Resources</Link>
-              <Link href="/learn/career-roadmap">Career Roadmap</Link>
+              <Link href="/learn/quiz" prefetch={false}>Take the Quiz</Link>
+              <Link href="/learn/downloads" prefetch={false}>Downloads</Link>
+              <Link href="/learn/resources" prefetch={false}>Resources</Link>
+              <Link href="/learn/career-roadmap" prefetch={false}>Career Roadmap</Link>
             </div>
           </div>
         </div>

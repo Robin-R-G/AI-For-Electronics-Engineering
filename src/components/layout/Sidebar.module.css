@@ -1,23 +1,25 @@
 .sidebar {
-  width: 272px;
+  width: 280px;
   flex-shrink: 0;
-  height: calc(100vh - 72px); /* Matches navbar height + offset */
+  height: calc(100vh - 72px);
   position: sticky;
   top: 72px;
-  background: var(--color-surface);
+  background: rgba(14, 14, 24, 0.55);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
   border-right: 1px solid var(--color-border);
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 40;
 }
 
-.nav { padding: var(--space-6) var(--space-4) var(--space-12); }
+.nav { padding: var(--space-8) var(--space-4) var(--space-12); }
 
 /* ── Header ───────────────────────────── */
 .header {
   margin-bottom: var(--space-6);
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--color-border-subtle);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .header h3 {
@@ -32,23 +34,21 @@
 .progressText {
   font-size: 0.75rem;
   color: var(--color-text-tertiary);
-  margin-bottom: var(--space-2);
-  display: flex;
-  justify-content: space-between;
+  margin-bottom: var(--space-3);
 }
 
 .progressBarContainer {
   width: 100%;
   height: 4px;
-  background: var(--color-surface-2);
-  border-radius: var(--radius-sm);
+  background: var(--color-surface-3);
+  border-radius: 99px;
   overflow: hidden;
 }
 
 .progressBar {
   height: 100%;
-  background: var(--color-text-primary);
-  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--color-brand), var(--color-accent));
+  border-radius: 99px;
   transition: width var(--transition-slow);
 }
 
@@ -66,31 +66,39 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-radius: var(--radius-md);
   color: var(--color-text-secondary);
-  transition: all var(--transition-fast);
+  transition: background var(--transition-fast), color var(--transition-fast);
   font-size: 0.875rem;
   font-weight: 500;
   position: relative;
-  overflow: hidden;
 }
 
-.link:hover {
-  background: var(--color-surface-hover);
-  color: var(--color-text-primary);
-}
+.link:hover { background: var(--color-surface-hover); color: var(--color-text-primary); }
 
 .link.active {
-  background: var(--color-surface-2);
+  background: var(--color-brand-subtle);
   color: var(--color-text-primary);
   font-weight: 600;
 }
 
+.link.active::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 18px;
+  border-radius: 3px;
+  background: linear-gradient(to bottom, var(--color-brand), var(--color-accent));
+}
+
 /* ── Icon / Dot ───────────────────────── */
 .icon {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,50 +106,54 @@
 }
 
 .circle {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--color-text-muted);
-  transition: all var(--transition-fast);
+  transition: background var(--transition-fast);
 }
 
-.link:hover .circle {
-  background: var(--color-text-secondary);
-}
+.link:hover .circle { background: var(--color-text-secondary); }
+.link.active .circle { background: var(--color-brand); }
 
-.link.active .circle {
-  background: var(--color-brand);
-}
+.text { flex: 1; line-height: 1.4; }
 
-.text { flex: 1; }
-
-/* ── Check mark for read sections ─────── */
-.checkmark {
-  font-size: 0.75rem;
-  color: var(--color-success);
-  flex-shrink: 0;
+/* ── Swipe hint ───────────────────────── */
+.swipeHint {
+  display: none;
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 /* ── Mobile Toggle ────────────────────── */
 .mobileToggle {
   display: none;
   position: fixed;
-  bottom: 2rem;
+  bottom: 76px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 150;
-  background: var(--color-text-primary);
-  color: var(--color-background);
+  background: linear-gradient(100deg, var(--color-brand), var(--color-brand-strong));
+  color: #fff;
   border: none;
-  padding: 10px 24px;
+  padding: 10px 22px;
   border-radius: var(--radius-full);
   font-weight: 600;
-  font-size: 0.875rem;
-  box-shadow: var(--shadow-md);
+  font-size: 0.85rem;
+  box-shadow: 0 8px 28px -6px var(--color-brand-glow);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
 }
-.mobileToggle:hover { transform: translateX(-50%) scale(1.02); }
+
+.mobileToggle:hover { transform: translateX(-50%) scale(1.03); box-shadow: 0 12px 36px -8px var(--color-brand-glow); }
 
 .backdrop { display: none; }
 
@@ -149,25 +161,38 @@
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
-    top: 72px;
+    top: 0;
     left: 0;
-    width: 280px;
-    height: calc(100vh - 72px);
+    width: min(280px, 82vw);
+    height: 100vh;
+    z-index: 100;
     transform: translateX(-100%);
     transition: transform var(--transition-normal);
-    z-index: 100;
-    border-right: none;
+    border-right: 1px solid var(--color-border);
+    box-shadow: none;
+    padding-top: 72px;
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
   }
+
   .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
-  .mobileToggle { display: flex; }
+
+  .nav { padding: var(--space-5) var(--space-3) var(--space-24); }
+
+  .mobileToggle { display: inline-flex; }
+
+  .swipeHint { display: block; }
+
   .backdrop {
     display: block;
     position: fixed;
-    top: 72px;
-    left: 0;
-    width: 100vw;
-    height: calc(100vh - 72px);
-    background: var(--color-surface);
+    inset: 0;
+    background: rgba(7, 7, 16, 0.7);
     z-index: 90;
   }
+}
+
+@media (max-width: 480px) {
+  .mobileToggle { padding: 9px 18px; font-size: 0.8rem; bottom: 72px; }
 }

@@ -1,6 +1,6 @@
 .header {
   margin-bottom: 3rem;
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.5s var(--ease-snappy) both;
 }
 
 .metadata {
@@ -26,46 +26,61 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow var(--transition-fast);
 }
 
 .beginner {
-  background: var(--color-surface);
+  background: var(--color-accent-subtle);
   color: var(--color-cyan);
-  border: 1px solid rgba(0, 229, 255, 0.2);
+  border: 1px solid rgba(91, 141, 239, 0.25);
 }
-.beginner:hover { box-shadow: 0 0 12px rgba(0, 229, 255, 0.2); }
 
 .intermediate {
-  background: var(--color-surface);
-  color: var(--color-electric-blue);
-  border: 1px solid rgba(0, 82, 255, 0.2);
+  background: var(--color-brand-subtle);
+  color: var(--color-brand);
+  border: 1px solid rgba(91, 91, 214, 0.25);
 }
-.intermediate:hover { box-shadow: 0 0 12px rgba(0, 82, 255, 0.2); }
 
 .advanced {
-  background: var(--color-surface);
+  background: var(--color-violet-subtle);
   color: var(--color-purple);
-  border: 1px solid rgba(112, 0, 255, 0.2);
+  border: 1px solid rgba(142, 131, 216, 0.25);
 }
-.advanced:hover { box-shadow: 0 0 12px rgba(112, 0, 255, 0.2); }
 
 .title {
-  font-size: 3rem;
-  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-cyan) 100%);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-cyan) 70%, var(--color-brand-hover) 100%);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
   margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 .divider {
   width: 100%;
   height: 1px;
-  }
+  background: linear-gradient(90deg, var(--color-cyan), var(--color-electric-blue), transparent);
+  opacity: 0.6;
+}
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .header {
+    margin-bottom: 2rem;
+  }
+  .metadata {
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+  .title {
+    margin-bottom: 1rem;
+  }
 }

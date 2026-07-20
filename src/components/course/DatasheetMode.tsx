@@ -30,12 +30,12 @@ interface DatasheetModeProps {
 }
 
 const pinTypeColors: Record<string, string> = {
-  power: '#ef4444',
+  power: 'var(--color-error)',
   ground: '#6b7280',
   input: '#3b82f6',
   output: '#10b981',
-  bidirectional: '#f59e0b',
-  analog: '#8b5cf6',
+  bidirectional: 'var(--color-warning)',
+  analog: 'var(--color-purple)',
 };
 
 const DatasheetMode: React.FC<DatasheetModeProps> = ({
@@ -52,6 +52,10 @@ const DatasheetMode: React.FC<DatasheetModeProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'pinout' | 'specs' | 'electrical' | 'design' | 'interview'>('pinout');
 
+  const hasElectrical = electricalRatings.length > 0 || !!timingInfo;
+  const hasDesign = !!exampleCircuit || recommendedDesign.length > 0 || commonMistakes.length > 0;
+  const hasInterview = interviewQuestions.length > 0;
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -61,19 +65,23 @@ const DatasheetMode: React.FC<DatasheetModeProps> = ({
       </div>
 
       <div className={styles.tabs}>
-        {(['pinout', 'specs', 'electrical', 'design', 'interview'] as const).map(tab => (
-          <button
-            key={tab}
-            className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab === 'pinout' && 'Pinout'}
-            {tab === 'specs' && 'Specifications'}
-            {tab === 'electrical' && 'Electrical'}
-            {tab === 'design' && 'Design Tips'}
-            {tab === 'interview' && 'Interview Q&A'}
-          </button>
-        ))}
+        {([
+          { id: 'pinout', label: 'Pinout', show: true },
+          { id: 'specs', label: 'Specifications', show: true },
+          { id: 'electrical', label: 'Electrical', show: hasElectrical },
+          { id: 'design', label: 'Design Tips', show: hasDesign },
+          { id: 'interview', label: 'Interview Q&A', show: hasInterview },
+        ] as const)
+          .filter(tab => tab.show)
+          .map(tab => (
+            <button
+              key={tab.id}
+              className={`${styles.tab} ${activeTab === tab.id ? styles.activeTab : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
       </div>
 
       <div className={styles.tabContent}>
@@ -111,7 +119,7 @@ const DatasheetMode: React.FC<DatasheetModeProps> = ({
 
         {activeTab === 'electrical' && (
           <div>
-            {electricalRatings.length > 0 ? (
+            {electricalRatings.length > 0 && (
               <div className={styles.specsGrid}>
                 {electricalRatings.map((rating, i) => (
                   <div key={i} className={styles.specRow}>
@@ -122,8 +130,6 @@ const DatasheetMode: React.FC<DatasheetModeProps> = ({
                   </div>
                 ))}
               </div>
-            ) : (
-              <p className={styles.placeholder}>No electrical ratings specified.</p>
             )}
             {timingInfo && (
               <div className={styles.timingBox}>
@@ -167,16 +173,12 @@ const DatasheetMode: React.FC<DatasheetModeProps> = ({
 
         {activeTab === 'interview' && (
           <div className={styles.interviewList}>
-            {interviewQuestions.length > 0 ? (
-              interviewQuestions.map((q, i) => (
-                <div key={i} className={styles.interviewItem}>
-                  <span className={styles.questionNumber}>Q{i + 1}</span>
-                  <p>{q}</p>
-                </div>
-              ))
-            ) : (
-              <p className={styles.placeholder}>No interview questions available yet.</p>
-            )}
+            {interviewQuestions.map((q, i) => (
+              <div key={i} className={styles.interviewItem}>
+                <span className={styles.questionNumber}>Q{i + 1}</span>
+                <p>{q}</p>
+              </div>
+            ))}
           </div>
         )}
       </div>

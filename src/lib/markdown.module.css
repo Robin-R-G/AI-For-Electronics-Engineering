@@ -66,7 +66,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: #0d1117;
+  background: var(--color-dark-slate);
 }
 
 .codeHead {
@@ -105,7 +105,7 @@
 .codePre :global(code) {
   font-family: var(--font-mono);
   font-size: 0.88rem;
-  color: #c9d1d9;
+  color: var(--color-text-secondary);
   background: none;
 }
 
@@ -141,11 +141,11 @@
   font-size: 0.95rem;
   margin-bottom: 0.4rem;
 }
-.calloutNote { border-left-color: #58a6ff; color: #58a6ff; }
-.calloutTip { border-left-color: #3fb950; color: #3fb950; }
-.calloutImportant { border-left-color: #d29922; color: #d29922; }
-.calloutWarning { border-left-color: #e3b341; color: #e3b341; }
-.calloutCaution { border-left-color: #f85149; color: #f85149; }
+.calloutNote { border-left-color: var(--color-electric-blue); color: var(--color-electric-blue); }
+.calloutTip { border-left-color: var(--color-success); color: var(--color-success); }
+.calloutImportant { border-left-color: var(--color-warning); color: var(--color-warning); }
+.calloutWarning { border-left-color: var(--color-warning); color: var(--color-warning); }
+.calloutCaution { border-left-color: var(--color-error); color: var(--color-error); }
 
 /* ── Interactive sections ─────────────────────── */
 .interactive {
@@ -166,7 +166,7 @@
   background: linear-gradient(135deg, var(--color-electric-blue), var(--color-cyan));
   border: none;
   border-radius: var(--radius-md);
-  color: #04121a;
+  color: var(--color-text-primary);
   font-weight: 700;
   cursor: pointer;
 }
@@ -194,8 +194,18 @@
   background: var(--color-surface);
   border: 1px solid rgba(248, 81, 73, 0.3);
   border-radius: var(--radius-md);
-  color: #ff6b6b;
+  color: var(--color-error);
   font-size: 0.85rem;
 }
 
 .md :global(.katex) { color: var(--color-text-primary); font-size: 1.05em; }
+
+/* Wide tables scroll on small screens instead of blowing out the layout. */
+@media (max-width: 640px) {
+  .md :global(table) {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -19,7 +19,7 @@
 }
 
 .badge {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0.5rem 1rem;
   border-radius: 99px;
@@ -33,14 +33,15 @@
 }
 
 .badge:hover {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .badge.selected {
-  background: var(--color-surface);
+  background: rgba(0, 229, 255, 0.15);
   border-color: var(--color-cyan);
   color: var(--color-white);
-  }
+  box-shadow: var(--shadow-xs);
+}
 
 .comparisonGrid {
   display: grid;
@@ -90,11 +91,11 @@
 }
 
 .green {
-  color: #00ff64 !important;
+  color: var(--color-success) !important;
 }
 
 .red {
-  color: #ff0050 !important;
+  color: var(--color-error) !important;
 }
 
 .section p {
@@ -131,5 +132,17 @@
 @media (max-width: 768px) {
   .comparisonGrid {
     grid-template-columns: 1fr !important; /* Stack on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .selector {
+    margin-bottom: 2rem;
+  }
+  .column {
+    padding: 1.25rem;
+  }
+  .badge {
+    padding: 0.45rem 0.8rem;
   }
 }

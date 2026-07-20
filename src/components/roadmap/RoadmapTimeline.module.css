@@ -11,7 +11,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   transform: translateX(-50%);
   border-radius: 4px;
   overflow: hidden;
@@ -31,7 +31,7 @@
     transparent
   );
   animation: pulseDown 4s linear infinite;
-  box-shadow: 0 0 20px var(--color-cyan);
+  box-shadow: var(--shadow-xs);
 }
 
 @keyframes pulseDown {
@@ -42,5 +42,11 @@
 @media (max-width: 900px) {
   .centralLine {
     left: 24px; /* Align to left on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .timelineContainer {
+    padding: 1rem 0;
   }
 }

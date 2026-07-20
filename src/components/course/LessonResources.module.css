@@ -26,7 +26,7 @@
   margin-left: 0.25rem;
   padding: 0.15rem 0.6rem;
   border-radius: var(--radius-full);
-  background: var(--color-surface);
+  background: rgba(0, 229, 255, 0.1);
   color: var(--color-cyan);
   font-size: 0.75rem;
   font-weight: 700;
@@ -110,7 +110,7 @@
   border: none;
   border-radius: var(--radius-md);
   background: linear-gradient(135deg, var(--color-electric-blue), var(--color-cyan));
-  color: #04121a;
+  color: var(--color-text-primary);
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
@@ -119,4 +119,21 @@
 
 .btn:hover {
   opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+  .section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
+  .title {
+    font-size: 1.25rem;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .card {
+    padding: 1.1rem;
+  }
 }

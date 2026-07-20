@@ -66,11 +66,24 @@
 }
 
 .card:hover .title {
-  text-shadow: 0 0 16px rgba(0, 229, 255, 0.4);
+  text-shadow: var(--shadow-xs);
 }
 
 @media (max-width: 600px) {
   .navigation {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .navigation {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+  }
+  .card {
+    padding: 1.1rem;
+  }
+  .title {
+    font-size: 1rem;
   }
 }

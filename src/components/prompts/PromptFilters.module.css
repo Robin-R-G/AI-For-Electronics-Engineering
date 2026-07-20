@@ -7,6 +7,7 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 1.5rem;
   border-radius: 16px;
+  backdrop-filter: blur(10px);
 }
 
 .topRow {
@@ -30,7 +31,7 @@
 
 .searchInput {
   width: 100%;
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--color-white);
   padding: 0.8rem 1rem 0.8rem 2.5rem;
@@ -42,11 +43,11 @@
 .searchInput:focus {
   outline: none;
   border-color: var(--color-cyan);
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .favoriteToggle {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--color-text-secondary);
   padding: 0.8rem 1.5rem;
@@ -58,13 +59,13 @@
 }
 
 .favoriteToggle:hover {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .activeFav {
-  background: var(--color-surface);
-  border-color: #ffd700;
-  color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+  border-color: var(--color-warning);
+  color: var(--color-warning);
 }
 
 .filterRow {
@@ -93,7 +94,7 @@
 }
 
 .pill:hover {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--color-white);
 }
 
@@ -107,7 +108,7 @@
 .difficulty {
   display: flex;
   gap: 0.5rem;
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.3);
   padding: 0.25rem;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -129,7 +130,7 @@
 }
 
 .activeDiff {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.1);
   color: var(--color-white);
   font-weight: 500;
 }
@@ -151,5 +152,17 @@
   }
   .pill {
     white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1.1rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .difficulty {
+    width: 100%;
+    justify-content: space-between;
   }
 }

@@ -11,6 +11,23 @@ interface LessonQuizProps {
   lessonTitle: string;
 }
 
+function useCountUp(target: number, duration = 900) {
+  const [value, setValue] = React.useState(0);
+  React.useEffect(() => {
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(target * eased));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, duration]);
+  return value;
+}
+
 export default function LessonQuiz({ slug, lessonTitle }: LessonQuizProps) {
   const questions = lessonQuizQuestions[slug];
   const { quizScores, saveQuizScore } = useProgress();
@@ -30,6 +47,7 @@ export default function LessonQuiz({ slug, lessonTitle }: LessonQuizProps) {
 
   const currentQuestion = questions[currentIdx];
   const percentage = completed ? Math.round((score / questions.length) * 100) : 0;
+  const animatedScore = useCountUp(percentage);
 
   const handleSubmitAnswer = () => {
     if (!selectedAnswer) return;
@@ -108,7 +126,7 @@ export default function LessonQuiz({ slug, lessonTitle }: LessonQuizProps) {
               {passedNow ? 'Quiz Passed!' : 'Keep Learning'}
             </h3>
             <div className={styles.scoreDisplay}>
-              <span className={styles.scoreNumber}>{percentage}%</span>
+              <span className={styles.scoreNumber}>{animatedScore}%</span>
               <span className={styles.scoreDetail}>{score}/{questions.length} correct</span>
             </div>
             <p className={styles.resultText}>
@@ -154,6 +172,7 @@ export default function LessonQuiz({ slug, lessonTitle }: LessonQuizProps) {
           </div>
         </div>
 
+        <div key={currentIdx} className={styles.questionPane}>
         <p className={styles.question}>{currentQuestion.question}</p>
 
         <div className={styles.options}>
@@ -238,6 +257,7 @@ export default function LessonQuiz({ slug, lessonTitle }: LessonQuizProps) {
             </button>
           </div>
         )}
+        </div>
       </div>
     </div>
   );

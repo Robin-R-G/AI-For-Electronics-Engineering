@@ -6,6 +6,7 @@ import { QuizQuestion, Difficulty } from '@/data/quizTypes';
 import { generateQuizSession } from '@/lib/quizRandomizer';
 import CertificateModal from '@/components/quiz/CertificateModal';
 import { loadQuestions, recordQuestionAnswer, getQuestionOfTheDay } from '@/lib/quizService';
+import { useProgress } from '@/context/ProgressContext';
 import styles from './quiz.module.css';
 
 const HISTORY_KEY = 'workshop_quiz_history_v2';
@@ -31,6 +32,23 @@ function writeHistory(history: string[][]) {
 }
 
 export type QuizMode = 'Quick' | 'Topic' | 'Exam' | 'Practice';
+
+function useCountUp(target: number, duration = 900) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(target * eased));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, duration]);
+  return value;
+}
 
 export const QuizContent = () => {
   const [started, setStarted] = useState(false);
@@ -72,15 +90,28 @@ export const QuizContent = () => {
   const [practiceAttempts, setPracticeAttempts] = useState(0);
   const [practiceCorrect, setPracticeCorrect] = useState(0);
 
+  // Share result feedback
+  const [shareLabel, setShareLabel] = useState('Share Result');
+
   // Available topics loaded from the merged questions
-  const availableTopics = useMemo(() => {
-    const all = loadQuestions(quizQuestions);
-    const topics = new Set<string>();
-    all.forEach(q => {
-      if (q.topic) topics.add(q.topic);
+  const [availableTopics, setAvailableTopics] = useState<string[]>([]);
+
+  useEffect(() => {
+    loadQuestions(quizQuestions).then(all => {
+      const topics = new Set<string>();
+      all.forEach(q => { if (q.topic) topics.add(q.topic); });
+      setAvailableTopics(Array.from(topics).sort());
     });
-    return Array.from(topics).sort();
   }, []);
+
+  const { saveQuizScore } = useProgress();
+
+  useEffect(() => {
+    if (completed && mode && mode !== 'Practice' && selectedTopic) {
+      saveQuizScore(`${mode} · ${selectedTopic}`, scorePercentage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [completed]);
 
   const currentQuestion = sessionQuestions[currentIdx];
 
@@ -114,8 +145,8 @@ export const QuizContent = () => {
     return () => clearInterval(timer);
   }, [started, completed, mode, showTransition]);
 
-  const handleStart = (selectedMode: QuizMode) => {
-    const allAvailable = loadQuestions(quizQuestions);
+  const handleStart = async (selectedMode: QuizMode) => {
+    const allAvailable = await loadQuestions(quizQuestions);
     let pool = allAvailable;
 
     if (selectedMode === 'Topic') {
@@ -273,16 +304,17 @@ export const QuizContent = () => {
       if (isCorrect) setPracticeCorrect(prev => prev + 1);
 
       if (currentIdx + 1 >= sessionQuestions.length) {
-        const allAvailable = loadQuestions(quizQuestions);
-        const activeIds = new Set(sessionQuestions.map(q => q.id));
-        let pool = allAvailable.filter(q => !activeIds.has(q.id));
-        if (difficultyFilter !== 'All') {
-          pool = pool.filter(q => q.difficulty === difficultyFilter);
-        }
-        if (pool.length === 0) pool = allAvailable;
+        loadQuestions(quizQuestions).then(allAvailable => {
+          const activeIds = new Set(sessionQuestions.map(q => q.id));
+          let pool = allAvailable.filter(q => !activeIds.has(q.id));
+          if (difficultyFilter !== 'All') {
+            pool = pool.filter(q => q.difficulty === difficultyFilter);
+          }
+          if (pool.length === 0) pool = allAvailable;
 
-        const nextBatch = generateQuizSession(pool, { sessionSize: 10 });
-        setSessionQuestions(prev => [...prev, ...nextBatch]);
+          const nextBatch = generateQuizSession(pool, { sessionSize: 10 });
+          setSessionQuestions(prev => [...prev, ...nextBatch]);
+        });
       }
 
       setCurrentIdx(prev => prev + 1);
@@ -302,8 +334,8 @@ export const QuizContent = () => {
     }
   };
 
-  const handleNextBatch = () => {
-    const allAvailable = loadQuestions(quizQuestions);
+  const handleNextBatch = async () => {
+    const allAvailable = await loadQuestions(quizQuestions);
     let pool = allAvailable;
 
     if (mode === 'Topic') {
@@ -369,6 +401,26 @@ export const QuizContent = () => {
     setAdaptiveMode(false);
   };
 
+  const handleShare = async () => {
+    const label = adaptiveMode ? 'Adaptive' : (mode ?? 'Engineering');
+    const text = `I scored ${scorePercentage}% on the ${label} Engineering Quiz — AI for Electronics Engineers.`;
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: 'AI for Electronics — Quiz', text });
+        return;
+      } catch {
+        /* user dismissed share sheet */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setShareLabel('Copied to clipboard!');
+    } catch {
+      setShareLabel('Copy failed');
+    }
+    setTimeout(() => setShareLabel('Share Result'), 2000);
+  };
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -388,6 +440,15 @@ export const QuizContent = () => {
   }, [score, sessionQuestions, mode, practiceAttempts, practiceCorrect, adaptiveMode, attemptedQuestionsList]);
 
   const canClaimCertificate = scorePercentage >= 80 && mode !== 'Practice';
+
+  // Animated progress bar: how far through the current attempt
+  const progressPercent = useMemo(() => {
+    const total = sessionQuestions.length || 1;
+    const done = submitted ? currentIdx + 1 : currentIdx;
+    return Math.min(100, Math.round((done / total) * 100));
+  }, [currentIdx, submitted, sessionQuestions.length]);
+
+  const animatedScore = useCountUp(scorePercentage);
 
   // Categories/Topics breakdown
   const categoryPerformance = useMemo(() => {
@@ -598,6 +659,16 @@ export const QuizContent = () => {
       {/* 2. Active Question View */}
       {started && !completed && !showTransition && currentQuestion && (
         <div className={styles.quizCard}>
+          <div
+            className={styles.progressTrack}
+            role="progressbar"
+            aria-valuenow={progressPercent}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <div className={styles.progressFill} style={{ width: `${progressPercent}%` }} />
+          </div>
+
           {/* Header Area */}
           <div className={styles.quizHeader}>
             <span className={styles.progressText}>
@@ -630,9 +701,10 @@ export const QuizContent = () => {
           </div>
 
           {/* Meta Tags */}
+          <div key={currentIdx} className={styles.questionPane}>
           <div className={styles.metaRow}>
             <span className={styles.topicBadge}>
-              🏷️ {currentQuestion.topic || 'General'}
+              {currentQuestion.topic || 'General'}
             </span>
             <span className={`${styles.categoryBadge} ${
               currentQuestion.category === 'concept-understanding' ? styles.catConcept :
@@ -759,6 +831,7 @@ export const QuizContent = () => {
               )}
             </div>
           )}
+          </div>
         </div>
       )}
 
@@ -766,8 +839,8 @@ export const QuizContent = () => {
       {started && showTransition && (
         <div className={styles.resultsCard}>
           <h2>Batch {batchNumber + 1} Complete! 📊</h2>
-          <div className={styles.scoreCircle} style={{ borderColor: '#ffd700', boxShadow: '0 0 20px rgba(255, 215, 0, 0.15)' }}>
-            <span className={styles.percentage} style={{ color: '#ffd700' }}>
+          <div className={styles.scoreCircle} style={{ borderColor: 'var(--color-warning)', boxShadow: '0 0 20px rgba(255, 215, 0, 0.15)' }}>
+            <span className={styles.percentage} style={{ color: 'var(--color-warning)' }}>
               {Math.round((batchCorrect / batchTotal) * 100)}%
             </span>
             <span className={styles.scoreText}>{batchCorrect} / {batchTotal} Correct</span>
@@ -799,7 +872,7 @@ export const QuizContent = () => {
             <h2>Quiz Completed! 🎉</h2>
             <div className={styles.scoreRow}>
               <div className={styles.scoreCircle}>
-                <span className={styles.percentage}>{scorePercentage}%</span>
+                <span className={styles.percentage}>{animatedScore}%</span>
                 <span className={styles.scoreText}>
                   {mode === 'Practice'
                     ? `${practiceCorrect} / ${practiceAttempts}`
@@ -851,13 +924,16 @@ export const QuizContent = () => {
               <button onClick={handleRestart} className={styles.restartBtn}>
                 Choose Another Mode
               </button>
+              <button onClick={handleShare} className={styles.shareBtn}>
+                {shareLabel}
+              </button>
             </div>
           </div>
 
           {/* study recommendations based on performance */}
           {recommendedLessons.length > 0 && (
             <div className={styles.performanceBreakdownSection}>
-              <h3 style={{ color: '#fbbf24' }}>🎯 Recommended Review Chapters</h3>
+              <h3 style={{ color: 'var(--color-warning)' }}>🎯 Recommended Review Chapters</h3>
               <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem', marginBottom: '1.25rem' }}>
                 Based on your quiz attempts, we suggest reviewing these lessons to reinforce your understanding of these concepts:
               </p>
@@ -865,7 +941,7 @@ export const QuizContent = () => {
                 {recommendedLessons.map(slug => (
                   <a 
                     key={slug} 
-                    href={`/AI-For-Electronics-Engineering/learn/${slug}`}
+                    href={`/learn/${slug}`}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -906,7 +982,7 @@ export const QuizContent = () => {
                         className={styles.catProgressBar} 
                         style={{ 
                           width: `${cat.percent}%`,
-                          backgroundColor: cat.percent >= 80 ? '#34d399' : cat.percent >= 50 ? '#fbbf24' : '#f87171' 
+                          backgroundColor: cat.percent >= 80 ? 'var(--color-success)' : cat.percent >= 50 ? 'var(--color-warning)' : 'var(--color-error)' 
                         }}
                       />
                     </div>

@@ -1,7 +1,7 @@
 /* ── Root ──────────────────────────────────────────────── */
 .root {
   min-height: 100vh;
-  background: #060810;
+  background: var(--color-dark-slate);
   color: #e2e8f0;
   display: flex;
   flex-direction: column;
@@ -21,11 +21,11 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: radial-gradient(circle, #ff1a1a 0%, rgba(255, 26, 26, 0.4) 60%, transparent 100%);
+  background: radial-gradient(circle, var(--color-error) 0%, rgba(255, 26, 26, 0.4) 60%, transparent 100%);
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 9999;
-  box-shadow: 0 0 12px 4px rgba(255, 26, 26, 0.6);
+  box-shadow: var(--shadow-xs);
   animation: laserPulse 0.8s ease-in-out infinite;
 }
 
@@ -47,11 +47,12 @@
 }
 
 .shortcutsPanel {
-  background: #0e1320;
+  background: var(--color-surface-2);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  padding: 2.5rem;
-  min-width: 400px;
+  padding: clamp(1.25rem, 5vw, 2.5rem);
+  min-width: min(400px, 90vw);
+  max-width: 92vw;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
 }
 
@@ -86,7 +87,7 @@
   border-radius: 6px;
   font-family: monospace;
   font-size: 0.85rem;
-  color: #00e5ff;
+  color: var(--color-cyan);
 }
 
 .closeShortcuts {
@@ -126,7 +127,7 @@
 .presenterBadge {
   background: linear-gradient(135deg, rgba(255, 26, 26, 0.2), rgba(255, 100, 0, 0.2));
   border: 1px solid rgba(255, 100, 0, 0.4);
-  color: #ff9944;
+  color: var(--color-warning);
   padding: 0.3rem 0.75rem;
   border-radius: 99px;
   font-size: 0.8rem;
@@ -136,8 +137,8 @@
 }
 
 @keyframes presenterGlow {
-  0%, 100% { box-shadow: 0 0 8px rgba(255, 100, 0, 0.3); }
-  50%       { box-shadow: 0 0 16px rgba(255, 100, 0, 0.6); }
+  0%, 100% { box-shadow: var(--shadow-xs); }
+  50%       { box-shadow: var(--shadow-xs); }
 }
 
 .sectionCounter {
@@ -156,12 +157,12 @@
   font-size: 2.5rem;
   font-weight: 700;
   font-family: monospace;
-  color: #00e5ff;
+  color: var(--color-cyan);
   transition: color 0.3s;
 }
 
 .timerOverrun {
-  color: #ff4444 !important;
+  color: var(--color-error) !important;
   animation: timerBlink 1s step-end infinite;
 }
 
@@ -198,7 +199,7 @@
 .headerBtnActive {
   background: rgba(255, 26, 26, 0.15) !important;
   border-color: rgba(255, 26, 26, 0.4) !important;
-  color: #ff6666 !important;
+  color: var(--color-error) !important;
 }
 
 /* ── Main Grid ─────────────────────────────────────────── */
@@ -285,9 +286,9 @@
   font-weight: 600;
 }
 
-.diffGreen  { background: var(--color-surface); color: #00ff64; }
-.diffYellow { background: var(--color-surface); color: #ffd700; }
-.diffRed    { background: var(--color-surface);  color: #ff0050; }
+.diffGreen  { background: var(--color-surface); color: var(--color-success); }
+.diffYellow { background: var(--color-surface); color: var(--color-warning); }
+.diffRed    { background: var(--color-surface);  color: var(--color-error); }
 
 .metaChip {
   font-size: 0.82rem;
@@ -356,7 +357,7 @@
 }
 
 .dotActive {
-  background: #00e5ff;
+  background: var(--color-cyan);
     transform: scale(1.3);
 }
 
@@ -409,7 +410,7 @@
   min-width: 22px;
   height: 22px;
   background: var(--color-surface);
-  color: #00e5ff;
+  color: var(--color-cyan);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -429,7 +430,7 @@
   font-size: 4rem;
   font-weight: 800;
   font-family: monospace;
-  color: #00e5ff;
+  color: var(--color-cyan);
   text-align: center;
   margin: 0.5rem 0 1rem;
   transition: color 0.3s;
@@ -453,7 +454,7 @@
 
 .timerBtnStart {
   background: var(--color-surface);
-  color: #00e5ff;
+  color: var(--color-cyan);
   border: 1px solid rgba(0, 229, 255, 0.3);
 }
 
@@ -461,7 +462,7 @@
 
 .timerBtnStop {
   background: var(--color-surface);
-  color: #ff6666;
+  color: var(--color-error);
   border: 1px solid rgba(255, 68, 68, 0.3);
 }
 
@@ -484,7 +485,7 @@
   margin-top: 0.75rem;
   background: var(--color-surface);
   border: 1px solid rgba(255, 68, 68, 0.3);
-  color: #ff6666;
+  color: var(--color-error);
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
   font-size: 0.85rem;
@@ -517,7 +518,7 @@
 .addQBtn {
   background: var(--color-surface);
   border: 1px solid rgba(0, 229, 255, 0.3);
-  color: #00e5ff;
+  color: var(--color-cyan);
   padding: 0.55rem 1rem;
   border-radius: 8px;
   cursor: pointer;
@@ -560,7 +561,7 @@
 .qBullet {
   font-size: 0.72rem;
   font-weight: 700;
-  color: #ffd700;
+  color: var(--color-warning);
   background: var(--color-surface);
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
@@ -579,7 +580,7 @@
   flex-shrink: 0;
 }
 
-.deleteQBtn:hover { color: #ff6666; }
+.deleteQBtn:hover { color: var(--color-error); }
 
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -595,4 +596,15 @@
   .grid { grid-template-columns: 1fr; padding: 1rem; }
   .col:last-child { flex-direction: column; grid-column: span 1; }
   .header { flex-direction: column; gap: 0.75rem; padding: 1rem; }
+}
+
+/* Small phones: shrink chrome so timer + controls stay readable. */
+@media (max-width: 480px) {
+  .header { gap: 0.5rem; padding: 0.75rem; }
+  .headerLeft { gap: 0.75rem; flex-wrap: wrap; }
+  .timer { font-size: 2rem; }
+  .headerBtn { padding: 0.35rem 0.6rem; font-size: 0.8rem; }
+  .bigTimer { font-size: 3rem; }
+  .navBtn { padding: 0.45rem 0.75rem; font-size: 0.85rem; }
+  .shortcutsPanel { min-width: 0; }
 }

@@ -2,34 +2,37 @@
 
 import { QuizQuestion, Difficulty } from '@/data/quizTypes';
 
-// Import static JSON databases
-import aiQuestionsRaw from '@/data/quiz/ai.json';
-import embeddedQuestionsRaw from '@/data/quiz/embedded.json';
-import pcbQuestionsRaw from '@/data/quiz/pcb.json';
-import stm32QuestionsRaw from '@/data/quiz/stm32.json';
-import iotQuestionsRaw from '@/data/quiz/iot.json';
-import fpgaQuestionsRaw from '@/data/quiz/fpga.json';
+// ponytail: lazy-load quiz JSON to avoid pulling ~200KB into every bundle that imports this module.
+let _topicQuestions: QuizQuestion[] | null = null;
+
+async function loadTopicQuestions(): Promise<QuizQuestion[]> {
+  if (_topicQuestions) return _topicQuestions;
+  const [aiRaw, embeddedRaw, pcbRaw, stm32Raw, iotRaw, fpgaRaw] = await Promise.all([
+    import('@/data/quiz/ai.json'),
+    import('@/data/quiz/embedded.json'),
+    import('@/data/quiz/pcb.json'),
+    import('@/data/quiz/stm32.json'),
+    import('@/data/quiz/iot.json'),
+    import('@/data/quiz/fpga.json'),
+  ]);
+  _topicQuestions = [
+    ...(aiRaw.default as QuizQuestion[]).map(q => ({ ...q, topic: 'AI' })),
+    ...(embeddedRaw.default as QuizQuestion[]).map(q => ({ ...q, topic: 'Embedded Systems' })),
+    ...(pcbRaw.default as QuizQuestion[]).map(q => ({ ...q, topic: 'PCB Design' })),
+    ...(stm32Raw.default as QuizQuestion[]).map(q => ({ ...q, topic: 'STM32' })),
+    ...(iotRaw.default as QuizQuestion[]).map(q => ({ ...q, topic: 'IoT' })),
+    ...(fpgaRaw.default as QuizQuestion[]).map(q => ({ ...q, topic: 'FPGA' })),
+  ];
+  return _topicQuestions;
+}
+
+// Synchronous getter — only valid after loadTopicQuestions() has resolved at least once.
+// Used by admin dashboard and quiz page which call loadQuestions() in a useEffect.
+export const staticTopicQuestions: QuizQuestion[] = [];
 
 // Local storage keys
 const CUSTOM_QUESTIONS_KEY = 'workshop_custom_questions_v1';
 const ANALYTICS_ANSWERS_KEY = 'workshop_quiz_answers_analytics_v1';
-
-// Add topic information and cast questions to QuizQuestion type
-const aiQuestions: QuizQuestion[] = (aiQuestionsRaw as any[]).map(q => ({ ...q, topic: 'AI' }));
-const embeddedQuestions: QuizQuestion[] = (embeddedQuestionsRaw as any[]).map(q => ({ ...q, topic: 'Embedded Systems' }));
-const pcbQuestions: QuizQuestion[] = (pcbQuestionsRaw as any[]).map(q => ({ ...q, topic: 'PCB Design' }));
-const stm32Questions: QuizQuestion[] = (stm32QuestionsRaw as any[]).map(q => ({ ...q, topic: 'STM32' }));
-const iotQuestions: QuizQuestion[] = (iotQuestionsRaw as any[]).map(q => ({ ...q, topic: 'IoT' }));
-const fpgaQuestions: QuizQuestion[] = (fpgaQuestionsRaw as any[]).map(q => ({ ...q, topic: 'FPGA' }));
-
-export const staticTopicQuestions: QuizQuestion[] = [
-  ...aiQuestions,
-  ...embeddedQuestions,
-  ...pcbQuestions,
-  ...stm32Questions,
-  ...iotQuestions,
-  ...fpgaQuestions
-];
 
 // Helper to map old difficulties to new ones
 export function mapDifficulty(diff: string): Difficulty {
@@ -43,9 +46,9 @@ export function mapDifficulty(diff: string): Difficulty {
  * Loads all questions by merging the static JSON files, base quiz questions,
  * and custom questions stored in localStorage.
  */
-export function loadQuestions(baseQuizQuestions: QuizQuestion[] = []): QuizQuestion[] {
-  // 1. Get static topic-specific questions
-  const staticQuestions = [...staticTopicQuestions];
+export async function loadQuestions(baseQuizQuestions: QuizQuestion[] = []): Promise<QuizQuestion[]> {
+  // 1. Get static topic-specific questions (lazy loaded)
+  const staticQuestions = await loadTopicQuestions();
 
   // 2. Get base questions mapped to the new difficulty format
   const mappedBaseQuestions = baseQuizQuestions.map(q => ({

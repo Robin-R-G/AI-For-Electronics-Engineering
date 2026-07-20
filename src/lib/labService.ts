@@ -1,14 +1,39 @@
-import embedded from '@/data/lab/embedded.json';
-import arduino from '@/data/lab/arduino.json';
-import esp32 from '@/data/lab/esp32.json';
-import stm32 from '@/data/lab/stm32.json';
-import iot from '@/data/lab/iot.json';
-import robotics from '@/data/lab/robotics.json';
-import ai from '@/data/lab/ai.json';
-import pcb from '@/data/lab/pcb.json';
-import analog from '@/data/lab/analog.json';
-import digital from '@/data/lab/digital.json';
-import fpga from '@/data/lab/fpga.json';
+// ponytail: lazy-load lab JSON to avoid pulling ~300KB into every bundle that imports this module.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _categoryMap: Record<string, any[]> | null = null;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function loadCategoryMap(): Promise<Record<string, any[]>> {
+  if (_categoryMap) return _categoryMap;
+  const [embedded, arduino, esp32, stm32, iot, robotics, ai, pcb, analog, digital, fpga] =
+    await Promise.all([
+      import('@/data/lab/embedded.json'),
+      import('@/data/lab/arduino.json'),
+      import('@/data/lab/esp32.json'),
+      import('@/data/lab/stm32.json'),
+      import('@/data/lab/iot.json'),
+      import('@/data/lab/robotics.json'),
+      import('@/data/lab/ai.json'),
+      import('@/data/lab/pcb.json'),
+      import('@/data/lab/analog.json'),
+      import('@/data/lab/digital.json'),
+      import('@/data/lab/fpga.json'),
+    ]);
+  _categoryMap = {
+    'Embedded Systems': embedded.default,
+    'Arduino Projects': arduino.default,
+    'ESP32 Projects': esp32.default,
+    'STM32 Projects': stm32.default,
+    'IoT': iot.default,
+    'Robotics': robotics.default,
+    'AI + Electronics': ai.default,
+    'PCB Design': pcb.default,
+    'Analog Electronics': analog.default,
+    'Digital Electronics': digital.default,
+    'FPGA': fpga.default,
+  };
+  return _categoryMap;
+}
 
 export interface ComponentItem {
   name: string;
@@ -79,20 +104,6 @@ export interface LabProject {
   suggestedNextProjects: string[]; // List of project IDs recommended next
 }
 
-const CATEGORY_MAP: Record<string, any[]> = {
-  'Embedded Systems': embedded,
-  'Arduino Projects': arduino,
-  'ESP32 Projects': esp32,
-  'STM32 Projects': stm32,
-  'IoT': iot,
-  'Robotics': robotics,
-  'AI + Electronics': ai,
-  'PCB Design': pcb,
-  'Analog Electronics': analog,
-  'Digital Electronics': digital,
-  'FPGA': fpga
-};
-
 // Recommendation engine helper
 function getRecommendations(currentId: string, category: string, allBaselines: any[]): string[] {
   const sameCategory = allBaselines.filter(p => p.category === category && p.id !== currentId);
@@ -103,10 +114,11 @@ function getRecommendations(currentId: string, category: string, allBaselines: a
   return pool.slice(0, 3).map(p => p.id);
 }
 
-// Template compiler compiling the 34 required fields
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function compileProject(p: any, allBaselines: any[]): LabProject {
-  const title = p.title || 'Untitled Project';
-  const category = p.category || 'General';
+  const id = (p.id as string) || 'untitled';
+  const title = (p.title as string) || 'Untitled Project';
+  const category = (p.category as string) || 'General';
   const difficulty = p.difficulty || 'Intermediate';
   const componentsList = p.components || [];
   const connections = p.connections || [];
@@ -255,10 +267,10 @@ function compileProject(p: any, allBaselines: any[]): LabProject {
   ];
 
   // Final suggestions
-  const suggestedNextProjects = getRecommendations(p.id, category, allBaselines);
+  const suggestedNextProjects = getRecommendations(p.id as string, category, allBaselines);
 
   return {
-    id: p.id,
+    id,
     title,
     category,
     difficulty,
@@ -280,16 +292,16 @@ function compileProject(p: any, allBaselines: any[]): LabProject {
     circuitDiagramUrl: `<svg viewBox="0 0 400 180" width="100%" style="background:#091220; border:1px solid #1e293b; border-radius:8px; margin:1rem 0;">
       <rect x="20" y="30" width="100" height="70" rx="4" fill="#0c4a6e" stroke="var(--color-cyan)" stroke-width="2"/>
       <text x="70" y="70" fill="white" font-size="10" font-family="monospace" text-anchor="middle">MCU / CPU</text>
-      <rect x="260" y="30" width="100" height="70" rx="4" fill="#312e81" stroke="#818cf8" stroke-width="2"/>
+      <rect x="260" y="30" width="100" height="70" rx="4" fill="#312e81" stroke="var(--color-brand-hover)" stroke-width="2"/>
       <text x="310" y="70" fill="white" font-size="10" font-family="monospace" text-anchor="middle">LOAD/BOARD</text>
-      <line x1="120" y1="50" x2="260" y2="50" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4"/>
-      <text x="190" y="44" fill="#f59e0b" font-size="9" text-anchor="middle">GPIO / BUS</text>
+      <line x1="120" y1="50" x2="260" y2="50" stroke="var(--color-warning)" stroke-width="2" stroke-dasharray="4"/>
+      <text x="190" y="44" fill="var(--color-warning)" font-size="9" text-anchor="middle">GPIO / BUS</text>
       <line x1="120" y1="80" x2="260" y2="80" stroke="#e11d48" stroke-width="2"/>
       <text x="190" y="74" fill="#e11d48" font-size="9" text-anchor="middle">3.3V / 5V</text>
-      <line x1="70" y1="100" x2="70" y2="140" stroke="#34d399" stroke-width="2"/>
-      <line x1="310" y1="100" x2="310" y2="140" stroke="#34d399" stroke-width="2"/>
-      <line x1="70" y1="140" x2="310" y2="140" stroke="#34d399" stroke-width="2"/>
-      <text x="190" y="135" fill="#34d399" font-size="9" text-anchor="middle">COMMON GND PLANE</text>
+      <line x1="70" y1="100" x2="70" y2="140" stroke="var(--color-success)" stroke-width="2"/>
+      <line x1="310" y1="100" x2="310" y2="140" stroke="var(--color-success)" stroke-width="2"/>
+      <line x1="70" y1="140" x2="310" y2="140" stroke="var(--color-success)" stroke-width="2"/>
+      <text x="190" y="135" fill="var(--color-success)" font-size="9" text-anchor="middle">COMMON GND PLANE</text>
     </svg>`,
     pinConnections: connections,
     hardwareExplanation: `The power supply delivers steady voltages bypassed by 100nF and 10uF capacitors located close to the active IC VCC pins. I/O communication pins interface over SPI or I2C, terminating with 4.7kΩ pull-up resistors to prevent bus line floating.`,
@@ -365,7 +377,9 @@ function compileProject(p: any, allBaselines: any[]): LabProject {
   };
 }
 
-export function loadAllProjects(): LabProject[] {
+export async function loadAllProjects(): Promise<LabProject[]> {
+  const CATEGORY_MAP = await loadCategoryMap();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const baselines: any[] = [];
   Object.entries(CATEGORY_MAP).forEach(([categoryName, list]) => {
     list.forEach((item: any) => {
@@ -380,6 +394,7 @@ export function loadAllProjects(): LabProject[] {
   return baselines.map(p => compileProject(p, baselines));
 }
 
-export function getCategoriesList(): string[] {
+export async function getCategoriesList(): Promise<string[]> {
+  const CATEGORY_MAP = await loadCategoryMap();
   return Object.keys(CATEGORY_MAP);
 }

@@ -69,7 +69,7 @@ export default function AdminDashboardPage() {
   const [fileCount, setFileCount] = useState(0);
 
   useEffect(() => {
-    if (!admin) window.location.replace('/AI-For-Electronics-Engineering/admin/login');
+    if (!admin) window.location.replace('/admin');
   }, [admin]);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export default function AdminDashboardPage() {
 
   const handleLogout = () => {
     destroySession();
-    window.location.replace('/AI-For-Electronics-Engineering/admin/login');
+    window.location.replace('/admin');
   };
 
   if (!admin) {
@@ -219,7 +219,7 @@ function OverviewTab({ fileCount, onGo }: { fileCount: number; onGo: (t: Tab) =>
             <span className={styles.actionIcon}>ðŸ“</span>
             Edit Lessons
           </button>
-          <a className={styles.actionCard} href="/AI-For-Electronics-Engineering/">
+            <a className={styles.actionCard} href="/">
             <span className={styles.actionIcon}>ðŸŒ</span>
             View Site
           </a>
@@ -1004,8 +1004,8 @@ function QuizAdminManager() {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  const reload = () => {
-    const list = loadQuestions(quizQuestions);
+  const reload = async () => {
+    const list = await loadQuestions(quizQuestions);
     setQuestions(list);
     setAnalytics(getQuestionAnalytics(list));
   };
@@ -1191,8 +1191,8 @@ function QuizAdminManager() {
       <div className={styles.certLeftCol}>
         <section className={styles.certSection}>
           <h2>{editingId ? '✍️ Edit Question' : '➕ Add Quiz Question'}</h2>
-          {errorMsg && <div className={styles.errorBox} style={{ color: '#f87171', background: 'rgba(248,113,113,0.08)', padding: '0.75rem', borderRadius: '6px', marginBottom: '1rem' }}>{errorMsg}</div>}
-          {successMsg && <div className={styles.successBox} style={{ color: '#34d399', background: 'rgba(52,211,153,0.08)', padding: '0.75rem', borderRadius: '6px', marginBottom: '1rem' }}>{successMsg}</div>}
+          {errorMsg && <div className={styles.errorBox} style={{ color: 'var(--color-error)', background: 'rgba(248,113,113,0.08)', padding: '0.75rem', borderRadius: '6px', marginBottom: '1rem' }}>{errorMsg}</div>}
+          {successMsg && <div className={styles.successBox} style={{ color: 'var(--color-success)', background: 'rgba(52,211,153,0.08)', padding: '0.75rem', borderRadius: '6px', marginBottom: '1rem' }}>{successMsg}</div>}
 
           <form onSubmit={handleFormSubmit} className={styles.formGrid}>
             <label className={styles.field}>
@@ -1310,7 +1310,7 @@ function QuizAdminManager() {
             </div>
           </form>
           <div style={{ marginTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1rem' }}>
-            <button type="button" className={styles.cancelBtn} style={{ color: '#f87171', borderColor: 'rgba(248,113,113,0.3)' }} onClick={handleResetDb}>
+            <button type="button" className={styles.cancelBtn} style={{ color: 'var(--color-error)', borderColor: 'rgba(248,113,113,0.3)' }} onClick={handleResetDb}>
               ⚠️ Wipe custom questions & Restore defaults
             </button>
           </div>
@@ -1347,7 +1347,7 @@ function QuizAdminManager() {
                       <span style={{ display: 'block', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '220px' }} title={item.question}>
                         {item.question}
                       </span>
-                      <span style={{ color: '#f87171' }}>Error rate: {item.errorRate}%</span>
+                      <span style={{ color: 'var(--color-error)' }}>Error rate: {item.errorRate}%</span>
                     </li>
                   ))}
                 </ol>
@@ -1430,7 +1430,7 @@ function QuizAdminManager() {
                         padding: '1px 5px', 
                         borderRadius: '3px',
                         background: q.difficulty === 'Beginner' ? 'rgba(52,211,153,0.1)' : q.difficulty === 'Intermediate' ? 'rgba(251,191,36,0.1)' : q.difficulty === 'Advanced' ? 'rgba(248,113,113,0.1)' : 'rgba(167,139,250,0.1)',
-                        color: q.difficulty === 'Beginner' ? '#34d399' : q.difficulty === 'Intermediate' ? '#fbbf24' : q.difficulty === 'Advanced' ? '#f87171' : '#c084fc',
+                        color: q.difficulty === 'Beginner' ? 'var(--color-success)' : q.difficulty === 'Intermediate' ? 'var(--color-warning)' : q.difficulty === 'Advanced' ? 'var(--color-error)' : '#c084fc',
                         fontWeight: 600
                       }}>
                         {q.difficulty}
@@ -1448,7 +1448,7 @@ function QuizAdminManager() {
                       <button className={styles.delLink} onClick={() => handleEdit(q)} style={{ color: 'var(--color-cyan)', marginRight: '0.5rem' }}>
                         Edit
                       </button>
-                      <button className={styles.delLink} onClick={() => handleDelete(q.id)} style={{ color: '#f87171' }}>
+                      <button className={styles.delLink} onClick={() => handleDelete(q.id)} style={{ color: 'var(--color-error)' }}>
                         Delete
                       </button>
                     </td>

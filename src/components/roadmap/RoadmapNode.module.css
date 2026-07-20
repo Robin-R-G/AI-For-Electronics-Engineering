@@ -31,7 +31,8 @@
   border-radius: 50%;
   z-index: 10;
   transition: all 0.3s;
-  }
+  box-shadow: var(--shadow-xs);
+}
 
 .leftNode .timelinePoint {
   right: -12px;
@@ -45,6 +46,7 @@
   background: var(--glass-bg);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
+  backdrop-filter: blur(10px);
   overflow: hidden;
   transition: all 0.3s;
 }
@@ -65,7 +67,7 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  background: var(--color-surface);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .title {
@@ -87,7 +89,7 @@
 }
 
 .timeBadge {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   padding: 0.4rem 0.8rem;
   border-radius: 99px;
   font-size: 0.85rem;
@@ -150,14 +152,14 @@
 }
 
 .interviewSection {
-  background: var(--color-surface);
+  background: rgba(255, 215, 0, 0.05);
   border: 1px solid rgba(255, 215, 0, 0.2);
   padding: 1.5rem;
   border-radius: 12px;
 }
 
 .interviewSection h4 {
-  color: #ffd700;
+  color: var(--color-warning);
   margin: 0 0 1rem 0;
 }
 
@@ -178,7 +180,7 @@
 }
 
 .qIcon {
-  color: #ffd700;
+  color: var(--color-warning);
   font-weight: bold;
 }
 
@@ -211,5 +213,24 @@
   }
   .sectionGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .nodeWrapper {
+    padding: 1.25rem 0 1.25rem 2rem;
+  }
+  .header {
+    padding: 1.25rem;
+  }
+  .title {
+    font-size: 1.25rem;
+  }
+  .expandedContent {
+    padding: 1.25rem;
+  }
+  .sectionGrid {
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 }

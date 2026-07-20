@@ -41,7 +41,7 @@ export async function renderCertificate(
   ctx.textAlign = 'left';
 
   // background + border
-  ctx.fillStyle = '#0d1117';
+  ctx.fillStyle = 'var(--color-dark-slate)';
   ctx.fillRect(0, 0, W, H);
   ctx.strokeStyle = '#f59e0b';
   ctx.lineWidth = 4;

@@ -16,7 +16,7 @@ export default function AdminLoginPage() {
   useEffect(() => {
     const session = getSessionSync();
     if (session) {
-      router.replace('/AI-For-Electronics-Engineering/admin/dashboard');
+      router.replace('/admin/dashboard');
     }
   }, [router]);
 
@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
     const result = await login(email, password);
 
     if (result.success) {
-      router.push('/AI-For-Electronics-Engineering/admin/dashboard');
+      router.push('/admin/dashboard');
     } else {
       setError(result.error || 'Invalid credentials');
       if (result.lockoutSeconds) {
