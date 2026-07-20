@@ -4,8 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(12px);
+  background: var(--color-surface);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -15,7 +14,7 @@
 }
 
 .modal {
-  background: rgba(11, 15, 25, 0.95);
+  background: var(--color-surface);
   width: 100%;
   max-width: 1200px;
   height: 90vh;
@@ -31,7 +30,7 @@
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-surface);
   border: none;
   color: white;
   width: 40px;
@@ -47,7 +46,7 @@
 }
 
 .closeBtn:hover {
-  background: rgba(255, 0, 80, 0.8);
+  background: var(--color-surface);
   transform: scale(1.1);
 }
 
@@ -59,7 +58,7 @@
 
 .sidebar {
   width: 280px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--color-surface);
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
@@ -108,12 +107,12 @@
 }
 
 .navBtn:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   color: var(--color-white);
 }
 
 .navBtn.active {
-  background: rgba(0, 229, 255, 0.1);
+  background: var(--color-surface);
   border-color: rgba(0, 229, 255, 0.3);
   color: var(--color-cyan);
 }
@@ -163,7 +162,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   padding: 1rem;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -201,8 +200,7 @@
 }
 
 .projectCard {
-  background: linear-gradient(135deg, rgba(11, 15, 25, 0.8), rgba(0, 82, 255, 0.1));
-  border: 1px solid rgba(0, 82, 255, 0.3);
+    border: 1px solid rgba(0, 82, 255, 0.3);
   padding: 2rem;
   border-radius: 16px;
 }
@@ -242,12 +240,12 @@
   gap: 0.5rem;
   padding: 0.75rem;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   transition: all 0.2s;
 }
 
 .resourceList a:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-surface);
 }
 
 .roadmapSteps {
@@ -264,7 +262,7 @@
   bottom: 0;
   left: 20px;
   width: 2px;
-  background: rgba(0, 229, 255, 0.3);
+  background: var(--color-surface);
 }
 
 .step {
@@ -291,7 +289,7 @@
 .stepText {
   color: var(--color-white);
   font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--color-surface);
   padding: 1rem 1.5rem;
   border-radius: 12px;
   flex: 1;

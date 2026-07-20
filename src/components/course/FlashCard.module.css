@@ -74,13 +74,11 @@
 }
 
 .cardFront {
-  background: linear-gradient(135deg, rgba(0, 82, 255, 0.1), rgba(0, 229, 255, 0.05));
-  border: 1px solid rgba(0, 229, 255, 0.2);
+    border: 1px solid rgba(0, 229, 255, 0.2);
 }
 
 .cardBack {
-  background: linear-gradient(135deg, rgba(0, 255, 163, 0.1), rgba(0, 229, 255, 0.05));
-  border: 1px solid rgba(0, 255, 163, 0.2);
+    border: 1px solid rgba(0, 255, 163, 0.2);
   transform: rotateY(180deg);
 }
 
@@ -131,24 +129,24 @@
 }
 
 .knownBtn {
-  background: rgba(0, 255, 163, 0.15);
+  background: var(--color-surface);
   color: var(--color-green);
   border-color: rgba(0, 255, 163, 0.3);
 }
 
 .knownBtn:hover {
-  background: rgba(0, 255, 163, 0.25);
+  background: var(--color-surface);
   transform: translateY(-1px);
 }
 
 .unknownBtn {
-  background: rgba(245, 158, 11, 0.15);
+  background: var(--color-surface);
   color: #f59e0b;
   border-color: rgba(245, 158, 11, 0.3);
 }
 
 .unknownBtn:hover {
-  background: rgba(245, 158, 11, 0.25);
+  background: var(--color-surface);
   transform: translateY(-1px);
 }
 

@@ -11,7 +11,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   transform: translateX(-50%);
   border-radius: 4px;
   overflow: hidden;

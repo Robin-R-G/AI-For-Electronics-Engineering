@@ -14,7 +14,7 @@
 .badge {
   display: inline-block;
   padding: var(--space-1) var(--space-3);
-  background: rgba(0, 255, 163, 0.15);
+  background: var(--color-surface);
   color: var(--color-green);
   font-size: 0.7rem;
   font-weight: 700;
@@ -45,9 +45,9 @@
   font-weight: 700;
 }
 
-.beginner { background: rgba(0,255,163,0.1); color: #00ffa3; }
-.intermediate { background: rgba(245,158,11,0.1); color: #f59e0b; }
-.advanced { background: rgba(239,68,68,0.1); color: #ef4444; }
+.beginner { background: var(--color-surface); color: #00ffa3; }
+.intermediate { background: var(--color-surface); color: #f59e0b; }
+.advanced { background: var(--color-surface); color: #ef4444; }
 
 .steps h4 {
   font-size: 0.85rem;
@@ -75,7 +75,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: rgba(0, 229, 255, 0.15);
+  background: var(--color-surface);
   color: var(--color-cyan);
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@
 .outcome {
   margin-top: var(--space-5);
   padding: var(--space-4);
-  background: rgba(0, 229, 255, 0.03);
+  background: var(--color-surface);
   border-radius: var(--radius-md);
   border: 1px dashed rgba(0, 229, 255, 0.3);
 }

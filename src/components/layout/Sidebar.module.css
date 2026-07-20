@@ -1,70 +1,55 @@
 .sidebar {
   width: 272px;
   flex-shrink: 0;
-  height: calc(100vh - 70px);
+  height: calc(100vh - 72px); /* Matches navbar height + offset */
   position: sticky;
-  top: 70px;
-  background: rgba(8, 12, 20, 0.75);
-  border-right: 1px solid rgba(255, 255, 255, 0.055);
+  top: 72px;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
   overflow-y: auto;
   overflow-x: hidden;
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
   z-index: 40;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0,229,255,0.15) transparent;
 }
 
-.sidebar::-webkit-scrollbar { width: 4px; }
-.sidebar::-webkit-scrollbar-track { background: transparent; }
-.sidebar::-webkit-scrollbar-thumb {
-  background: rgba(0, 229, 255, 0.15);
-  border-radius: 4px;
-}
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 229, 255, 0.3);
-}
-
-.nav { padding: 1.5rem 1rem 3rem; }
+.nav { padding: var(--space-6) var(--space-4) var(--space-12); }
 
 /* ── Header ───────────────────────────── */
 .header {
-  margin-bottom: 1.75rem;
-  padding-bottom: 1.25rem;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
   border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .header h3 {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   color: var(--color-text-muted);
-  margin-bottom: 0.875rem;
+  margin-bottom: var(--space-3);
   font-weight: 600;
 }
 
 .progressText {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--color-text-tertiary);
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
   display: flex;
   justify-content: space-between;
 }
 
 .progressBarContainer {
   width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 3px;
+  height: 4px;
+  background: var(--color-surface-2);
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
 .progressBar {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-electric-blue), var(--color-cyan));
-  border-radius: 3px;
-  transition: width 0.5s var(--ease-snappy);
-  box-shadow: 0 0 8px rgba(0,229,255,0.4);
+  background: var(--color-text-primary);
+  border-radius: var(--radius-sm);
+  transition: width var(--transition-slow);
 }
 
 /* ── Menu ─────────────────────────────── */
@@ -80,56 +65,32 @@
 .link {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0.525rem 0.625rem;
+  gap: var(--space-3);
+  padding: 6px 12px;
   border-radius: var(--radius-md);
-  color: var(--color-text-tertiary);
-  transition:
-    color var(--transition-fast),
-    background var(--transition-fast),
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
   font-size: 0.875rem;
   font-weight: 500;
   position: relative;
   overflow: hidden;
 }
 
-.link::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%) scaleY(0);
-  width: 2px;
-  height: 60%;
-  background: var(--color-cyan);
-  border-radius: 0 2px 2px 0;
-  transition: transform var(--transition-fast);
-}
-
 .link:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-surface-hover);
   color: var(--color-text-primary);
-  transform: translateX(3px);
 }
 
 .link.active {
-  background: rgba(0, 82, 255, 0.12);
-  color: var(--color-white);
+  background: var(--color-surface-2);
+  color: var(--color-text-primary);
   font-weight: 600;
-  border: 1px solid rgba(0,82,255,0.2);
-  box-shadow: 0 0 16px rgba(0, 82, 255, 0.1);
-}
-
-.link.active::before {
-  transform: translateY(-50%) scaleY(1);
 }
 
 /* ── Icon / Dot ───────────────────────── */
 .icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -140,26 +101,24 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--color-text-muted);
   transition: all var(--transition-fast);
 }
 
 .link:hover .circle {
-  background: rgba(255,255,255,0.3);
+  background: var(--color-text-secondary);
 }
 
 .link.active .circle {
-  background: var(--color-cyan);
-  box-shadow: 0 0 8px rgba(0,229,255,0.6);
+  background: var(--color-brand);
 }
 
 .text { flex: 1; }
 
 /* ── Check mark for read sections ─────── */
 .checkmark {
-  font-size: 0.65rem;
-  opacity: 0.5;
-  color: var(--color-green);
+  font-size: 0.75rem;
+  color: var(--color-success);
   flex-shrink: 0;
 }
 
@@ -167,22 +126,22 @@
 .mobileToggle {
   display: none;
   position: fixed;
-  bottom: 5.5rem;
+  bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 150;
-  background: linear-gradient(135deg, var(--color-electric-blue), #0055ee);
-  color: white;
+  background: var(--color-text-primary);
+  color: var(--color-background);
   border: none;
-  padding: 0.65rem 1.5rem;
+  padding: 10px 24px;
   border-radius: var(--radius-full);
   font-weight: 600;
-  font-size: 0.85rem;
-  box-shadow: 0 4px 20px rgba(0, 82, 255, 0.5);
+  font-size: 0.875rem;
+  box-shadow: var(--shadow-md);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
-.mobileToggle:hover { transform: translateX(-50%) scale(1.04); }
+.mobileToggle:hover { transform: translateX(-50%) scale(1.02); }
 
 .backdrop { display: none; }
 
@@ -190,25 +149,25 @@
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
-    top: 70px;
+    top: 72px;
     left: 0;
     width: 280px;
-    height: calc(100vh - 70px);
+    height: calc(100vh - 72px);
     transform: translateX(-100%);
-    transition: transform 0.35s var(--ease-snappy);
+    transition: transform var(--transition-normal);
     z-index: 100;
+    border-right: none;
   }
-  .sidebar.open { transform: translateX(0); }
+  .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
   .mobileToggle { display: flex; }
   .backdrop {
     display: block;
     position: fixed;
-    top: 70px;
+    top: 72px;
     left: 0;
     width: 100vw;
-    height: calc(100vh - 70px);
-    background: rgba(0, 0, 0, 0.6);
+    height: calc(100vh - 72px);
+    background: var(--color-surface);
     z-index: 90;
-    backdrop-filter: blur(4px);
   }
 }

@@ -15,7 +15,6 @@
   width: 100%;
   max-width: 600px;
   text-align: center;
-  backdrop-filter: blur(10px);
 }
 
 .startCard h2 {
@@ -48,7 +47,7 @@
 }
 
 .diffBtn {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--color-text-secondary);
   padding: 0.8rem;
@@ -59,7 +58,7 @@
 }
 
 .diffBtn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-surface);
   color: white;
 }
 
@@ -96,7 +95,6 @@
   padding: 2.5rem;
   width: 100%;
   max-width: 750px;
-  backdrop-filter: blur(10px);
 }
 
 .quizHeader {
@@ -119,9 +117,9 @@
   text-transform: uppercase;
 }
 
-.badgeEasy { background: rgba(0, 255, 100, 0.1); color: #00ff64; }
-.badgeMedium { background: rgba(255, 215, 0, 0.1); color: #ffd700; }
-.badgeHard { background: rgba(255, 0, 80, 0.1); color: #ff0050; }
+.badgeEasy { background: var(--color-surface); color: #00ff64; }
+.badgeMedium { background: var(--color-surface); color: #ffd700; }
+.badgeHard { background: var(--color-surface); color: #ff0050; }
 
 .metaRow {
   display: flex;
@@ -140,14 +138,14 @@
   letter-spacing: 0.04em;
 }
 
-.catConcept { background: rgba(99, 102, 241, 0.12); color: #818cf8; }
-.catPractical { background: rgba(16, 185, 129, 0.12); color: #34d399; }
-.catDebug { background: rgba(239, 68, 68, 0.12); color: #f87171; }
-.catCircuit { background: rgba(245, 158, 11, 0.12); color: #fbbf24; }
-.catDecision { background: rgba(139, 92, 246, 0.12); color: #a78bfa; }
-.catReal { background: rgba(236, 72, 153, 0.12); color: #f472b6; }
-.catInterview { background: rgba(14, 165, 233, 0.12); color: #38bdf8; }
-.catIndustry { background: rgba(249, 115, 22, 0.12); color: #fb923c; }
+.catConcept { background: var(--color-surface); color: #818cf8; }
+.catPractical { background: var(--color-surface); color: #34d399; }
+.catDebug { background: var(--color-surface); color: #f87171; }
+.catCircuit { background: var(--color-surface); color: #fbbf24; }
+.catDecision { background: var(--color-surface); color: #a78bfa; }
+.catReal { background: var(--color-surface); color: #f472b6; }
+.catInterview { background: var(--color-surface); color: #38bdf8; }
+.catIndustry { background: var(--color-surface); color: #fb923c; }
 
 .lessonTag {
   font-size: 0.7rem;
@@ -175,7 +173,7 @@
   font-size: 0.65rem;
   padding: 0.15rem 0.5rem;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.06);
   color: var(--color-text-tertiary);
   font-weight: 500;
@@ -224,7 +222,7 @@
 }
 
 .optionBtn {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--color-text-secondary);
   padding: 1.1rem 1.5rem;
@@ -236,7 +234,7 @@
 }
 
 .optionBtn:hover:not(.disabledOption) {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   border-color: rgba(255, 255, 255, 0.2);
   color: white;
 }
@@ -309,7 +307,7 @@
 
 /* Explanation Box */
 .explanationBox {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 10px;
   padding: 1.5rem;
@@ -338,7 +336,6 @@
   width: 100%;
   max-width: 600px;
   text-align: center;
-  backdrop-filter: blur(10px);
 }
 
 .resultsCard h2 {
@@ -356,9 +353,8 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 2rem;
-  background: rgba(0, 229, 255, 0.03);
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
-}
+  background: var(--color-surface);
+  }
 
 .percentage {
   font-size: 2.25rem;
@@ -435,7 +431,7 @@
 }
 
 .modeOptionCard {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 1.5rem;
@@ -447,7 +443,7 @@
 }
 
 .modeOptionCard:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   border-color: rgba(0, 229, 255, 0.3);
   transform: translateY(-2px);
 }
@@ -455,8 +451,7 @@
 .activeModeCard {
   background: rgba(0, 229, 255, 0.05) !important;
   border-color: var(--color-cyan) !important;
-  box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
-}
+  }
 
 .modeIcon {
   font-size: 1.8rem;
@@ -502,7 +497,7 @@
 }
 
 .setupChoiceBtn {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--color-text-secondary);
   padding: 0.5rem 1rem;
@@ -513,7 +508,7 @@
 }
 
 .setupChoiceBtn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-surface);
   color: white;
 }
 
@@ -525,8 +520,7 @@
 }
 
 .glowingStart {
-  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.2);
-}
+  }
 
 /* Timer and Topic Badges */
 .timerBanner {
@@ -534,7 +528,7 @@
   font-weight: bold;
   font-size: 1.1rem;
   color: #34d399;
-  background: rgba(52, 211, 153, 0.1);
+  background: var(--color-surface);
   padding: 0.3rem 0.75rem;
   border-radius: 6px;
   letter-spacing: 0.05em;
@@ -543,20 +537,20 @@
 
 .timerWarning {
   color: #f87171;
-  background: rgba(248, 113, 113, 0.1);
+  background: var(--color-surface);
   box-shadow: 0 0 8px rgba(248, 113, 113, 0.15);
   animation: pulse 1s infinite alternate;
 }
 
 .badgeExpert {
-  background: rgba(167, 139, 250, 0.1);
+  background: var(--color-surface);
   color: #c084fc;
 }
 
 .topicBadge {
   font-size: 0.75rem;
   color: var(--color-text-secondary);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   padding: 0.2rem 0.6rem;
   border-radius: 4px;
   font-weight: 500;
@@ -584,7 +578,7 @@
 .backBtn:hover {
   color: white;
   border-color: rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
 }
 
 .flowRightGroup {
@@ -594,7 +588,7 @@
 }
 
 .finishPracticeBtn {
-  background: rgba(248, 113, 113, 0.1);
+  background: var(--color-surface);
   border: 1px solid rgba(248, 113, 113, 0.3);
   color: #f87171;
   padding: 0.8rem 1.5rem;
@@ -606,7 +600,7 @@
 }
 
 .finishPracticeBtn:hover {
-  background: rgba(248, 113, 113, 0.2);
+  background: var(--color-surface);
   border-color: #f87171;
 }
 
@@ -626,7 +620,6 @@
   border-radius: 20px;
   padding: 2.5rem;
   text-align: center;
-  backdrop-filter: blur(10px);
 }
 
 .resultsHeaderCard h2 {
@@ -656,7 +649,7 @@
   flex-direction: column;
   gap: 0.6rem;
   text-align: left;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 1.2rem 1.5rem;
   border-radius: 12px;
@@ -693,7 +686,6 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 20px;
   padding: 2rem 2.5rem;
-  backdrop-filter: blur(10px);
 }
 
 .performanceBreakdownSection h3 {
@@ -732,7 +724,7 @@
 }
 
 .catProgressTrack {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--color-surface);
   height: 8px;
   border-radius: 4px;
   overflow: hidden;
@@ -750,7 +742,6 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 20px;
   padding: 2rem 2.5rem;
-  backdrop-filter: blur(10px);
   text-align: left;
 }
 
@@ -770,7 +761,7 @@
   border-radius: 12px;
   padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(255, 255, 255, 0.01);
+  background: var(--color-surface);
   position: relative;
 }
 
@@ -803,12 +794,12 @@
 }
 
 .statusBadgeCorrect {
-  background: rgba(52, 211, 153, 0.1);
+  background: var(--color-surface);
   color: #34d399;
 }
 
 .statusBadgeIncorrect {
-  background: rgba(248, 113, 113, 0.1);
+  background: var(--color-surface);
   color: #f87171;
 }
 
@@ -829,7 +820,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background: rgba(0, 0, 0, 0.15);
+  background: var(--color-surface);
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;

@@ -2,7 +2,6 @@
   background: var(--glass-bg);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 12px;
-  backdrop-filter: blur(10px);
   overflow: hidden;
   transition: all 0.2s ease;
 }
@@ -17,7 +16,7 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--color-surface);
 }
 
 .titleRow {
@@ -27,7 +26,7 @@
 }
 
 .categoryBadge {
-  background: rgba(0, 229, 255, 0.1);
+  background: var(--color-surface);
   color: var(--color-cyan);
   padding: 0.25rem 0.75rem;
   border-radius: 99px;
@@ -57,9 +56,9 @@
   font-weight: 500;
 }
 
-.diffGreen { background: rgba(0, 255, 100, 0.1); color: #00ff64; }
-.diffYellow { background: rgba(255, 215, 0, 0.1); color: #ffd700; }
-.diffRed { background: rgba(255, 0, 80, 0.1); color: #ff0050; }
+.diffGreen { background: var(--color-surface); color: #00ff64; }
+.diffYellow { background: var(--color-surface); color: #ffd700; }
+.diffRed { background: var(--color-surface); color: #ff0050; }
 
 .favoriteBtn {
   background: none;
@@ -97,7 +96,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   padding: 0.5rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -111,7 +110,7 @@
 }
 
 .copyBtn {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-surface);
   border: none;
   color: var(--color-white);
   padding: 0.25rem 0.75rem;
@@ -121,7 +120,7 @@
   transition: all 0.2s;
 }
 
-.copyBtn:hover { background: rgba(0, 229, 255, 0.2); color: var(--color-cyan); }
+.copyBtn:hover { background: var(--color-surface); color: var(--color-cyan); }
 
 .promptText {
   padding: 1.25rem;
@@ -174,7 +173,7 @@
 }
 
 .metaBox {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 1rem;
   border-radius: 8px;
@@ -207,7 +206,7 @@
 
 /* Tips / Best practices / Common mistakes */
 .tipBox {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 1rem 1.25rem;
   border-radius: 8px;

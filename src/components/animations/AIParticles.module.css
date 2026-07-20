@@ -1,36 +1,3 @@
 .particleContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: var(--color-cyan);
-  border-radius: 50%;
-  box-shadow: 0 0 10px 2px var(--color-cyan-glow);
-  opacity: 0;
-  animation: particleFloat ease-in-out infinite alternate;
-}
-
-@keyframes particleFloat {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0.5);
-  }
-  50% {
-    opacity: 0.8;
-    transform: translate(20px, -20px) scale(1.5);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-10px, -40px) scale(0.5);
-  }
+  display: none;
 }

@@ -4,8 +4,6 @@
   border-radius: 14px;
   background: var(--glass-bg);
   border-left: 4px solid;
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -38,24 +36,24 @@
 /* Variants */
 .note {
   border-left-color: var(--color-cyan);
-  background: rgba(0, 229, 255, 0.05);
+  background: var(--color-surface);
 }
 .note .title { color: var(--color-cyan); }
 
 .important {
   border-left-color: var(--color-purple);
-  background: rgba(112, 0, 255, 0.05);
+  background: var(--color-surface);
 }
 .important .title { color: var(--color-purple); }
 
 .warning {
   border-left-color: #ff9800;
-  background: rgba(255, 152, 0, 0.05);
+  background: var(--color-surface);
 }
 .warning .title { color: #ff9800; }
 
 .example {
   border-left-color: var(--color-electric-blue);
-  background: rgba(0, 82, 255, 0.05);
+  background: var(--color-surface);
 }
 .example .title { color: var(--color-electric-blue); }

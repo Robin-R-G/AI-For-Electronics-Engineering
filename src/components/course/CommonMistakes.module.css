@@ -28,7 +28,7 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-4) var(--space-5);
-  background: rgba(239, 68, 68, 0.05);
+  background: var(--color-surface);
 }
 
 .icon {

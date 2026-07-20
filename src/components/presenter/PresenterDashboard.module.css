@@ -38,8 +38,7 @@
 .shortcutsOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(6px);
+  background: var(--color-surface);
   z-index: 5000;
   display: flex;
   align-items: center;
@@ -80,7 +79,7 @@
 }
 
 .kbd {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-bottom-width: 3px;
   padding: 0.2rem 0.5rem;
@@ -93,7 +92,7 @@
 .closeShortcuts {
   width: 100%;
   margin-top: 1.5rem;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #94a3b8;
   padding: 0.6rem;
@@ -103,7 +102,7 @@
 }
 
 .closeShortcuts:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--color-surface);
   color: white;
 }
 
@@ -113,7 +112,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--color-surface);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   flex-shrink: 0;
 }
@@ -181,7 +180,7 @@
 }
 
 .headerBtn {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: #94a3b8;
   padding: 0.4rem 0.85rem;
@@ -192,7 +191,7 @@
 }
 
 .headerBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-surface);
   color: white;
 }
 
@@ -221,7 +220,7 @@
 
 /* ── Panel Base ────────────────────────────────────────── */
 .panel {
-  background: rgba(255, 255, 255, 0.025);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 16px;
   padding: 1.5rem;
@@ -231,7 +230,7 @@
 
 .panelDim {
   opacity: 0.6;
-  background: rgba(255, 255, 255, 0.01);
+  background: var(--color-surface);
 }
 
 .panelTall {
@@ -286,9 +285,9 @@
   font-weight: 600;
 }
 
-.diffGreen  { background: rgba(0,255,100,0.1); color: #00ff64; }
-.diffYellow { background: rgba(255,215,0,0.1); color: #ffd700; }
-.diffRed    { background: rgba(255,0,80,0.1);  color: #ff0050; }
+.diffGreen  { background: var(--color-surface); color: #00ff64; }
+.diffYellow { background: var(--color-surface); color: #ffd700; }
+.diffRed    { background: var(--color-surface);  color: #ff0050; }
 
 .metaChip {
   font-size: 0.82rem;
@@ -316,7 +315,7 @@
 }
 
 .navBtn {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #94a3b8;
   padding: 0.5rem 1rem;
@@ -328,7 +327,7 @@
 }
 
 .navBtn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--color-surface);
   color: white;
 }
 
@@ -349,7 +348,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-surface);
   border: none;
   cursor: pointer;
   padding: 0;
@@ -358,12 +357,11 @@
 
 .dotActive {
   background: #00e5ff;
-  box-shadow: 0 0 6px rgba(0,229,255,0.8);
-  transform: scale(1.3);
+    transform: scale(1.3);
 }
 
 .dotDone {
-  background: rgba(0, 229, 255, 0.3);
+  background: var(--color-surface);
 }
 
 /* ── Speaker Notes ─────────────────────────────────────── */
@@ -376,7 +374,7 @@
 
 .divider {
   height: 1px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-surface);
   margin: 1.25rem 0;
 }
 
@@ -410,7 +408,7 @@
 .tpNum {
   min-width: 22px;
   height: 22px;
-  background: rgba(0, 229, 255, 0.12);
+  background: var(--color-surface);
   color: #00e5ff;
   border-radius: 50%;
   display: flex;
@@ -454,24 +452,24 @@
 }
 
 .timerBtnStart {
-  background: rgba(0, 229, 255, 0.15);
+  background: var(--color-surface);
   color: #00e5ff;
   border: 1px solid rgba(0, 229, 255, 0.3);
 }
 
-.timerBtnStart:hover { background: rgba(0, 229, 255, 0.25); }
+.timerBtnStart:hover { background: var(--color-surface); }
 
 .timerBtnStop {
-  background: rgba(255, 68, 68, 0.15);
+  background: var(--color-surface);
   color: #ff6666;
   border: 1px solid rgba(255, 68, 68, 0.3);
 }
 
-.timerBtnStop:hover { background: rgba(255, 68, 68, 0.25); }
+.timerBtnStop:hover { background: var(--color-surface); }
 
 .timerBtnReset {
   padding: 0.6rem 1rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: #64748b;
   border-radius: 8px;
@@ -480,11 +478,11 @@
   transition: all 0.2s;
 }
 
-.timerBtnReset:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+.timerBtnReset:hover { background: var(--color-surface); color: white; }
 
 .overrunAlert {
   margin-top: 0.75rem;
-  background: rgba(255, 68, 68, 0.1);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 68, 68, 0.3);
   color: #ff6666;
   padding: 0.5rem 0.75rem;
@@ -502,7 +500,7 @@
 
 .questionInput {
   flex: 1;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: white;
   padding: 0.55rem 0.75rem;
@@ -517,7 +515,7 @@
 }
 
 .addQBtn {
-  background: rgba(0, 229, 255, 0.15);
+  background: var(--color-surface);
   border: 1px solid rgba(0, 229, 255, 0.3);
   color: #00e5ff;
   padding: 0.55rem 1rem;
@@ -528,7 +526,7 @@
   transition: all 0.2s;
 }
 
-.addQBtn:hover { background: rgba(0, 229, 255, 0.25); }
+.addQBtn:hover { background: var(--color-surface); }
 
 .questionList {
   flex: 1;
@@ -551,7 +549,7 @@
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--color-surface);
   padding: 0.75rem;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -563,7 +561,7 @@
   font-size: 0.72rem;
   font-weight: 700;
   color: #ffd700;
-  background: rgba(255, 215, 0, 0.08);
+  background: var(--color-surface);
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   white-space: nowrap;

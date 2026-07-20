@@ -19,7 +19,7 @@
 }
 
 .badge {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0.5rem 1rem;
   border-radius: 99px;
@@ -33,15 +33,14 @@
 }
 
 .badge:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-surface);
 }
 
 .badge.selected {
-  background: rgba(0, 229, 255, 0.15);
+  background: var(--color-surface);
   border-color: var(--color-cyan);
   color: var(--color-white);
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
-}
+  }
 
 .comparisonGrid {
   display: grid;

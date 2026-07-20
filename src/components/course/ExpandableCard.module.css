@@ -20,7 +20,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4) var(--space-5);
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: none;
   cursor: pointer;
   transition: background var(--transition-fast);
@@ -28,7 +28,7 @@
 }
 
 .header:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--color-surface);
 }
 
 .headerLeft {
@@ -93,7 +93,7 @@
 }
 
 .inner code {
-  background: rgba(0, 229, 255, 0.1);
+  background: var(--color-surface);
   padding: 0.15em 0.4em;
   border-radius: 4px;
   font-size: 0.85em;

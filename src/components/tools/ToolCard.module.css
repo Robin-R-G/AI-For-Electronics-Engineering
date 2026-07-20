@@ -5,7 +5,6 @@
   padding: 1.5rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -14,8 +13,7 @@
 .card:hover {
   transform: translateY(-5px);
   border-color: rgba(0, 229, 255, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 229, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
+    background: var(--color-surface);
 }
 
 .header {
@@ -32,7 +30,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   border-radius: 12px;
 }
 

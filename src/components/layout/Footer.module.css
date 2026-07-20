@@ -3,8 +3,6 @@
   margin-top: var(--space-24);
   border-top: 1px solid var(--color-border);
   background: var(--glass-bg-heavy);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .container {
@@ -116,14 +114,14 @@
   width: 36px;
   height: 36px;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   color: var(--color-text-secondary);
   transition: all var(--transition-fast);
 }
 
 .socialLink:hover {
-  background: rgba(0, 229, 255, 0.1);
+  background: var(--color-surface);
   border-color: rgba(0, 229, 255, 0.3);
   color: var(--color-cyan);
   transform: translateY(-2px);
@@ -149,7 +147,6 @@
   height: 44px;
   border-radius: var(--radius-full);
   background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--color-border);
   color: var(--color-cyan);
   display: flex;
@@ -162,7 +159,7 @@
 }
 
 .backToTop:hover {
-  background: rgba(0, 229, 255, 0.15);
+  background: var(--color-surface);
   border-color: rgba(0, 229, 255, 0.4);
   transform: translateY(-3px);
   box-shadow: var(--shadow-glow-cyan);

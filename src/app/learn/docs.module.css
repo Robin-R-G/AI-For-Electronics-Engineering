@@ -81,7 +81,7 @@
 }
 
 .docContent code {
-  background: rgba(0,229,255,0.06);
+  background: var(--color-surface);
   border: 1px solid rgba(0,229,255,0.12);
   padding: 0.15em 0.4em;
   border-radius: 4px;
@@ -111,7 +111,7 @@
   border-left: 3px solid var(--color-cyan);
   padding: 0.5rem 1.25rem;
   margin: 1.5rem 0;
-  background: rgba(0,229,255,0.04);
+  background: var(--color-surface);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   color: var(--color-text-secondary);
   font-style: italic;
@@ -120,7 +120,7 @@
 /* ── Placeholder ─────────────────────────────── */
 .placeholder {
   padding: 2.5rem;
-  background: rgba(0, 229, 255, 0.03);
+  background: var(--color-surface);
   border: 1px dashed rgba(0, 229, 255, 0.18);
   border-radius: var(--radius-xl);
   margin: 2rem 0;

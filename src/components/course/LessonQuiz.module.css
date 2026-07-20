@@ -7,11 +7,9 @@
   text-align: center;
   padding: 3rem 2rem;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(12px) saturate(140%);
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
 }
 
 .icon {
@@ -41,7 +39,7 @@
   margin-left: 0.5rem;
   padding: 0.15rem 0.6rem;
   border-radius: 20px;
-  background: rgba(0, 255, 100, 0.15);
+  background: var(--color-surface);
   color: #00ff64;
   font-size: 0.8rem;
   font-weight: 600;
@@ -57,23 +55,19 @@
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.25s var(--ease-snappy);
-  box-shadow: 0 4px 14px rgba(0, 82, 255, 0.35);
-}
+  }
 
 .startBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 82, 255, 0.5);
-}
+  }
 
 /* Quiz card */
 .quizCard {
   padding: 2rem;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(12px) saturate(140%);
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
 }
 
 .progress {
@@ -90,7 +84,7 @@
 
 .progressBar {
   height: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-surface);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -123,7 +117,7 @@
   gap: 0.75rem;
   text-align: left;
   padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   color: var(--color-text-secondary);
@@ -133,7 +127,7 @@
 }
 
 .optionBtn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--color-surface);
   border-color: rgba(0, 229, 255, 0.3);
   transform: translateX(4px);
 }
@@ -146,20 +140,20 @@
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-surface);
   font-weight: 700;
   font-size: 0.85rem;
   color: var(--color-text-tertiary);
 }
 
 .selected {
-  background: rgba(0, 82, 255, 0.2);
+  background: var(--color-surface);
   border-color: var(--color-electric-blue);
   color: var(--color-white);
 }
 
 .selected .optionLetter {
-  background: rgba(0, 82, 255, 0.4);
+  background: var(--color-surface);
   color: white;
 }
 
@@ -191,8 +185,7 @@
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.25s var(--ease-snappy);
-  box-shadow: 0 4px 14px rgba(0, 82, 255, 0.35);
-}
+  }
 
 .submitBtn:disabled {
   opacity: 0.45;
@@ -203,8 +196,7 @@
 
 .submitBtn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 82, 255, 0.5);
-}
+  }
 
 /* Feedback */
 .feedback {
@@ -218,7 +210,7 @@
   gap: 0.75rem;
   padding: 1rem 1.25rem;
   border-radius: 10px;
-  background: rgba(0, 255, 100, 0.1);
+  background: var(--color-surface);
   border-left: 4px solid #00ff64;
   color: #e0ffe8;
   font-size: 1.05rem;
@@ -232,7 +224,7 @@
   gap: 0.75rem;
   padding: 1rem 1.25rem;
   border-radius: 10px;
-  background: rgba(255, 0, 80, 0.1);
+  background: var(--color-surface);
   border-left: 4px solid #ff0050;
   color: #ffe0e8;
   font-size: 1.05rem;
@@ -248,7 +240,7 @@
 .feedbackSection {
   padding: 1rem 1.25rem;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.05);
   margin-bottom: 0.75rem;
 }
@@ -277,7 +269,7 @@
 .nextBtn {
   margin-top: 1rem;
   padding: 0.7rem 1.8rem;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-surface);
   color: var(--color-white);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
@@ -288,7 +280,7 @@
 }
 
 .nextBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--color-surface);
   transform: translateY(-1px);
 }
 
@@ -297,11 +289,9 @@
   text-align: center;
   padding: 3rem 2rem;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(12px) saturate(140%);
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
 }
 
 .resultIconPass {
@@ -368,7 +358,7 @@
 
 .retryBtn {
   padding: 0.8rem 2rem;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-surface);
   color: var(--color-white);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
@@ -379,7 +369,7 @@
 }
 
 .retryBtn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--color-surface);
   transform: translateY(-1px);
 }
 

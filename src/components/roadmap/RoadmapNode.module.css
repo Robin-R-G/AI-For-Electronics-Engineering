@@ -31,8 +31,7 @@
   border-radius: 50%;
   z-index: 10;
   transition: all 0.3s;
-  box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
-}
+  }
 
 .leftNode .timelinePoint {
   right: -12px;
@@ -46,7 +45,6 @@
   background: var(--glass-bg);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  backdrop-filter: blur(10px);
   overflow: hidden;
   transition: all 0.3s;
 }
@@ -67,7 +65,7 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--color-surface);
 }
 
 .title {
@@ -89,7 +87,7 @@
 }
 
 .timeBadge {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   padding: 0.4rem 0.8rem;
   border-radius: 99px;
   font-size: 0.85rem;
@@ -152,7 +150,7 @@
 }
 
 .interviewSection {
-  background: rgba(255, 215, 0, 0.05);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 215, 0, 0.2);
   padding: 1.5rem;
   border-radius: 12px;

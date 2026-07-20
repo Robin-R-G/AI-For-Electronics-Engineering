@@ -4,8 +4,6 @@
   overflow: hidden;
   background: #0d1117;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -19,7 +17,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 0.85rem;
   color: var(--color-text-secondary);
@@ -54,7 +52,7 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--color-white);
   padding: 0.4rem 0.8rem;
@@ -70,5 +68,5 @@
 }
 
 .copyBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-surface);
 }

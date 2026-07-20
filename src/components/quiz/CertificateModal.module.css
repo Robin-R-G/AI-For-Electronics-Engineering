@@ -4,8 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(12px);
+  background: var(--color-surface);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -15,7 +14,7 @@
 }
 
 .modal {
-  background: rgba(11, 15, 25, 0.95);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   width: 100%;
@@ -29,7 +28,7 @@
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   border: none;
   color: white;
   width: 36px;
@@ -44,7 +43,7 @@
 }
 
 .closeBtn:hover {
-  background: rgba(255, 0, 80, 0.8);
+  background: var(--color-surface);
 }
 
 /* Setup View */
@@ -69,7 +68,7 @@
 }
 
 .nameInput {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
   padding: 1rem 1.5rem;
@@ -214,8 +213,7 @@
   z-index: 2;
   width: 60%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
-  margin: 0 0 1rem 0;
+    margin: 0 0 1rem 0;
 }
 
 .detailsRow {

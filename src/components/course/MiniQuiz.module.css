@@ -2,11 +2,9 @@
   margin: 3rem 0;
   padding: 2rem;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(12px) saturate(140%);
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
   transition: border-color 0.3s ease;
 }
 
@@ -40,7 +38,7 @@
 .optionBtn {
   text-align: left;
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   color: var(--color-text-secondary);
@@ -55,13 +53,12 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0,82,255,0.08), transparent);
-  opacity: 0;
+    opacity: 0;
   transition: opacity 0.25s ease;
 }
 
 .optionBtn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--color-surface);
   border-color: rgba(0, 229, 255, 0.3);
   transform: translateX(4px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
@@ -69,7 +66,7 @@
 .optionBtn:hover:not(:disabled)::before { opacity: 1; }
 
 .selected {
-  background: rgba(0, 82, 255, 0.2);
+  background: var(--color-surface);
   border-color: var(--color-electric-blue);
   color: var(--color-white);
 }
@@ -97,8 +94,7 @@
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.25s var(--ease-snappy);
-  box-shadow: 0 4px 14px rgba(0, 82, 255, 0.35);
-  position: relative;
+    position: relative;
   overflow: hidden;
 }
 
@@ -128,8 +124,7 @@
 
 .submitBtn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 82, 255, 0.5);
-}
+  }
 
 .submitBtn:active:not(:disabled) {
   transform: translateY(0) scale(0.98);
@@ -145,13 +140,13 @@
 }
 
 .success {
-  background: rgba(0, 255, 100, 0.1);
+  background: var(--color-surface);
   border-left: 4px solid #00ff64;
   color: #e0ffe8;
 }
 
 .error {
-  background: rgba(255, 0, 80, 0.1);
+  background: var(--color-surface);
   border-left: 4px solid #ff0050;
   color: #ffe0e8;
 }

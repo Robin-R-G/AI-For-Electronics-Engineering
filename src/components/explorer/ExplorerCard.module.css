@@ -1,12 +1,11 @@
 .card {
   position: relative;
-  background: rgba(11, 15, 25, 0.6);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   padding: 1.5rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  backdrop-filter: blur(10px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -23,7 +22,7 @@
 .iconWrapper {
   width: 56px;
   height: 56px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-surface);
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -34,7 +33,7 @@
 
 .card:hover .iconWrapper {
   transform: scale(1.1);
-  background: rgba(0, 229, 255, 0.1);
+  background: var(--color-surface);
 }
 
 .content {

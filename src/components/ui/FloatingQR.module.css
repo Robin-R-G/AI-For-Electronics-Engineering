@@ -14,15 +14,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 24px rgba(0, 82, 255, 0.5);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: fixed;
 }
 
 .floatingBtn:hover {
   transform: scale(1.1);
-  box-shadow: 0 8px 32px rgba(0, 229, 255, 0.6);
-}
+  }
 
 .floatingBtnActive {
   background: rgba(255, 255, 255, 0.1) !important;
@@ -45,7 +43,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgba(0, 229, 255, 0.3);
+  background: var(--color-surface);
   animation: pulse 2.5s ease-out infinite;
   z-index: 0;
 }
@@ -60,8 +58,7 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
+  background: var(--color-surface);
   z-index: 490;
   animation: fadeIn 0.2s ease-out;
 }
@@ -73,17 +70,11 @@
   right: 2rem;
   z-index: 501;
   width: 320px;
-  background: rgba(8, 12, 20, 0.92);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  background: var(--color-surface);
   border: 1px solid rgba(0, 229, 255, 0.2);
   border-radius: 24px;
   padding: 1.75rem;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04),
-    0 24px 56px rgba(0, 0, 0, 0.7),
-    0 0 60px rgba(0, 229, 255, 0.06);
-  display: flex;
+    display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
@@ -118,7 +109,7 @@
   position: relative;
   padding: 1.25rem;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--color-surface);
   border: 1px solid rgba(0, 229, 255, 0.15);
   display: flex;
   align-items: center;
@@ -155,7 +146,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
   padding: 0.5rem 0.875rem;
@@ -187,7 +178,7 @@
   padding: 0.75rem 0.5rem;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--color-surface);
   color: var(--color-text-secondary);
   font-size: 0.72rem;
   font-weight: 500;
@@ -205,13 +196,12 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0,229,255,0.06), transparent);
-  opacity: 0;
+    opacity: 0;
   transition: opacity 0.25s ease;
 }
 
 .actionBtn:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--color-surface);
   border-color: rgba(0, 229, 255, 0.3);
   color: var(--color-white);
   transform: translateY(-2px);

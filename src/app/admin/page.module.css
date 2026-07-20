@@ -11,7 +11,6 @@
   width: 100%;
   max-width: 420px;
   background: var(--glass-bg-heavy);
-  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: 2.5rem;
@@ -30,7 +29,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(0, 229, 255, 0.1);
+  background: var(--color-surface);
   border: 1px solid rgba(0, 229, 255, 0.2);
   color: var(--color-cyan);
   margin-bottom: 1rem;
@@ -59,7 +58,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: rgba(239, 68, 68, 0.1);
+  background: var(--color-surface);
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: var(--radius-md);
   color: #ef4444;
@@ -69,7 +68,7 @@
 
 .lockout {
   padding: 0.75rem 1rem;
-  background: rgba(245, 158, 11, 0.1);
+  background: var(--color-surface);
   border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: var(--radius-md);
   color: #f59e0b;
@@ -92,7 +91,7 @@
 
 .field input {
   padding: 0.75rem 1rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text-primary);
@@ -104,8 +103,7 @@
 .field input:focus {
   outline: none;
   border-color: var(--color-cyan);
-  box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.1);
-}
+  }
 
 .field input::placeholder {
   color: var(--color-text-muted);
