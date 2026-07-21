@@ -129,6 +129,46 @@
   color: var(--color-text-tertiary);
 }
 
+/* ── Roadmap breakout — timeline needs full width ── */
+.docContent > div:first-child {
+  max-width: none;
+  width: calc(100% + 8rem);
+  margin-left: -4rem;
+  margin-right: -4rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+@media (max-width: 1024px) {
+  .docContent > div:first-child {
+    width: calc(100% + 4rem);
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .docContent > div:first-child {
+    width: calc(100% + 2.5rem);
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .docContent > div:first-child {
+    width: calc(100% + 2rem);
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
 /* ── Responsive ──────────────────────────────── */
 @media (max-width: 1024px) {
   .mainContent { padding: 2.5rem 2rem; }

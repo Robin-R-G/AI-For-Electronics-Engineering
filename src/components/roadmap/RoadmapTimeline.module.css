@@ -1,6 +1,6 @@
 .timelineContainer {
   position: relative;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 2rem 0;
 }
@@ -41,7 +41,7 @@
 
 @media (max-width: 900px) {
   .centralLine {
-    left: 24px; /* Align to left on mobile */
+    left: 24px;
   }
 }
 
