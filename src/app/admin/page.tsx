@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { login, getSessionSync } from '@/lib/adminAuth';
 import styles from './page.module.css';
 
+const BASE = '/AI-For-Electronics-Engineering';
+
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -16,9 +16,9 @@ export default function AdminLoginPage() {
   useEffect(() => {
     const session = getSessionSync();
     if (session) {
-      router.replace('/admin/dashboard');
+      window.location.href = BASE + '/admin/dashboard';
     }
-  }, [router]);
+  }, []);
 
   // Lockout countdown
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
     const result = await login(email, password);
 
     if (result.success) {
-      router.push('/AI-For-Electronics-Engineering/admin/dashboard');
+      window.location.href = BASE + '/admin/dashboard';
     } else {
       setError(result.error || 'Invalid credentials');
       if (result.lockoutSeconds) {
