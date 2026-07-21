@@ -29,7 +29,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({ score, total
     day: 'numeric',
   });
 
-  const verificationUrl = (typeof window !== 'undefined' ? window.location.origin : '') + '/learn/quiz';
+  const verificationUrl = (typeof window !== 'undefined' ? window.location.origin : '') + '/AI-For-Electronics-Engineering/learn/quiz';
 
   // ── Zoom ───────────────────────────────────────────────────────
   const MIN_ZOOM = 0.3;

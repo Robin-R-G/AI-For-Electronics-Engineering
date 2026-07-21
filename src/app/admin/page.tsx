@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
     const result = await login(email, password);
 
     if (result.success) {
-      router.push('/admin/dashboard');
+      router.push('/AI-For-Electronics-Engineering/admin/dashboard');
     } else {
       setError(result.error || 'Invalid credentials');
       if (result.lockoutSeconds) {

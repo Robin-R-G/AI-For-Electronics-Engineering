@@ -46,7 +46,7 @@ export default function AdminDashboardPage() {
   const [fileCount, setFileCount] = useState(0);
 
   useEffect(() => {
-    if (!admin) window.location.replace('/admin');
+    if (!admin) window.location.replace(BASE + '/admin');
   }, [admin]);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function AdminDashboardPage() {
 
   const handleLogout = () => {
     destroySession();
-    window.location.replace('/admin');
+    window.location.replace(BASE + '/admin');
   };
 
   if (!admin) {
