@@ -1,31 +1,19 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState } from 'react';
+import CertificateDesigner from './CertificateDesigner';
 import {
-  CertificateSettings,
-  getSettings,
-  saveSettings,
-  resetSettings,
+  CertificateSettings, getSettings, saveSettings, resetSettings,
   fileToDataUrl as settingsFileToDataUrl,
 } from '@/lib/settings';
-import {
-  renderCertificate,
-  canvasToPdfBlob,
-  canvasesToPdf,
-  downloadBlob,
-  downloadCanvasPng,
-} from '@/lib/certificate';
-import { track } from '@/lib/analytics';
 import styles from './AdminStyles.module.css';
 
 function ImageField({
   label, hint, value, onPick, onClear,
 }: {
-  label: string; hint: string;
-  value: string;
-  onPick: (f: File | null) => void;
-  onClear: () => void;
+  label: string; hint: string; value: string;
+  onPick: (f: File | null) => void; onClear: () => void;
 }) {
-  const ref = useRef<HTMLInputElement>(null);
+  const ref = React.useRef<HTMLInputElement>(null);
   return (
     <div className={styles.imgField}>
       <span className={styles.imgLabel}>{label} <em>({hint})</em></span>
@@ -43,83 +31,25 @@ function ImageField({
 }
 
 export default function CertificateManager() {
+  const [mode, setMode] = useState<'settings' | 'designer'>('settings');
   const [s, setS] = useState<CertificateSettings>(() => getSettings());
   const [status, setStatus] = useState('');
-  const [generating, setGenerating] = useState(false);
-  const [previewName, setPreviewName] = useState('Sample Participant');
-  const [names, setNames] = useState('');
-  const previewRef = useRef<HTMLCanvasElement>(null);
 
   const update = (patch: Partial<CertificateSettings>) => setS((prev) => ({ ...prev, ...patch }));
+  const flash = (msg: string) => { setStatus(msg); setTimeout(() => setStatus(''), 2500); };
 
-  const flash = (msg: string) => {
-    setStatus(msg);
-    setTimeout(() => setStatus(''), 2500);
-  };
-
-  const handleImage = async (
-    file: File | null,
-    key: 'signatureImage' | 'institutionLogo' | 'ieeeLogo'
-  ) => {
+  const handleImage = async (file: File | null, key: 'signatureImage' | 'institutionLogo' | 'ieeeLogo') => {
     if (!file) return;
-    try {
-      update({ [key]: await settingsFileToDataUrl(file) });
-      flash('Image loaded - click Preview to see it.');
-    } catch {
-      flash('Could not read image.');
-    }
+    try { update({ [key]: await settingsFileToDataUrl(file) }); flash('Image loaded.'); }
+    catch { flash('Could not read image.'); }
   };
 
-  const handleSave = () => {
-    saveSettings(s);
-    flash('Saved!');
-    if (previewRef.current) renderCertificate(previewRef.current, s, previewName.trim() || 'Sample Participant');
-  };
+  const handleSave = () => { saveSettings(s); flash('Settings saved!'); };
+  const handleReset = () => { resetSettings(); setS(getSettings()); flash('Reset to defaults.'); };
 
-  const handleReset = () => {
-    resetSettings();
-    setS(getSettings());
-    flash('Reset to defaults');
-  };
-
-  const handlePreview = async () => {
-    if (!previewRef.current) return;
-    await renderCertificate(previewRef.current, s, previewName.trim() || 'Sample Participant');
-  };
-
-  const handleDownloadPng = async () => {
-    const c = document.createElement('canvas');
-    await renderCertificate(c, s, previewName.trim() || 'Sample Participant');
-    downloadCanvasPng(c, 'certificate.png');
-  };
-
-  const handleGenerate = async () => {
-    const list = names.split('\n').map((n) => n.trim()).filter(Boolean);
-    if (list.length === 0) { flash('Enter at least one name.'); return; }
-    setGenerating(true);
-    try {
-      const canvases = await Promise.all(
-        list.map(async (name) => {
-          const c = document.createElement('canvas');
-          await renderCertificate(c, s, name);
-          return c;
-        })
-      );
-      const blob = canvases.length === 1 ? await canvasToPdfBlob(canvases[0]) : await canvasesToPdf(canvases);
-      downloadBlob(blob, `certificates_${canvases.length}.pdf`);
-      track('certificate_generated', { count: canvases.length });
-      flash(`Generated ${canvases.length} certificate(s)`);
-    } catch {
-      flash('PDF generation failed.');
-    } finally {
-      setGenerating(false);
-    }
-  };
-
-  useEffect(() => {
-    if (previewRef.current) renderCertificate(previewRef.current, s, previewName.trim() || 'Sample Participant');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if (mode === 'designer') {
+    return <CertificateDesigner onBack={() => setMode('settings')} />;
+  }
 
   return (
     <div className={styles.certGrid}>
@@ -170,8 +100,7 @@ export default function CertificateManager() {
       <section className={styles.certSection}>
         <h2>Logos &amp; Signature</h2>
         <p className={styles.sectionDesc}>
-          Upload images to place on the certificate. Institution logo sits top-left,
-          IEEE logo (optional) top-right, signature bottom-center above the instructor name.
+          Upload images to place on the certificate.
         </p>
         <div className={styles.imgUploadRow}>
           <ImageField label="Institution Logo" hint="top-left" value={s.institutionLogo} onPick={(f) => handleImage(f, 'institutionLogo')} onClear={() => update({ institutionLogo: '' })} />
@@ -180,7 +109,7 @@ export default function CertificateManager() {
         <div className={styles.checkboxRow}>
           <label className={styles.checkbox}>
             <input type="checkbox" checked={s.ieeeEnabled} onChange={(e) => update({ ieeeEnabled: e.target.checked })} />
-            <span>Show IEEE logo (when applicable)</span>
+            <span>Show IEEE logo</span>
           </label>
         </div>
         {s.ieeeEnabled && (
@@ -191,33 +120,16 @@ export default function CertificateManager() {
       </section>
 
       <section className={styles.certSection}>
-        <h2>Live Preview</h2>
-        <div className={styles.previewWrap}>
-          <canvas ref={previewRef} className={styles.previewCanvas} />
-        </div>
-        <div className={styles.previewControls}>
-          <input className={styles.nameInput} value={previewName} onChange={(e) => setPreviewName(e.target.value)} placeholder="Preview name" />
-          <button className={styles.smallBtn} onClick={handlePreview}>Update Preview</button>
-          <button className={styles.smallBtn} onClick={handleDownloadPng}>Download PNG</button>
-        </div>
-      </section>
-
-      <section className={styles.certSection}>
-        <h2>Generate PDF Certificates</h2>
-        <p className={styles.sectionDesc}>
-          Enter one participant name per line. A PDF is generated automatically - one
-          certificate per name (multi-page when more than one).
-        </p>
-        <textarea className={styles.namesArea} value={names} onChange={(e) => setNames(e.target.value)} placeholder={'Robin R G\nAlice Thomas\nBob Martin'} rows={6} />
-        <button className={styles.submitBtn} onClick={handleGenerate} disabled={generating}>
-          {generating ? 'Generating...' : 'Generate PDF Certificates'}
-        </button>
-      </section>
-
-      <section className={styles.certSection}>
-        <div className={styles.certActions}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <button className={styles.submitBtn} onClick={handleSave}>Save Settings</button>
           <button className={styles.cancelBtn} onClick={handleReset}>Reset to Defaults</button>
+          <button
+            className={styles.submitBtn}
+            style={{ background: 'var(--color-brand)', borderColor: 'var(--color-brand)' }}
+            onClick={() => setMode('designer')}
+          >
+            Open Visual Designer
+          </button>
           {status && <span className={styles.statusMsg}>{status}</span>}
         </div>
       </section>
